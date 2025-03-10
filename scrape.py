@@ -8,7 +8,8 @@ url_zones = "https://parcheggi.comune.trento.it/static/services/registry_zones.j
 url_parks = "https://parcheggi.comune.trento.it/static/services/registry_parks.json"
 parks_geoparquet = "data" + os.sep + "parks.geoparquet"
 zones_geoparquet = "data" + os.sep + "zones.geoparquet"
-
+parks_csv = "data" + os.sep + "last_parks.csv"
+zones_csv = "data" + os.sep + "last_zones.csv"
 def expand_stalls(df):
     stalls_df = df['stalls'].apply(pd.Series)
     for i in range(stalls_df.shape[1]):
@@ -89,3 +90,8 @@ if os.path.exists(zones_geoparquet) and os.path.exists(parks_geoparquet):
 else:
     parks.to_parquet(parks_geoparquet, engine='pyarrow')
     zones.to_parquet(zones_geoparquet, engine='pyarrow')
+
+del parks['geom']
+del zones['geom']
+parks.to_file(parks_csv,index=False)
+zones.to_file(zones_csv,index=False)
