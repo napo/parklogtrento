@@ -8,8 +8,8 @@ URL_ZONES = "https://parcheggi.comune.trento.it/static/services/registry_zones.j
 URL_PARKS = "https://parcheggi.comune.trento.it/static/services/registry_parks.json"
 PARKS_GEOPARQUET = "data" + os.sep + "parks.geoparquet"
 ZONES_GEOPARQUET = "data" + os.sep + "zones.geoparquet"
-PARKS_CSV = "data" + os.sep + "parks.csv"
-ZONES_CSV = "data" + os.sep + "zones.csv"
+PARKS_CSV = "data" + os.sep + "last_parks.csv"
+ZONES_CSV = "data" + os.sep + "last_zones.csv"
 
 def expand_stalls(df):
     """
