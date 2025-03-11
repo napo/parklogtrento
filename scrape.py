@@ -126,7 +126,7 @@ if os.path.exists(ZONES_GEOPARQUET) and os.path.exists(PARKS_GEOPARQUET):
         parks_history = gpd.GeoDataFrame(pd.concat([parks_history, parks], ignore_index=True))
         parks_history.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
         print("new parks create " + str(parks.currentTimestamp.max()))
-    if zones_history.ts.max() < zones_history.ts.max():
+    if zones_history.ts.max() < zones.ts.max():
         zones_history = gpd.GeoDataFrame(pd.concat([zones_history, zones], ignore_index=True))
         zones_history.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
         print("new zones create " + str(zones_history.ts.max()))
