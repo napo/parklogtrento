@@ -119,16 +119,18 @@ parks['currentTimestamp'] = pd.to_datetime(parks['currentTimestamp'], unit='s')
 
 #max_timestamp = parks.currentTimestamp.max()
 #formatted_timestamp = max_timestamp.strftime('%d/%m/%Y %H:%M:%S')
-print(os.path.exists(ZONES_GEOPARQUET))
 if os.path.exists(ZONES_GEOPARQUET) and os.path.exists(PARKS_GEOPARQUET):
     zones_history = gpd.read_parquet(ZONES_GEOPARQUET)
     parks_history = gpd.read_parquet(PARKS_GEOPARQUET)
     if parks_history.currentTimestamp.max() < parks.currentTimestamp.max():
         parks_history = gpd.GeoDataFrame(pd.concat([parks_history, parks], ignore_index=True))
         parks_history.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
+        print("new parks create " + str(parks.currentTimestamp.max()))
     if zones_history.ts.max() < zones_history.ts.max():
         zones_history = gpd.GeoDataFrame(pd.concat([zones_history, zones], ignore_index=True))
         zones_history.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
+        print("new zones create " + str(zones_history.ts.max()))
+
 else:
     parks.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
     zones.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
