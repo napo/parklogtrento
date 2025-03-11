@@ -93,5 +93,5 @@ else:
 
 del parks['geom']
 del zones['geom']
-parks.to_file(parks_csv,index=False)
-zones.to_file(zones_csv,index=False)
+#parks.to_file(parks_csv,index=False)
+#zones.to_file(zones_csv,index=False)
