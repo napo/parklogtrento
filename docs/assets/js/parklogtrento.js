@@ -1,3 +1,9 @@
+var dom = document.getElementById('data_parks');
+var myChart = echarts.init(dom, null, {
+  renderer: 'canvas',
+  useDirtyRect: false
+});
+
 fetch('data/descriptions.json')
     .then(response => {
         if (!response.ok) throw new Error("Errore fetch");
@@ -15,8 +21,10 @@ fetch('data/descriptions.json')
         document.querySelector('span#total_carparkspaces').textContent = data.total_carparkspaces;
         document.querySelector('#total_carparkspaces').classList.remove('spinner-border');
 
-        document.querySelector('span#total_bikespaces').textContent = data.total_bikespaces;
-        document.querySelector('span#total_parks').textContent = data.total_parks;
+        document.querySelector('span#total_bikespaces').textContent = data.total_bikespaces;        
+        document.querySelectorAll('span.total_parks').forEach(el => {
+            el.textContent = data.total_parks;
+        });
         document.querySelector('span#total_zonespaces').textContent = data.total_zonespaces;
         document.querySelector('span#total_zones').textContent = data.total_zones;
         document.querySelector('span#total_ciclobox').textContent = data.total_ciclobox;
@@ -35,3 +43,14 @@ fetch('data/descriptions.json')
         new PureCounter();
     })
     .catch(error => console.error('Errore:', error));
+
+  // Caricare option da un file JSON esterno
+  fetch('data/data_parks.json') // Assicurati che il file sia accessibile
+    .then(response => response.json()) // Converti la risposta in JSON
+    .then(data => {
+      myChart.setOption(data); // Imposta l'option con i dati del JSON
+    })
+    .catch(error => console.error('Errore nel caricamento del JSON:', error));
+
+  // Adatta il grafico al ridimensionamento della finestra
+  window.addEventListener('resize', myChart.resize);
