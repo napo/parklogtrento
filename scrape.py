@@ -128,6 +128,10 @@ if os.path.exists(ZONES_GEOPARQUET) and os.path.exists(PARKS_GEOPARQUET):
         print("new parks create " + str(parks.currentTimestamp.max()))
     if zones_history.ts.max() < zones.ts.max():
         zones_history = gpd.GeoDataFrame(pd.concat([zones_history, zones], ignore_index=True))
+        to_int = ['stall_blu_capacity','stall_blu_freeslots',
+          'stall_carico-scarico_capacity','stall_carico-scarico_freeslots',
+          'stall_disabili_capacity','stall_disabili_freeslots']
+        zones_history[to_int] = zones_history[to_int].astype(int)
         zones_history.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
         print("new zones create " + str(zones_history.ts.max()))
 
