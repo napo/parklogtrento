@@ -5,6 +5,7 @@ import numpy as np
 import os
 import json
 import locale
+import pytz
 locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8')
 
 URL_ZONES = "https://parcheggi.comune.trento.it/static/services/registry_zones.json"
@@ -141,7 +142,7 @@ if os.path.exists(ZONES_GEOPARQUET) and os.path.exists(PARKS_GEOPARQUET):
 else:
     parks.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
     zones.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
-
+pytz
 del parks['geom']
 del zones['geom']
 parks.to_csv(PARKS_CSV,index=False)
@@ -151,6 +152,11 @@ zones.to_csv(ZONES_CSV,index=False)
 
 descriptions = {}
 timestamp_parks = parks.currentTimestamp.max()
+lastime_parks = timestamp_parks.strftime('%d %B %Y ore %H:%M')
+if timestamp_parks.tzinfo is None:
+    timestamp_parks = timestamp_parks.tz_localize('UTC')  
+rome_tz = pytz.timezone('Europe/Rome')
+timestamp_parks = timestamp_parks.astimezone(rome_tz)
 lastime_parks = timestamp_parks.strftime('%d %B %Y ore %H:%M')
 descriptions['timestamp_parks'] = lastime_parks
 timestamp_zones = zones.ts.max()
