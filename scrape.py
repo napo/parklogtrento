@@ -6,7 +6,6 @@ import os
 import json
 import locale
 import pytz
-locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8')
 
 URL_ZONES = "https://parcheggi.comune.trento.it/static/services/registry_zones.json"
 URL_PARKS = "https://parcheggi.comune.trento.it/static/services/registry_parks.json"
@@ -150,15 +149,19 @@ zones.to_csv(ZONES_CSV,index=False)
 
 # data4web
 
+def month2mese(s):
+    return s.replace('January','Gennaio').replace('February','Febbraio').replace('March','Marzo').replace('April','Aprile').replace('May','Maggio').replace('June','Giugno').replace('July','Luglio').replace('August','Agosto').replace('September','Settembre').replace('October','Ottobre').replace('November','Novembre').replace('December','Dicembre')  
+
 descriptions = {}
 timestamp_parks = parks.currentTimestamp.max()
-lastime_parks = timestamp_parks.strftime('%d %B %Y ore %H:%M')
-if timestamp_parks.tzinfo is None:
-    timestamp_parks = timestamp_parks.tz_localize('UTC')  
+timestamp_parks_to_print = parks.currentTimestamp.max()
+if timestamp_parks_to_print.tzinfo is None:
+    timestamp_parks_to_print = timestamp_parks_to_print.tz_localize('UTC')  
 rome_tz = pytz.timezone('Europe/Rome')
-timestamp_parks = timestamp_parks.astimezone(rome_tz)
-lastime_parks = timestamp_parks.strftime('%d %B %Y ore %H:%M')
-descriptions['timestamp_parks'] = lastime_parks
+timestamp_parks_to_print = timestamp_parks_to_print.astimezone(rome_tz)
+lastime_parks_to_print = timestamp_parks_to_print.strftime('%d %B %Y ore %H:%M')
+lastime_parks_to_print = month2mese(lastime_parks_to_print)
+descriptions['timestamp_parks'] = lastime_parks_to_print
 timestamp_zones = zones.ts.max()
 lastime_zones = timestamp_zones.strftime('%d/%m/%Y %H:%M')
 total_carparkspaces = parks[(parks['type'] == 'park') & (parks.currentTimestamp == timestamp_parks)].capacity.sum()
