@@ -49,7 +49,7 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="#hero" class="active">Home</a></li>
-          <li><a href="#parcheggiinstruttura">Parcheggi in struttura</a></li>
+          <li><a href="#strutture">Strutture</a></li>
           <li><a href="https://github.com/napo/parklogtrento">GitHub</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -61,17 +61,14 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
-
       <img src="assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
-
       <div class="container">
-
         <div class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
           <div class="col-xl-6 col-lg-8">
             <br/>
             <h2>Disponibilità parcheggi nella città di Trento</h2>
             <p>parcheggi disponibili</p>
-            <p>al giorno <span id='extractiontime'></span></p>
+            <p>al giorno <span class='extractiontime'></span></p>
           </div>
         </div>
 
@@ -79,18 +76,18 @@
           <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="icon-box">
               <i class="bi bi-p-circle"></i>
-              <big>occupazione <span id="carparkspaces_rate"/></big>
+              <big>occupazione <span id="carparkspaces_rate"></span></big>
               <h3>
                 <span id="total_carparkspaces_free" data-purecounter-start="0" data-purecounter-end="" data-purecounter-duration="1" class="purecounter"></span>
                 parcheggi liberi per veicoli su <span id="total_carparkspaces"></span> 
-                totali nelle <span class="total_parks"/> strutture
+                totali nelle <span class="total_parks"></span> strutture
               </h3>
             </div>
           </div>
           <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="icon-box">
               <i class="bi bi-car-front"></i>
-              <big>occupazione <span id="zonespaces_rate"/></big>
+              <big>occupazione <span id="zonespaces_rate"></span></big>
               <h3>
                 <span id="total_zonespaces_free" data-purecounter-start="0" data-purecounter-end="" data-purecounter-duration="1" class="purecounter"></span>
                 parcheggi liberi per veicoli nei <span id="total_zonespaces"></span> stalli blu in <span id="total_zones"></span> zone della città
@@ -101,7 +98,7 @@
           <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="icon-box">
               <i class="bi bi-bicycle"></i>
-              <big>occupazione <span id="bikespaces_rate"/></big>
+              <big>occupazione <span id="bikespaces_rate"></span></big>
               <h3>
                 <span id="total_bikespaces_free" data-purecounter-start="0" data-purecounter-end="" data-purecounter-duration="1" class="purecounter"></span>
                 parcheggi liberi per biciclette nei <span id="total_bikespaces"></span> posti distribuiti su <span id="total_ciclobox"></span> ciclobox
@@ -114,16 +111,22 @@
 
     </section><!-- /Hero Section -->
 
-    <section id="parcheggiinstruttura" class="featured-services section">
+    <section id="strutture" class="featured-services section">
       <div class="container section-title" data-aos="fade-up">
         <h2>Parcheggi in struttura</h2>
         <p>La città di Trento tiene monitorata l'occupazione di <span class="total_parks"></span> strutture di parcheggio</p>
+        <div id="gauge_structures" style="min-height: 500px;" class="echart"></div>
       </div>
       <div class="container">
-        <div class="row gy-4" data-aos="fade-up" data-aos-delay="100">
-          <div id="data_parks" style="width: 500px; height: auto;"></div>        </div>
+        <div class="row"> 
+          <div id="stackedbarchartparcheggi" style="min-height: 350px;" class="echart"></div>
+        </div>
+        <div class="row"> 
+          <div id="riverstrutture" style="min-height: 350px;" class="echart"></div>
+        </div>
       </div>
     </section>
+  
   </main>
 
   <footer id="footer" class="footer dark-background">
@@ -158,6 +161,7 @@
   <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="data/data.js"></script>
   <script src="assets/js/parklogtrento.js"></script>
 </body>
 
