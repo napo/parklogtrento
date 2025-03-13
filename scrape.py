@@ -141,68 +141,9 @@ if os.path.exists(ZONES_GEOPARQUET) and os.path.exists(PARKS_GEOPARQUET):
 else:
     parks.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
     zones.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
-pytz
+
 del parks['geom']
 del zones['geom']
 parks.to_csv(PARKS_CSV,index=False)
 zones.to_csv(ZONES_CSV,index=False)
-
-# data4web
-
-def month2mese(s):
-    return s.replace('January','Gennaio').replace('February','Febbraio').replace('March','Marzo').replace('April','Aprile').replace('May','Maggio').replace('June','Giugno').replace('July','Luglio').replace('August','Agosto').replace('September','Settembre').replace('October','Ottobre').replace('November','Novembre').replace('December','Dicembre')  
-
-descriptions = {}
-timestamp_parks = parks.currentTimestamp.max()
-timestamp_parks_to_print = parks.currentTimestamp.max()
-if timestamp_parks_to_print.tzinfo is None:
-    timestamp_parks_to_print = timestamp_parks_to_print.tz_localize('UTC')  
-rome_tz = pytz.timezone('Europe/Rome')
-timestamp_parks_to_print = timestamp_parks_to_print.astimezone(rome_tz)
-lastime_parks_to_print = timestamp_parks_to_print.strftime('%d %B %Y ore %H:%M')
-lastime_parks_to_print = month2mese(lastime_parks_to_print)
-descriptions['timestamp_parks'] = lastime_parks_to_print
-timestamp_zones = zones.ts.max()
-lastime_zones = timestamp_zones.strftime('%d/%m/%Y %H:%M')
-total_carparkspaces = parks[(parks['type'] == 'park') & (parks.currentTimestamp == timestamp_parks)].capacity.sum()
-total_carparkspaces_free = parks[(parks['type'] == 'park') & (parks.currentTimestamp == timestamp_parks)].freeslots.sum()
-total_bikeparkspaces = parks[(parks['type'] == 'bike') & (parks.currentTimestamp == timestamp_parks)].capacity.sum()
-total_bikeparkspaces_free = parks[(parks['type'] == 'bike') & (parks.currentTimestamp == timestamp_parks)].freeslots.sum()
-descriptions["total_carparkspaces"] = total_carparkspaces
-descriptions["total_carparkspaces_free"] = total_carparkspaces_free
-descriptions["total_bikespaces"] = total_bikeparkspaces
-descriptions["total_bikespaces_free"] = total_bikeparkspaces_free
-to_int = ['stall_blu_capacity','stall_blu_freeslots',
-          'stall_carico-scarico_capacity','stall_carico-scarico_freeslots',
-          'stall_disabili_capacity','stall_disabili_freeslots']
-zones[to_int] = zones[to_int].astype(int)
-total_zonespaces = zones[zones.ts == timestamp_zones].capacity.sum()
-total_zonespaces_free = zones[zones.ts == timestamp_zones].freeslots.sum()
-total_zonespaces_blu = zones[zones.ts == timestamp_zones].stall_blu_capacity.sum()
-total_zonespaces_blu_free = zones[zones.ts == timestamp_zones].stall_blu_freeslots.sum()
-total_zonespaces_carico_scarico = zones[zones.ts == timestamp_zones]['stall_carico-scarico_capacity'].sum()
-total_zonespaces_carico_scarico_free = zones[zones.ts == timestamp_zones]['stall_carico-scarico_freeslots'].sum()
-total_zonespaces_disabili = zones[zones.ts == timestamp_zones].stall_disabili_capacity.sum()
-total_zonespaces_disabili_free = zones[zones.ts == timestamp_zones].stall_disabili_freeslots.sum()
-descriptions["total_zonespaces"] = total_zonespaces
-descriptions["total_zonespaces_free"] = total_zonespaces_free
-descriptions["total_zonespaces_blu"] = total_zonespaces_blu
-descriptions["total_zonespaces_blu_free"] = total_zonespaces_blu_free
-descriptions["total_zonespaces_carico_scarico"] = total_zonespaces_carico_scarico
-descriptions["total_zonespaces_carico_scarico_free"] = total_zonespaces_carico_scarico_free
-descriptions["total_zonespaces_disabili"] = total_zonespaces_disabili
-descriptions["total_zonespaces_disabili_free"] = total_zonespaces_disabili_free
-total_parks = len(parks[parks['type'] == 'park'].name.unique())
-total_ciclobox = len(parks[parks['type'] == 'bike'].name.unique())
-total_zones = len(zones.name.unique())
-descriptions["total_parks"] = total_parks
-descriptions["total_ciclobox"] = total_ciclobox
-descriptions["total_zones"] = total_zones
-#zones[zones.stall_disabili_capacity > 0].name.unique()
-#zones[zones["stall_carico-scarico_capacity"] > 0].name.unique()
-descriptions = {k: int(v) if isinstance(v, np.integer) else v for k, v in descriptions.items()}
-# Scrittura su file JSON
-destjson = "docs" + os.sep + "data" + os.sep + "descriptions.json"
-with open(destjson, "w") as f:
-    json.dump(descriptions, f, indent=4)
 
