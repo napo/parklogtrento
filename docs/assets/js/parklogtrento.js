@@ -122,11 +122,7 @@ const optiongauge_structures = {
       max: 100,
       splitNumber: 4,
       itemStyle: {
-        color: '#58D9F9',
-        shadowColor: '#199eb8',
-        shadowBlur: 10,
-        shadowOffsetX: 2,
-        shadowOffsetY: 2
+        color: '#58D9F9'
       },
       progress: {
         show: true,
@@ -250,57 +246,67 @@ return (minutes === 0 || minutes === 30) ? value : '';
 
 // Converte i dati in un formato compatibile con ECharts
 const series = Object.keys(seriesData).map((name, index) => ({
-name,
-type: 'bar',
-stack: 'total',
-color: colors[index % colors.length], // Assegna un colore scuro progressivo a ogni parcheggio
-emphasis: {
-  focus: 'series'
-},
-data: allCategories.map(time => {
-  const entry = seriesData[name].find(d => d[0] === time);
-  return entry ? entry[1] : 0;
-})
-}));
+  name,
+  type: 'line',
+  stack: 'occupied',
+  areaStyle: {},
+  symbol: 'none',
+  color: colors[index % colors.length], // Assegna un colore scuro progressivo a ogni parcheggio
+  emphasis: {
+    focus: 'series'
+  },
+  data: allCategories.map(time => {
+    const entry = seriesData[name].find(d => d[0] === time);
+    return entry ? entry[1] : 0;
+    })
+  }));
 
 // Configurazione del grafico a barre impilate
 optionriverstrutture = {
-title: {
-  text: 'Veicoli parcheggiati ultime 24h',
-  left: 'center'
-},
-tooltip: {
-  trigger: 'axis',
-  axisPointer: {
-    type: 'shadow'
-  }
-},
-legend: {
-  data: Object.keys(seriesData),
-  bottom: '5%', // Posiziona la legenda in basso senza sovrapposizione
-  itemGap: 10,  // Distanza tra gli elementi della legenda
-  textStyle: {
+  title: {
+    text: 'Veicoli parcheggiati ultime 24h',
+    left: 'center'
+  },
+  dataZoom: [{
+    type: 'inside',
+    start: 0,
+    end: 100
+  },{
+    start: 0,
+    end: 100
+  }],
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+  legend: {
+    data: Object.keys(seriesData),
+    bottom: '15%', // Posiziona la legenda in basso senza sovrapposizione
+    itemGap: 10,  // Distanza tra gli elementi della legenda
+    textStyle: {
     fontSize: 12
   }
-},
-grid: {
-  left: '10%',
-  right: '10%',
-  bottom: '35%' // Aggiunge spazio per evitare sovrapposizione della legenda con l'asse X
-},
-xAxis: {
-  type: 'category',
-  data: allCategories,
-  axisLabel: {
-    formatter: labelFormatter, // Mostra solo le etichette delle ore e delle mezz'ore
-    rotate: 45 // Ruota le etichette per maggiore leggibilità
-  }
-},
-yAxis: {
-  type: 'value'
-},
-series
-};
+  },
+  grid: {
+    left: '10%',
+    right: '10%',
+    bottom: '35%' // Aggiunge spazio per evitare sovrapposizione della legenda con l'asse X
+  },
+  xAxis: {
+    type: 'category',
+    data: allCategories,
+    axisLabel: {
+      formatter: labelFormatter, // Mostra solo le etichette delle ore e delle mezz'ore
+      rotate: 45 // Ruota le etichette per maggiore leggibilità
+   }
+  },
+  yAxis: {
+    type: 'value'
+  },
+    series
+  };
 
 
 document.addEventListener("DOMContentLoaded", function () {
