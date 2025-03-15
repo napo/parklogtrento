@@ -1,6 +1,6 @@
-const lastime_parks="15 Marzo 2025 ore 10:37";
+const lastime_parks="15 Marzo 2025 ore 10:39";
 const total_carparkspaces=2350;
-const total_carparkspaces_free=971;
+const total_carparkspaces_free=963;
 const total_bikeparkspaces=444;
 const total_bikeparkspaces_free=244;
 const total_zonespaces=366;
@@ -15,8 +15,8 @@ const total_parks=9;
 const total_ciclobox=9;
 const total_zones=8;
 const structures_names=['Garage Autosilo Buonconsiglio - P3', 'Parcheggio piazzale Sanseverino - P7', 'Garage Centro Europa - P2', 'Garage piazza Fiera - P4', 'Parcheggio Cittadella dello studente - P6', 'Parcheggio Santa Chiara', 'Parcheggio Area ex Zuffo - P9', 'Garage Parcheggio Duomo - P5', 'Parcheggio via Monte Baldo - P8'];
-const total_structures_occupied=[188, 323, 133, 235, 0, 26, 329, 92, 53];
-const total_structures_free=[0, 0, 197, 213, 145, 179, 61, 27, 149];
+const total_structures_occupied=[188, 323, 133, 235, 0, 26, 330, 97, 55];
+const total_structures_free=[0, 0, 197, 213, 145, 179, 60, 22, 147];
 const percentage_structures_busy=59;
 
 var riverdatastrutture = [
@@ -886,7 +886,7 @@ var riverdatastrutture = [
   ['2025-03-15 10:20', 76, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-15 10:25', 87, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-15 10:30', 87, 'Garage Parcheggio Duomo - P5'],
-  ['2025-03-15 10:35', 92, 'Garage Parcheggio Duomo - P5'],
+  ['2025-03-15 10:35', 95, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-14 10:35', 342, 'Garage piazza Fiera - P4'],
   ['2025-03-14 10:40', 342, 'Garage piazza Fiera - P4'],
   ['2025-03-14 10:45', 342, 'Garage piazza Fiera - P4'],
@@ -1464,7 +1464,7 @@ var riverdatastrutture = [
   ['2025-03-15 10:20', 324, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-15 10:25', 324, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-15 10:30', 324, 'Parcheggio Area ex Zuffo - P9'],
-  ['2025-03-15 10:35', 329, 'Parcheggio Area ex Zuffo - P9'],
+  ['2025-03-15 10:35', 330, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-14 10:35', 3, 'Parcheggio Cittadella dello studente - P6'],
   ['2025-03-14 10:40', 3, 'Parcheggio Cittadella dello studente - P6'],
   ['2025-03-14 10:45', 3, 'Parcheggio Cittadella dello studente - P6'],
@@ -2620,5 +2620,5 @@ var riverdatastrutture = [
   ['2025-03-15 10:20', 42, 'Parcheggio via Monte Baldo - P8'],
   ['2025-03-15 10:25', 50, 'Parcheggio via Monte Baldo - P8'],
   ['2025-03-15 10:30', 50, 'Parcheggio via Monte Baldo - P8'],
-  ['2025-03-15 10:35', 53, 'Parcheggio via Monte Baldo - P8'],
+  ['2025-03-15 10:35', 54, 'Parcheggio via Monte Baldo - P8'],
 ];
