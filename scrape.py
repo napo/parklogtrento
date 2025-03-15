@@ -1,10 +1,8 @@
 import pandas as pd
 import geopandas as gpd
 from shapely import wkt
-import numpy as np
 import os
 import json
-import locale
 import pytz
 
 URL_ZONES = "https://parcheggi.comune.trento.it/static/services/registry_zones.json"
