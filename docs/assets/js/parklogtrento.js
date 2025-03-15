@@ -309,36 +309,176 @@ optionriverstrutture = {
   };
 
 
+// Creiamo un array di oggetti per i dati delle strutture
+const parkingData = structures_names.map((name, index) => {
+    let total = total_structures_occupied[index] + total_structures_free[index];
+    let percentOccupied = total > 0 ? Math.round((total_structures_occupied[index] / total) * 100) : 0;
+    
+    return {
+        name: name,
+        free: total_structures_free[index],
+        occupied: total_structures_occupied[index],
+        total: total,
+        percentOccupied: percentOccupied
+    };
+});
+
+// Seleziona il contenitore dove inserire i grafici
+var container = document.getElementById('charts-container');
+
+
 document.addEventListener("DOMContentLoaded", function () {
-  const sections = document.querySelectorAll(".echart");
+    const sections = document.querySelectorAll(".echart");
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                loadChart(entry.target);
+                observer.unobserve(entry.target); // Una volta caricato, non osservarlo più
+            }
+        });
+    }, { threshold: 0.3 });
 
-  const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-          if (entry.isIntersecting) {
-              loadChart(entry.target);
-              observer.unobserve(entry.target); // Una volta caricato, non osservarlo più
-          }
-      });
-  }, { threshold: 0.3 });
+    sections.forEach(section => observer.observe(section));
 
-  sections.forEach(section => observer.observe(section));
+    function loadChart(element) {
+        const chartId = element.id;
+        if (!chartId) return;
 
-  function loadChart(element) {
-      const chartId = element.id;
-      if (!chartId) return;
+        let option;
 
-      let option;
-      if (chartId === "stackedbarchartparcheggi") {
-          option = optionstackedbarchart; // Usa l'opzione del grafico a barre impilate
-      } else if (chartId === "riverstrutture") {
-          option = optionriverstrutture; // Sostituiscilo con l'opzione del tuo terzo grafico
-      } else if (chartId == 'gauge_structures') {
-          option = optiongauge_structures
-      }
+        if (chartId === "stackedbarchartparcheggi") {
+            option = optionstackedbarchart; // Usa l'opzione del grafico a barre impilate
+        } else if (chartId === "riverstrutture") {
+            option = optionriverstrutture; // Sostituiscilo con l'opzione del tuo terzo grafico
+        } else if (chartId === 'gauge_structures') {
+            option = optiongauge_structures;
+        } else if (optionsMap[chartId]) {
+            option = optionsMap[chartId]; // Carica l'opzione del grafico dinamico
+        }
 
-      if (option) {
-          const chart = echarts.init(element);
-          chart.setOption(option);
-      }
-  }
+        if (option) {
+            const chart = echarts.init(element);
+            chart.setOption(option);
+        }
+    }
+
+    // 📌 Creiamo un oggetto per memorizzare le opzioni dei grafici generati dinamicamente
+    const optionsMap = {};
+
+    // 🔥 Creiamo i grafici dinamici e li aggiungiamo alla lista osservata
+    parkingData.forEach((parking, index) => {
+        var chartDiv = document.createElement('div');
+        chartDiv.className = 'col-md-4 mb-4 echart';  // 3 colonne massimo + classe echart per essere osservato
+        chartDiv.id = `chart-${index}`;
+        chartDiv.style.minHeight = "250px";
+        document.getElementById('charts-container').appendChild(chartDiv);
+
+        // Definiamo l'opzione per ogni grafico
+        let option = {
+            title: { 
+                text: parking.name,  // Nome del parcheggio
+                left: 'left', // Allineato a sinistra
+                textStyle: { 
+                    fontSize: 18,  // Aumentato il testo del titolo
+                    fontWeight: 'bold', 
+                    fontFamily: 'var(--heading-font)'
+                }
+            },
+            tooltip: { 
+                trigger: 'axis', 
+                axisPointer: { type: 'shadow' } 
+            },
+            legend: { 
+                data: ['Parcheggi occupati', 'Parcheggi liberi'], 
+                bottom: '5%', // Avvicinata la legenda al grafico
+                left: 'center'
+            },
+            grid: {
+                left: '10%',  // Margine ridotto per evitare spazio extra
+                right: '10%',
+                bottom: '20%',
+                top: '25%', // Riduce ancora lo spazio tra il titolo e il grafico
+                containLabel: true
+            },
+            xAxis: { 
+                type: 'value',
+                max: parking.total / 2, // Ridotta la larghezza della barra impilata
+                show: false // Nasconde l'asse X
+            },
+            yAxis: { 
+                type: 'category', 
+                data: [''], // Mantiene l'orientamento orizzontale senza etichette
+                show: false // Nasconde l'asse Y
+            },
+            graphic: [
+                {
+                    type: 'text',
+                    left: '10%', // Allineato a sinistra
+                    top: '8%',
+                    style: {
+                        text: `Situazione al giorno ${lastime_parks}`, // Data sotto il titolo
+                        font: '14px var(--default-font)',
+                        fill: '#666',
+                        textAlign: 'left'
+                    }
+                },
+                {
+                    type: 'text',
+                    left: '10%', // Allineato a sinistra
+                    top: '15%',
+                    style: {
+                        text: `${parking.percentOccupied}% posti occupati`, // Percentuale arrotondata
+                        font: 'bold 14px var(--default-font)',
+                        fill: '#666',
+                        textAlign: 'left'
+                    }
+                },
+                {
+                    type: 'text',
+                    left: '10%', // Allineato a sinistra
+                    top: '22%',
+                    style: {
+                        text: `${parking.occupied} su ${parking.total}`, // Numero di posti occupati su totale
+                        font: '12px var(--default-font)',
+                        fill: '#333',
+                        textAlign: 'left'
+                    }
+                }
+            ],
+            series: [
+                { 
+                    name: 'Parcheggi occupati', 
+                    type: 'bar', 
+                    stack: 'total', 
+                    data: [parking.occupied], 
+                    itemStyle: { color: '#50737a' }, // Cambiato il colore degli occupati
+                    label: {
+                        show: true,
+                        position: 'insideLeft', // Etichetta allineata a sinistra
+                        color: '#fff',
+                        formatter: `{c}` // Mostra il valore numerico
+                    }
+                },
+                { 
+                    name: 'Parcheggi liberi', 
+                    type: 'bar', 
+                    stack: 'total', 
+                    data: [parking.free], 
+                    itemStyle: { color: '#58D9F9' }, // Cambiato il colore dei liberi
+                    label: {
+                        show: true,
+                        position: 'insideLeft', // Etichetta allineata a sinistra
+                        color: '#000',
+                        formatter: `{c}` // Mostra il valore numerico
+                    }
+                }
+            ]
+        };
+
+        // Memorizziamo l'opzione nel dizionario per essere usata nella funzione loadChart
+        optionsMap[chartDiv.id] = option;
+
+        // Aggiungiamo il div alla lista di osservazione per l'animazione on-scroll
+        observer.observe(chartDiv);
+    });
 });

@@ -9,7 +9,8 @@
   parcheggi a Trento. Interroga periodicamente le API pubbliche e 
   e aggiorna alcuni file di geoparquet, creando una serie temporale per l'analisi 
   analisi storica e di previsione.">
-  <meta name="keywords" content="trento, parcheggi, disponibilità, auto, biciclette, ciclobox, stalli blu, parcheggi a pagamento, statistiche, analisi, previsione">  
+  <meta name="keywords"
+    content="trento, parcheggi, disponibilità, auto, biciclette, ciclobox, stalli blu, parcheggi a pagamento, statistiche, analisi, previsione">
   <meta name="author" content="maurizio napolitano">
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
@@ -21,7 +22,9 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -71,7 +74,7 @@
       <div class="container">
         <div class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
           <div class="col-xl-6 col-lg-8">
-            <br/>
+            <br />
             <h2>Disponibilità parcheggi nella città di Trento</h2>
             <p>parcheggi disponibili</p>
             <p>al giorno <span class='extractiontime'></span></p>
@@ -84,8 +87,9 @@
               <i class="bi bi-p-circle"></i>
               <big>occupazione <span id="carparkspaces_rate"></span></big>
               <h3>
-                <span id="total_carparkspaces_free" data-purecounter-start="0" data-purecounter-end="" data-purecounter-duration="1" class="purecounter"></span>
-                parcheggi liberi per veicoli su <span id="total_carparkspaces"></span> 
+                <span id="total_carparkspaces_free" data-purecounter-start="0" data-purecounter-end=""
+                  data-purecounter-duration="1" class="purecounter"></span>
+                parcheggi liberi per veicoli su <span id="total_carparkspaces"></span>
                 totali nelle <span class="total_parks"></span> strutture
               </h3>
             </div>
@@ -95,52 +99,58 @@
               <i class="bi bi-car-front"></i>
               <big>occupazione <span id="zonespaces_rate"></span></big>
               <h3>
-                <span id="total_zonespaces_free" data-purecounter-start="0" data-purecounter-end="" data-purecounter-duration="1" class="purecounter"></span>
-                parcheggi liberi per veicoli nei <span id="total_zonespaces"></span> stalli blu in <span id="total_zones"></span> zone della città
+                <span id="total_zonespaces_free" data-purecounter-start="0" data-purecounter-end=""
+                  data-purecounter-duration="1" class="purecounter"></span>
+                parcheggi liberi per veicoli nei <span id="total_zonespaces"></span> stalli blu in <span
+                  id="total_zones"></span> zone della città
               </h3>
             </div>
           </div>
-  
+
           <div class="col-xl-2 col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="icon-box">
               <i class="bi bi-bicycle"></i>
               <big>occupazione <span id="bikespaces_rate"></span></big>
               <h3>
-                <span id="total_bikespaces_free" data-purecounter-start="0" data-purecounter-end="" data-purecounter-duration="1" class="purecounter"></span>
-                parcheggi liberi per biciclette nei <span id="total_bikespaces"></span> posti distribuiti su <span id="total_ciclobox"></span> ciclobox
+                <span id="total_bikespaces_free" data-purecounter-start="0" data-purecounter-end=""
+                  data-purecounter-duration="1" class="purecounter"></span>
+                parcheggi liberi per biciclette nei <span id="total_bikespaces"></span> posti distribuiti su <span
+                  id="total_ciclobox"></span> ciclobox
               </h3>
             </div>
           </div>
 
 
-      </div>
+        </div>
 
     </section><!-- /Hero Section -->
 
     <section id="strutture" class="featured-services section">
       <div class="container section-title" data-aos="fade-up">
         <h2>Parcheggi in struttura</h2>
-        <p>La città di Trento tiene monitorata l'occupazione di <span class="total_parks"></span> strutture di parcheggio</p>
+        <p>La città di Trento tiene monitorata l'occupazione di <span class="total_parks"></span> strutture di
+          parcheggio</p>
         <p>situazione al giorno <span class='extractiontime'></span></p>
         <div id="gauge_structures" style="min-height: 500px;" class="echart"></div>
       </div>
       <div class="container">
-        <div class="row"> 
-          <div id="stackedbarchartparcheggi" style="min-height: 400px;" class="echart"></div>
-        </div>
-        <div class="row"> 
+        <div class="row">
+            <div class="container">
+                <div id="charts-container" class="row"></div>
+            </div>        </div>
+        <div class="row">
           <div id="riverstrutture" style="min-height: 400px;" class="echart"></div>
         </div>
       </div>
     </section>
-  
+
   </main>
 
   <footer id="footer" class="footer dark-background">
     <div class="container copyright text-center mt-4">
       <p>origine dati: <a href=" https://parcheggi.comune.trento.it/">https://parcheggi.comune.trento.it/</a></p>
       <div class="credits">
-        un progetto di @napo<br/>
+        un progetto di @napo<br />
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you've purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
@@ -152,7 +162,8 @@
   </footer>
 
   <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Preloader -->
   <div id="preloader"></div>
