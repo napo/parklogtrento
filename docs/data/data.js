@@ -1,28 +1,25 @@
-const lastime_parks="19 Marzo 2025 ore 22:23";
+const lastime_parks="19 Marzo 2025 ore 22:37";
 const total_carparkspaces=2350;
-const total_carparkspaces_free=1324;
+const total_carparkspaces_free=1376;
 const total_bikeparkspaces=444;
 const total_bikeparkspaces_free=245;
 const total_zonespaces=291;
-const total_zonespaces_free=37;
+const total_zonespaces_free=39;
 const total_zonespaces_blu=291;
-const total_zonespaces_blu_free=37;
+const total_zonespaces_blu_free=39;
 const total_zonespaces_carico_scarico=47;
-const total_zonespaces_carico_scarico_free=14;
+const total_zonespaces_carico_scarico_free=15;
 const total_zonespaces_disabili=32;
 const total_zonespaces_disabili_free=15;
 const total_parks=9;
 const total_ciclobox=9;
 const total_zones=8;
 const structures_names=['Garage Autosilo Buonconsiglio - P3', 'Parcheggio piazzale Sanseverino - P7', 'Garage Centro Europa - P2', 'Garage piazza Fiera - P4', 'Parcheggio Cittadella dello studente - P6', 'Parcheggio Santa Chiara', 'Parcheggio Area ex Zuffo - P9', 'Garage Parcheggio Duomo - P5', 'Parcheggio via Monte Baldo - P8'];
-const total_structures_occupied=[105, 218, 230, 169, 2, 22, 255, 8, 17];
-const total_structures_free=[83, 105, 100, 279, 143, 183, 135, 111, 185];
-const percentage_structures_busy=44;
+const total_structures_occupied=[100, 190, 230, 156, 2, 21, 252, 6, 17];
+const total_structures_free=[88, 133, 100, 292, 143, 184, 138, 113, 185];
+const percentage_structures_busy=41;
 
 var riverdatastrutture = [
-  ['2025-03-18 22:30', 119, 'Garage Autosilo Buonconsiglio - P3'],
-  ['2025-03-18 22:35', 119, 'Garage Autosilo Buonconsiglio - P3'],
-  ['2025-03-18 22:40', 119, 'Garage Autosilo Buonconsiglio - P3'],
   ['2025-03-18 22:45', 116, 'Garage Autosilo Buonconsiglio - P3'],
   ['2025-03-18 22:50', 116, 'Garage Autosilo Buonconsiglio - P3'],
   ['2025-03-18 22:55', 111, 'Garage Autosilo Buonconsiglio - P3'],
@@ -307,9 +304,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 115, 'Garage Autosilo Buonconsiglio - P3'],
   ['2025-03-19 22:15', 115, 'Garage Autosilo Buonconsiglio - P3'],
   ['2025-03-19 22:20', 105, 'Garage Autosilo Buonconsiglio - P3'],
-  ['2025-03-18 22:30', 239, 'Garage Centro Europa - P2'],
-  ['2025-03-18 22:35', 239, 'Garage Centro Europa - P2'],
-  ['2025-03-18 22:40', 239, 'Garage Centro Europa - P2'],
+  ['2025-03-19 22:25', 105, 'Garage Autosilo Buonconsiglio - P3'],
+  ['2025-03-19 22:30', 105, 'Garage Autosilo Buonconsiglio - P3'],
+  ['2025-03-19 22:35', 100, 'Garage Autosilo Buonconsiglio - P3'],
   ['2025-03-18 22:45', 239, 'Garage Centro Europa - P2'],
   ['2025-03-18 22:50', 239, 'Garage Centro Europa - P2'],
   ['2025-03-18 22:55', 239, 'Garage Centro Europa - P2'],
@@ -594,9 +591,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 229, 'Garage Centro Europa - P2'],
   ['2025-03-19 22:15', 229, 'Garage Centro Europa - P2'],
   ['2025-03-19 22:20', 230, 'Garage Centro Europa - P2'],
-  ['2025-03-18 22:30', 11, 'Garage Parcheggio Duomo - P5'],
-  ['2025-03-18 22:35', 11, 'Garage Parcheggio Duomo - P5'],
-  ['2025-03-18 22:40', 11, 'Garage Parcheggio Duomo - P5'],
+  ['2025-03-19 22:25', 230, 'Garage Centro Europa - P2'],
+  ['2025-03-19 22:30', 230, 'Garage Centro Europa - P2'],
+  ['2025-03-19 22:35', 230, 'Garage Centro Europa - P2'],
   ['2025-03-18 22:45', 11, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-18 22:50', 11, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-18 22:55', 11, 'Garage Parcheggio Duomo - P5'],
@@ -881,9 +878,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 7, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-19 22:15', 7, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-19 22:20', 8, 'Garage Parcheggio Duomo - P5'],
-  ['2025-03-18 22:30', 157, 'Garage piazza Fiera - P4'],
-  ['2025-03-18 22:35', 157, 'Garage piazza Fiera - P4'],
-  ['2025-03-18 22:40', 157, 'Garage piazza Fiera - P4'],
+  ['2025-03-19 22:25', 8, 'Garage Parcheggio Duomo - P5'],
+  ['2025-03-19 22:30', 8, 'Garage Parcheggio Duomo - P5'],
+  ['2025-03-19 22:35', 6, 'Garage Parcheggio Duomo - P5'],
   ['2025-03-18 22:45', 148, 'Garage piazza Fiera - P4'],
   ['2025-03-18 22:50', 148, 'Garage piazza Fiera - P4'],
   ['2025-03-18 22:55', 132, 'Garage piazza Fiera - P4'],
@@ -1168,9 +1165,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 197, 'Garage piazza Fiera - P4'],
   ['2025-03-19 22:15', 197, 'Garage piazza Fiera - P4'],
   ['2025-03-19 22:20', 169, 'Garage piazza Fiera - P4'],
-  ['2025-03-18 22:30', 291, 'Parcheggio Area ex Zuffo - P9'],
-  ['2025-03-18 22:35', 291, 'Parcheggio Area ex Zuffo - P9'],
-  ['2025-03-18 22:40', 291, 'Parcheggio Area ex Zuffo - P9'],
+  ['2025-03-19 22:25', 169, 'Garage piazza Fiera - P4'],
+  ['2025-03-19 22:30', 169, 'Garage piazza Fiera - P4'],
+  ['2025-03-19 22:35', 156, 'Garage piazza Fiera - P4'],
   ['2025-03-18 22:45', 288, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-18 22:50', 288, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-18 22:55', 281, 'Parcheggio Area ex Zuffo - P9'],
@@ -1455,9 +1452,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 257, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-19 22:15', 257, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-19 22:20', 255, 'Parcheggio Area ex Zuffo - P9'],
-  ['2025-03-18 22:30', 1, 'Parcheggio Cittadella dello studente - P6'],
-  ['2025-03-18 22:35', 1, 'Parcheggio Cittadella dello studente - P6'],
-  ['2025-03-18 22:40', 1, 'Parcheggio Cittadella dello studente - P6'],
+  ['2025-03-19 22:25', 255, 'Parcheggio Area ex Zuffo - P9'],
+  ['2025-03-19 22:30', 255, 'Parcheggio Area ex Zuffo - P9'],
+  ['2025-03-19 22:35', 252, 'Parcheggio Area ex Zuffo - P9'],
   ['2025-03-18 22:45', 1, 'Parcheggio Cittadella dello studente - P6'],
   ['2025-03-18 22:50', 1, 'Parcheggio Cittadella dello studente - P6'],
   ['2025-03-18 22:55', 1, 'Parcheggio Cittadella dello studente - P6'],
@@ -1742,9 +1739,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 2, 'Parcheggio Cittadella dello studente - P6'],
   ['2025-03-19 22:15', 2, 'Parcheggio Cittadella dello studente - P6'],
   ['2025-03-19 22:20', 2, 'Parcheggio Cittadella dello studente - P6'],
-  ['2025-03-18 22:30', 12, 'Parcheggio Santa Chiara'],
-  ['2025-03-18 22:35', 12, 'Parcheggio Santa Chiara'],
-  ['2025-03-18 22:40', 12, 'Parcheggio Santa Chiara'],
+  ['2025-03-19 22:25', 2, 'Parcheggio Cittadella dello studente - P6'],
+  ['2025-03-19 22:30', 2, 'Parcheggio Cittadella dello studente - P6'],
+  ['2025-03-19 22:35', 2, 'Parcheggio Cittadella dello studente - P6'],
   ['2025-03-18 22:45', 12, 'Parcheggio Santa Chiara'],
   ['2025-03-18 22:50', 12, 'Parcheggio Santa Chiara'],
   ['2025-03-18 22:55', 11, 'Parcheggio Santa Chiara'],
@@ -2029,9 +2026,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 25, 'Parcheggio Santa Chiara'],
   ['2025-03-19 22:15', 25, 'Parcheggio Santa Chiara'],
   ['2025-03-19 22:20', 22, 'Parcheggio Santa Chiara'],
-  ['2025-03-18 22:30', 166, 'Parcheggio piazzale Sanseverino - P7'],
-  ['2025-03-18 22:35', 166, 'Parcheggio piazzale Sanseverino - P7'],
-  ['2025-03-18 22:40', 166, 'Parcheggio piazzale Sanseverino - P7'],
+  ['2025-03-19 22:25', 22, 'Parcheggio Santa Chiara'],
+  ['2025-03-19 22:30', 22, 'Parcheggio Santa Chiara'],
+  ['2025-03-19 22:35', 21, 'Parcheggio Santa Chiara'],
   ['2025-03-18 22:45', 156, 'Parcheggio piazzale Sanseverino - P7'],
   ['2025-03-18 22:50', 156, 'Parcheggio piazzale Sanseverino - P7'],
   ['2025-03-18 22:55', 130, 'Parcheggio piazzale Sanseverino - P7'],
@@ -2316,9 +2313,9 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 230, 'Parcheggio piazzale Sanseverino - P7'],
   ['2025-03-19 22:15', 230, 'Parcheggio piazzale Sanseverino - P7'],
   ['2025-03-19 22:20', 218, 'Parcheggio piazzale Sanseverino - P7'],
-  ['2025-03-18 22:30', 18, 'Parcheggio via Monte Baldo - P8'],
-  ['2025-03-18 22:35', 18, 'Parcheggio via Monte Baldo - P8'],
-  ['2025-03-18 22:40', 18, 'Parcheggio via Monte Baldo - P8'],
+  ['2025-03-19 22:25', 218, 'Parcheggio piazzale Sanseverino - P7'],
+  ['2025-03-19 22:30', 218, 'Parcheggio piazzale Sanseverino - P7'],
+  ['2025-03-19 22:35', 190, 'Parcheggio piazzale Sanseverino - P7'],
   ['2025-03-18 22:45', 17, 'Parcheggio via Monte Baldo - P8'],
   ['2025-03-18 22:50', 17, 'Parcheggio via Monte Baldo - P8'],
   ['2025-03-18 22:55', 17, 'Parcheggio via Monte Baldo - P8'],
@@ -2603,4 +2600,7 @@ var riverdatastrutture = [
   ['2025-03-19 22:10', 18, 'Parcheggio via Monte Baldo - P8'],
   ['2025-03-19 22:15', 18, 'Parcheggio via Monte Baldo - P8'],
   ['2025-03-19 22:20', 17, 'Parcheggio via Monte Baldo - P8'],
+  ['2025-03-19 22:25', 17, 'Parcheggio via Monte Baldo - P8'],
+  ['2025-03-19 22:30', 17, 'Parcheggio via Monte Baldo - P8'],
+  ['2025-03-19 22:35', 17, 'Parcheggio via Monte Baldo - P8'],
 ];
