@@ -1,9 +1,9 @@
 id,driver,name,type,city,color,capacity,freeslots,ts,stall_blu_capacity,stall_blu_freeslots,stall_blu_ts,stall_carico-scarico_capacity,stall_carico-scarico_freeslots,stall_carico-scarico_ts,stall_disabili_capacity,stall_disabili_freeslots,stall_disabili_ts
-1004,ID00,Area 2a Corona zona verde,tariffe,Trento,#008000,285,56,2025-03-22 05:39:43,285.0,56.0,1742621983.0,0.0,0.0,0.0,0.0,0.0,0.0
-1000,ID00,Area 2a Corona-zona blu,tariffe,Trento,#0000ff,65,17,2025-03-22 05:32:37,65.0,17.0,1742621557.0,0.0,0.0,0.0,0.0,0.0,0.0
+1004,ID00,Area 2a Corona zona verde,tariffe,Trento,#008000,285,59,2025-03-22 05:46:09,285.0,59.0,1742622369.0,0.0,0.0,0.0,0.0,0.0,0.0
 1001,ID00,Area periferica zona gialla,tariffe,Trento,#ffff00,75,13,2025-03-22 05:38:55,75.0,13.0,1742621935.0,0.0,0.0,0.0,0.0,0.0,0.0
 1008,ID00,Area Ospedaliera zona S.Camillo,tariffe,Trento,#9a8161,16,4,2025-03-22 05:29:34,16.0,4.0,1742621374.0,0.0,0.0,0.0,0.0,0.0,0.0
-1003,ID00,Area di 2a Corona zona rossa,tariffe,Trento,#ff0000,219,70,2025-03-22 05:39:22,219.0,70.0,1742621962.0,0.0,0.0,0.0,0.0,0.0,0.0
+1005,ID00,Area di 1a corona,tariffe,Trento,#5f5f5f,291,99,2025-03-22 05:49:33,291.0,99.0,1742622573.0,47.0,40.0,1742622573.0,32.0,24.0,1742622573.0
+1003,ID00,Area di 2a Corona zona rossa,tariffe,Trento,#ff0000,219,69,2025-03-22 05:46:15,219.0,69.0,1742622375.0,0.0,0.0,0.0,0.0,0.0,0.0
+1000,ID00,Area 2a Corona-zona blu,tariffe,Trento,#0000ff,65,18,2025-03-22 05:49:42,65.0,18.0,1742622582.0,0.0,0.0,0.0,0.0,0.0,0.0
+1006,ID00,Area periferica zona gialla 0.50,tariffe,Trento,#ffff00,178,72,2025-03-22 05:48:00,178.0,72.0,1742622480.0,0.0,0.0,0.0,0.0,0.0,0.0
 1009,ID00,Zona Villa Bianca / Villa Igea,tariffe,Trento,#474a51,22,5,2025-03-22 05:03:05,22.0,5.0,1742619785.0,0.0,0.0,0.0,0.0,0.0,0.0
-1005,ID00,Area di 1a corona,tariffe,Trento,#5f5f5f,291,100,2025-03-22 05:39:30,291.0,100.0,1742621970.0,47.0,40.0,1742621970.0,32.0,24.0,1742621970.0
-1006,ID00,Area periferica zona gialla 0.50,tariffe,Trento,#ffff00,178,72,2025-03-22 05:37:58,178.0,72.0,1742621878.0,0.0,0.0,0.0,0.0,0.0,0.0
