@@ -1,9 +1,9 @@
 id,driver,name,type,city,color,capacity,freeslots,ts,stall_blu_capacity,stall_blu_freeslots,stall_blu_ts,stall_disabili_capacity,stall_disabili_freeslots,stall_disabili_ts,stall_carico-scarico_capacity,stall_carico-scarico_freeslots,stall_carico-scarico_ts
-1009,ID00,Zona Villa Bianca / Villa Igea,tariffe,Trento,#474a51,22,3,2025-04-10 19:46:37,22.0,3.0,1744314397.0,0.0,0.0,0.0,0.0,0.0,0.0
-1006,ID00,Area periferica zona gialla 0.50,tariffe,Trento,#ffff00,178,50,2025-04-10 19:51:30,178.0,50.0,1744314690.0,0.0,0.0,0.0,0.0,0.0,0.0
-1000,ID00,Area 2a Corona-zona blu,tariffe,Trento,#0000ff,65,9,2025-04-10 19:51:26,65.0,9.0,1744314686.0,0.0,0.0,0.0,0.0,0.0,0.0
-1004,ID00,Area 2a Corona zona verde,tariffe,Trento,#008000,285,60,2025-04-10 19:53:26,285.0,60.0,1744314806.0,0.0,0.0,0.0,0.0,0.0,0.0
-1003,ID00,Area di 2a Corona zona rossa,tariffe,Trento,#ff0000,219,48,2025-04-10 19:51:03,219.0,48.0,1744314663.0,0.0,0.0,0.0,0.0,0.0,0.0
-1005,ID00,Area di 1a corona,tariffe,Trento,#5f5f5f,293,40,2025-04-10 19:54:47,293.0,40.0,1744314887.0,32.0,18.0,1744314887.0,45.0,13.0,1744314887.0
-1001,ID00,Area periferica zona gialla,tariffe,Trento,#ffff00,75,8,2025-04-10 19:54:42,75.0,8.0,1744314882.0,0.0,0.0,0.0,0.0,0.0,0.0
-1008,ID00,Area Ospedaliera zona S.Camillo,tariffe,Trento,#9a8161,16,3,2025-04-10 19:36:33,16.0,3.0,1744313793.0,0.0,0.0,0.0,0.0,0.0,0.0
+1004,ID00,Area 2a Corona zona verde,tariffe,Trento,#008000,285,74,2025-04-10 20:23:37,285.0,74.0,1744316617.0,0.0,0.0,0.0,0.0,0.0,0.0
+1005,ID00,Area di 1a corona,tariffe,Trento,#5f5f5f,293,51,2025-04-10 20:24:33,293.0,51.0,1744316673.0,32.0,17.0,1744316673.0,45.0,13.0,1744316673.0
+1000,ID00,Area 2a Corona-zona blu,tariffe,Trento,#0000ff,65,10,2025-04-10 20:23:57,65.0,10.0,1744316637.0,0.0,0.0,0.0,0.0,0.0,0.0
+1009,ID00,Zona Villa Bianca / Villa Igea,tariffe,Trento,#474a51,22,4,2025-04-10 20:19:51,22.0,4.0,1744316391.0,0.0,0.0,0.0,0.0,0.0,0.0
+1008,ID00,Area Ospedaliera zona S.Camillo,tariffe,Trento,#9a8161,16,3,2025-04-10 20:07:05,16.0,3.0,1744315625.0,0.0,0.0,0.0,0.0,0.0,0.0
+1003,ID00,Area di 2a Corona zona rossa,tariffe,Trento,#ff0000,219,46,2025-04-10 20:24:48,219.0,46.0,1744316688.0,0.0,0.0,0.0,0.0,0.0,0.0
+1006,ID00,Area periferica zona gialla 0.50,tariffe,Trento,#ffff00,178,52,2025-04-10 20:22:01,178.0,52.0,1744316521.0,0.0,0.0,0.0,0.0,0.0,0.0
+1001,ID00,Area periferica zona gialla,tariffe,Trento,#ffff00,75,7,2025-04-10 20:17:33,75.0,7.0,1744316253.0,0.0,0.0,0.0,0.0,0.0,0.0
