@@ -5,7 +5,6 @@ import json
 import pytz
 import geopandas as gpd
 from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
 PARKS_GEOPARQUET = "data" + os.sep + "parks.geoparquet"
 ZONES_GEOPARQUET = "data" + os.sep + "zones.geoparquet"
 parks = gpd.read_parquet(PARKS_GEOPARQUET)
