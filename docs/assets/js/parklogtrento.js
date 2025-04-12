@@ -1,484 +1,763 @@
-// Calcola la percentuale (free/totals)
-carparkspace_rate = 100- Math.round((total_carparkspaces_free / total_carparkspaces) * 100);
-zonespaces_rate = 100- Math.round((total_zonespaces_free / total_zonespaces) * 100);
-bikespaces_rate = 100 - Math.round((total_bikeparkspaces_free / total_bikeparkspaces) * 100);
+const summary = {
+  bike: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
+  park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
+  zone: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
+};
+var total_zones = 0;
 
-// Aggiorna dinamicamente i testi
-document.querySelectorAll('span.extractiontime').forEach(el => {
-  el.textContent = lastime_parks;
-});
-document.querySelector('span#total_carparkspaces').textContent = total_carparkspaces;
-document.querySelector('span#total_bikespaces').textContent = total_bikeparkspaces;        
-document.querySelectorAll('span.total_parks').forEach(el => {
-    el.textContent = total_parks;
-});
-document.querySelector('span#total_zonespaces').textContent = total_zonespaces;
-document.querySelector('span#total_zones').textContent = total_zones;
-document.querySelector('span#total_ciclobox').textContent = total_ciclobox;
-document.querySelector('span#carparkspaces_rate').textContent = carparkspace_rate + '%';
+async function fetchParkingData(timeout = 5000) {
+  const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://parcheggi.comune.trento.it/static/services/registry_parks.json");
 
-document.querySelector('span#zonespaces_rate').textContent = zonespaces_rate + '%';
-document.querySelector('span#bikespaces_rate').textContent = bikespaces_rate + '%';
-document.querySelector('span#total_zonespaces_free').textContent = total_zonespaces_free + '%';
-// aggiorna i contatori
-document.getElementById('total_carparkspaces_free').setAttribute('data-purecounter-end', total_carparkspaces_free);
-document.getElementById('total_bikespaces_free').setAttribute('data-purecounter-end', total_bikeparkspaces_free);
-document.getElementById('total_zonespaces_free').setAttribute('data-purecounter-end', total_zonespaces_free);
+  const controller = new AbortController();
+  const signal = controller.signal;
 
-// inizializza PureCounter dopo aver impostato i dati
-new PureCounter();
+  // Timeout manuale
+  const timer = setTimeout(() => controller.abort(), timeout);
 
-// Calcolo dei valori percentuali
-const total_structures_sum = total_structures_occupied.map((val, index) => val + total_structures_free[index]);
-const occupied_structures_percent = total_structures_occupied.map((val, index) => Math.round((val / total_structures_sum[index]) * 100));
-const free_structures_percent = total_structures_free.map((val, index) => Math.round((val / total_structures_sum[index]) * 100));
+  try {
+    const response = await fetch(proxyUrl, { signal });
+    clearTimeout(timer); // Se la fetch va a buon fine, annullo il timer
+    if (!response.ok) throw new Error("Errore nel fetch");
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Errore nel caricamento dei dati:", err.message || err);
+    // Qui puoi mostrare un messaggio all'utente o offrire un refresh
+    showErrorAndRefreshOption();
+    return null;
+  }
+}
 
-const optionstackedbarchart = {
-  title: {
-    text: 'Distribuzione strutture al ' + lastime_parks, 
-    left: 'center', 
-    top: 'top'
-  },
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'line' 
-    },
-    formatter: function (params) {
-      let tooltipText = `${params[0].name} <br/>`;
-      params.forEach(param => {
-        const absoluteValue = param.seriesName === 'occupati' 
-          ? total_structures_occupied[param.dataIndex] 
-          : total_structures_free[param.dataIndex];
-        tooltipText += `${param.marker} ${param.seriesName}: ${absoluteValue} (${param.value.toFixed(1)}%)<br/>`;
+function showErrorAndRefreshOption() {
+  const errorBox = document.getElementById("error-box");
+  if (errorBox) {
+    errorBox.innerHTML = `
+      <p>⚠️ Errore nel caricamento dei parcheggi. <button onclick="retryFetch()">Riprova</button></p>
+    `;
+  }
+}
+
+function retryFetch() {
+  document.getElementById("error-box").innerHTML = "⏳ Ricarico dati...";
+  fetchParkingData();
+}
+
+
+
+async function fetchZonesData() {
+  const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://parcheggi.comune.trento.it/static/services/registry_zones.json");
+  const response = await fetch(proxyUrl);
+  const data = await response.json();
+  return data;
+}
+
+async function render() {
+  //const structureContainer = document.getElementById('parking-structure');
+  //const bikeContainer = document.getElementById('bike-parking');
+  const data = await fetchParkingData();
+  const datazones = await fetchZonesData();
+  total_zones = 0;
+  datazones.forEach(item => {
+    if (Array.isArray(item.stalls)) {
+      item.stalls.forEach(stall => {
+        if (stall.type === "blu") {
+          total_zones += 1;
+          summary.zone.total += stall.capacity || 0;
+          summary.zone.freeslots += stall.freeslots || 0;
+        }
       });
-      return tooltipText;
     }
-  },
-  legend: {
-    bottom: 0,
-    left: 'center' 
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '20%',
-    containLabel: true
-  },
-  xAxis: {
-    type: 'value',
-    max: 100, // Poiché ora i dati sono percentuali
-    axisLabel: {
-      formatter: '{value}%' 
-    }
-  },
-  yAxis: {
-    type: 'category',
-    data: structures_names,
-  },
-  series: [
-    {
-      name: 'occupati',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true,
-        formatter: '{c}%' 
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      itemStyle: {
-        color: '#58D9F9' 
-      },
-      data: occupied_structures_percent
-    },
-    {
-      name: 'liberi',
-      type: 'bar',
-      stack: 'total',
-      label: {
-        show: true,
-        formatter: '{c}%'
-      },
-      emphasis: {
-        focus: 'series'
-      },
-      itemStyle: {
-        color: '#50737a' 
-      },
-      data: free_structures_percent
-    }
-  ]
-};
+  });
+  summary['zone'].spacerate = summary['zone'].total > 0
+    ? 100 - Math.round((summary['zone'].freeslots / summary['zone'].total) * 100)
+    : 0;
 
-const optiongauge_structures = {
-  series: [
-    {
-      type: 'gauge',
-      startAngle: 180,
-      endAngle: 0,
-      min: 0,
-      max: 100,
-      splitNumber: 4,
-      itemStyle: {
-        color: '#58D9F9'
-      },
-      progress: {
-        show: true,
-        roundCap: true,
-        width: 18
-      },
-      pointer: {
-        icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',
-        length: '75%',
-        width: 16,
-        offsetCenter: [0, '5%']
-      },
-      axisLine: {
-        roundCap: true,
-        lineStyle: {
-          width: 18
+  const parks = data.filter(item => item.type === "park");
+  summary.park.totalspaces = parks.length;
+  const latestTimestamp = Math.max(...parks.map(p => p.lastReceivedTimestamp || 0));
+  const latestDate = new Date(latestTimestamp * 1000);
+  const formattedDate = latestDate.toLocaleDateString('it-IT', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  const formattedTime = latestDate.toLocaleTimeString('it-IT', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  summary.park.latestdate =  `${formattedDate} ore ${formattedTime}`;
+
+  const filtered = data.filter(item => item.type === "bike" || item.type === "park");
+  filtered.forEach(item => {
+    const key = item.type; // "bike" o "park"
+    summary[key].total += item.capacity || 0;
+    summary[key].freeslots += item.freeslots || 0;
+  });
+
+  ['bike', 'park'].forEach(type => {
+    const total = summary[type].total;
+    const free = summary[type].freeslots;
+    summary[type].spacerate = total > 0 ? 100 - Math.round((free / total) * 100) : 0;
+  });
+
+  updatehero();  
+  observeGaugeAnimation(summary.park.spacerate); 
+  observeGaugeBike(summary.bike.spacerate);
+  observeGaugeZone(summary.zone.spacerate);
+  
+  document.querySelector('.total_zones').innerText = total_zones;
+  const zoneContainer = document.getElementById('zoneContainer');
+  datazones.forEach((zone, index) => {
+    let total = 0, freeslots = 0;
+    (zone.stalls || []).forEach(stall => {
+      if (stall.type === "blu") {
+        total += stall.capacity || 0;
+        freeslots += stall.freeslots || 0;
+      }
+    });
+  
+    
+    const cardHtml = createCardZone(zone, index);
+    const col = document.createElement('div');
+    col.className = 'col-12 col-sm-6 col-md-4 mb-4 parking-card';
+    col.innerHTML = cardHtml;
+    zoneContainer.appendChild(col);
+  
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateNumbers({ capacity: total, freeslots: freeslots }, index, 'zone');
+          observer.unobserve(entry.target);
         }
-      },
-      axisTick: {
-        splitNumber: 2,
-        lineStyle: {
-          width: 2,
-          color: '#999'
+      });
+    }, { threshold: 0.1 });
+  
+    observer.observe(col);
+  });
+
+  
+  let indexStructure = 0;
+  let indexBike = 0;
+  data.forEach((park) => {
+    const prefix = park.type === 'bike' ? 'bike' : 'structure';
+    const index = park.type === 'bike' ? indexBike++ : indexStructure++;
+    /* card */
+    const cardHtml = createCard(park, index, prefix);
+    const col = document.createElement('div');
+    col.className = 'col-md-4 mb-4 parking-card';
+    col.innerHTML = cardHtml;
+    const container = park.type === 'bike' ? bikeContainer : structureContainer;
+    container.appendChild(col);
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateNumbers(park, index, prefix);
+          observer.unobserve(entry.target);
         }
-      },
-      splitLine: {
-        length: 12,
-        lineStyle: {
-          width: 3,
-          color: '#999'
-        }
-      },
-      axisLabel: {
-        distance: 30,
-        color: '#999',
-        fontSize: 20
-      },
-      detail: {
-        backgroundColor: '#fff',
-        borderWidth: 0,
-        width: '100%',
-        lineHeight: 0,
-        height: 0,
-        borderRadius: 8,
-        offsetCenter: [0, '35%'],
-        valueAnimation: true,
-        formatter: function (value) {
-          return '{value|' + value.toFixed(0) + '%}{unit|posti occupati}';
+      });
+    }, { threshold: 0.1 });
+    observer.observe(col);
+  });
+}
+
+function animateValue(el, start, end, duration = 1000, suffix = '') {
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    const value = Math.floor(progress * (end - start) + start);
+    el.innerText = `${value}${suffix}`;
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  };
+  window.requestAnimationFrame(step);
+}
+
+
+async function startApp() {
+  const preloader = document.getElementById('preloader');
+
+  try {
+    await render(); // Chiama tutto il flusso
+  } catch (error) {
+    console.error("Errore nel caricamento dei dati:", error);
+    if (preloader) {
+      preloader.innerText = "Errore nel caricamento dei dati.";
+      return;
+    }
+  }
+
+  // Una volta che tutto è pronto, rimuove il preloader
+  if (preloader) {
+    preloader.remove();
+  }
+}
+
+// Avvia tutto quando la finestra è caricata
+window.addEventListener('load', startApp);
+
+
+function updatehero() {
+  // questo va calcolato!!!
+  const total_ciclobox=9;
+
+  // Aggiorna dinamicamente i testi
+  document.querySelectorAll('.extractiontime').forEach(el => {
+    el.textContent = summary.park.latestdate;
+  });
+  document.querySelector('span#total_carparkspaces').textContent = summary.park.total;
+  document.querySelector('span#total_bikespaces').textContent = summary.bike.total;
+  document.querySelectorAll('.total_parks').forEach(el => el.textContent = summary.park.totalspaces);
+
+
+  document.querySelector('span#total_zonespaces').textContent = summary.zone.total;
+  document.querySelector('span#total_zones').textContent = total_zones;
+  document.querySelector('span#total_ciclobox').textContent = total_ciclobox;
+  
+  document.querySelector('span#carparkspaces_rate').textContent = summary.park.spacerate + '%';
+  document.querySelector('span#zonespaces_rate').textContent = summary.zone.spacerate + '%';
+  document.querySelector('span#bikespaces_rate').textContent = summary.bike.spacerate  + '%';
+  //document.querySelector('span#total_zonespaces_free').textContent = total_zonespaces_free + '%';
+  // aggiorna i contatori
+  document.getElementById('total_carparkspaces_free').setAttribute('data-purecounter-end', summary.park.freeslots);
+  document.getElementById('total_bikespaces_free').setAttribute('data-purecounter-end', summary.bike.freeslots);
+  document.getElementById('total_zonespaces_free').setAttribute('data-purecounter-end', summary.zone.freeslots);
+
+  // inizializza PureCounter dopo aver impostato i dati
+  new PureCounter();
+}
+
+function observeGaugeAnimation(spacerate) {
+  const target = document.getElementById('gauge_structures');
+  if (!target) return;
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        drawGaugeStructures(spacerate); 
+        observer.unobserve(entry.target); 
+      }
+    });
+  }, { threshold: 0.4 });
+
+  observer.observe(target);
+}
+
+
+function drawGaugeStructures(spacerate) {
+  const chartDom = document.getElementById('gauge_structures');
+  const myChart = echarts.init(chartDom);
+
+  const optiongauge_structures = {
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 180,
+        endAngle: 0,
+        min: 0,
+        max: 100,
+        splitNumber: 4,
+        itemStyle: {
+          color: '#199eb8'
         },
-        rich: {
-          value: {
-            fontSize: 50,
-            fontWeight: 'bolder',
-            color: '#777'
-          },
-          unit: {
-            fontSize: 20,
-            color: '#999',
-            padding: [0, 0, -20, 10]
+        progress: {
+          show: true,
+          roundCap: true,
+          width: 18
+        },
+        pointer: {
+          show: true,
+          icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',          length: '75%',
+          width: 16,
+          offsetCenter: [0, '5%']
+        },
+        axisLine: {
+          roundCap: true,
+          lineStyle: {
+            width: 18
           }
-        }
-      },
-      data: [
-        {
-          value: percentage_structures_busy
-        }
-      ]
-    }
-  ]
-};
-
-// Funzione per generare una gradazione di colori scuri partendo da un colore base
-function generateGradientColors(baseColor, numSteps) {
-  const colors = [];
-  let [r, g, b] = [
-      parseInt(baseColor.substring(1, 3), 16),
-      parseInt(baseColor.substring(3, 5), 16),
-      parseInt(baseColor.substring(5, 7), 16)
-  ];
-
-  for (let i = 0; i < numSteps; i++) {
-      // Rende il colore più scuro diminuendo la luminosità
-      r = Math.max(0, r - 15);
-      g = Math.max(0, g - 15);
-      b = Math.max(0, b - 15);
-      colors.push(`#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`);
-  }
-
-  return colors;
-}
-
-// Genera una palette di colori scuri partendo da #199eb8
-const colors = generateGradientColors("#199eb8", 10);
-
-// Organizza i dati per il grafico a barre impilate
-const seriesData = {};
-const categories = new Set();
-
-riverdatastrutture.forEach(([time, value, structure]) => {
-// Estrai solo HH:MM
-const dateObj = new Date(time);
-const formattedTime = dateObj.toLocaleTimeString('it-IT', {
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: false
-});
-
-if (!seriesData[structure]) {
-  seriesData[structure] = [];
-}
-seriesData[structure].push([formattedTime, value]);
-categories.add(formattedTime);
-});
-
-// Mantiene tutti i dati, ma filtra le etichette da mostrare solo per le ore e le mezz'ore
-const allCategories = Array.from(categories);
-const labelFormatter = (value) => {
-const minutes = parseInt(value.split(':')[1], 10);
-return (minutes === 0 || minutes === 30) ? value : '';
-};
-
-// Converte i dati in un formato compatibile con ECharts
-const series = Object.keys(seriesData).map((name, index) => ({
-  name,
-  type: 'line',
-  stack: 'occupied',
-  areaStyle: {},
-  symbol: 'none',
-  color: colors[index % colors.length], // Assegna un colore scuro progressivo a ogni parcheggio
-  emphasis: {
-    focus: 'series'
-  },
-  data: allCategories.map(time => {
-    const entry = seriesData[name].find(d => d[0] === time);
-    return entry ? entry[1] : 0;
-    })
-  }));
-
-// Configurazione del grafico a barre impilate
-optionriverstrutture = {
-  title: {
-    text: 'Veicoli parcheggiati ultime 24h',
-    left: 'center'
-  },
-  dataZoom: [{
-    type: 'inside',
-    start: 0,
-    end: 100
-  },{
-    start: 0,
-    end: 100
-  }],
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'shadow'
-    }
-  },
-  legend: {
-    data: Object.keys(seriesData),
-    bottom: '15%', // Posiziona la legenda in basso senza sovrapposizione
-    itemGap: 10,  // Distanza tra gli elementi della legenda
-    textStyle: {
-    fontSize: 12
-  }
-  },
-  grid: {
-    left: '10%',
-    right: '10%',
-    bottom: '35%' // Aggiunge spazio per evitare sovrapposizione della legenda con l'asse X
-  },
-  xAxis: {
-    type: 'category',
-    data: allCategories,
-    axisLabel: {
-      formatter: labelFormatter, // Mostra solo le etichette delle ore e delle mezz'ore
-      rotate: 45 // Ruota le etichette per maggiore leggibilità
-   }
-  },
-  yAxis: {
-    type: 'value'
-  },
-    series
+        },
+        axisTick: {
+          splitNumber: 2,
+          lineStyle: {
+            width: 2,
+            color: '#999'
+          }
+        },
+        splitLine: {
+          length: 12,
+          lineStyle: {
+            width: 3,
+            color: '#999'
+          }
+        },
+        axisLabel: {
+          distance: 30,
+          color: '#999',
+          fontSize: 20
+        },
+        detail: {
+          backgroundColor: '#fff',
+          borderWidth: 0,
+          width: '100%',
+          lineHeight: 0,
+          height: 0,
+          borderRadius: 8,
+          offsetCenter: [0, '35%'],
+          valueAnimation: true,
+          formatter: function (value) {
+            return '{value|' + value.toFixed(0) + '%}{unit|posti occupati}';
+          },
+          rich: {
+            value: {
+              fontSize: 50,
+              fontWeight: 'bolder',
+              color: '#777'
+            },
+            unit: {
+              fontSize: 20,
+              color: '#999',
+              padding: [0, 0, -20, 10]
+            }
+          }
+        },
+        data: [
+          {
+            value: spacerate
+          }
+        ]
+      }
+    ]
   };
 
+  myChart.setOption(optiongauge_structures);
+    window.addEventListener('resize', () => {
+      myChart.resize();
+    });
+}
 
-// Creiamo un array di oggetti per i dati delle strutture
-const parkingData = structures_names.map((name, index) => {
-    let total = total_structures_occupied[index] + total_structures_free[index];
-    let percentOccupied = total > 0 ? Math.round((total_structures_occupied[index] / total) * 100) : 0;
-    
-    return {
-        name: name,
-        free: total_structures_free[index],
-        occupied: total_structures_occupied[index],
-        total: total,
-        percentOccupied: percentOccupied
-    };
-});
+function drawGaugeBike(spacerate) {
+  const chartDom = document.getElementById('gauge_bike');
+  if (!chartDom) return;
 
-// Seleziona il contenitore dove inserire i grafici
-var container = document.getElementById('charts-container');
+  const myChart = echarts.init(chartDom);
 
+  const option = {
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 180,
+        endAngle: 0,
+        min: 0,
+        max: 100,
+        splitNumber: 4,
+        itemStyle: { color: '#199eb8' },
+        progress: { show: true, roundCap: true, width: 18 },
+        pointer: {
+          show: true,
+          icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',          length: '75%',
+          width: 16,
+          offsetCenter: [0, '5%']
+        },
+        axisLine: { roundCap: true, lineStyle: { width: 18 } },
+        axisTick: { splitNumber: 2, lineStyle: { width: 2, color: '#999' } },
+        splitLine: { length: 12, lineStyle: { width: 3, color: '#999' } },
+        axisLabel: { distance: 30, color: '#999', fontSize: 16 },
+        detail: {
+          valueAnimation: true,
+          formatter: v => `${v.toFixed(0)}% occupati`,
+          fontSize: 24,
+          color: '#555',
+          offsetCenter: [0, '35%']
+        },
+        data: [{ value: spacerate }]
+      }
+    ]
+  };
 
-document.addEventListener("DOMContentLoaded", function () {
-    const sections = document.querySelectorAll(".echart");
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                loadChart(entry.target);
-                observer.unobserve(entry.target); // Una volta caricato, non osservarlo più
-            }
-        });
-    }, { threshold: 0.3 });
+  myChart.setOption(option);
+  window.addEventListener('resize', () => myChart.resize());
+}
 
-    sections.forEach(section => observer.observe(section));
+function observeGaugeBike(spacerate) {
+  const chartContainer = document.getElementById('gauge_bike');
+  if (!chartContainer) return;
 
-    function loadChart(element) {
-        const chartId = element.id;
-        if (!chartId) return;
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        drawGaugeBike(spacerate);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
 
-        let option;
+  observer.observe(chartContainer);
+}
 
-        if (chartId === "stackedbarchartparcheggi") {
-            option = optionstackedbarchart; // Usa l'opzione del grafico a barre impilate
-        } else if (chartId === "riverstrutture") {
-            option = optionriverstrutture; // Sostituiscilo con l'opzione del tuo terzo grafico
-        } else if (chartId === 'gauge_structures') {
-            option = optiongauge_structures;
-        } else if (optionsMap[chartId]) {
-            option = optionsMap[chartId]; // Carica l'opzione del grafico dinamico
-        }
+function createCardZone(zone, index) {
+  let total = 0, freeslots = 0;
 
-        if (option) {
-            const chart = echarts.init(element);
-            chart.setOption(option);
-        }
+  (zone.stalls || []).forEach(stall => {
+    if (stall.type === "blu") {
+      total += stall.capacity || 0;
+      freeslots += stall.freeslots || 0;
     }
+  });
 
-    // 📌 Creiamo un oggetto per memorizzare le opzioni dei grafici generati dinamicamente
-    const optionsMap = {};
+  const occupied = total - freeslots;
+  const percentage = total > 0 ? Math.round((occupied / total) * 100) : 0;
+  const html = [];
 
-    // 🔥 Creiamo i grafici dinamici e li aggiungiamo alla lista osservata
-    parkingData.forEach((parking, index) => {
-        var chartDiv = document.createElement('div');
-        chartDiv.className = 'col-md-4 mb-4 echart';  // 3 colonne massimo + classe echart per essere osservato
-        chartDiv.id = `chart-${index}`;
-        chartDiv.style.minHeight = "250px";
-        document.getElementById('charts-container').appendChild(chartDiv);
+  html.push(`<div class="card h-100 d-flex flex-column"><div class="card-body d-flex flex-column">`);
+  html.push(`<h5 class="card-title">${zone.name}</h5>`);
+  html.push(`<p class="card-text"><strong>Capacità:</strong> ${total}</p>`);
+  html.push(`<p class="card-text"><strong>Spazi liberi:</strong> <span id="free-zone-${index}">${freeslots}</span></p>`);
+  html.push(`<p class="card-text"><strong>Spazi occupati:</strong> <span id="occupied-zone-${index}">${occupied}</span></p>`);
 
-        // Definiamo l'opzione per ogni grafico
-        let option = {
-            title: { 
-                text: parking.name,  // Nome del parcheggio
-                left: 'left', // Allineato a sinistra
-                textStyle: { 
-                    fontSize: 18,  // Aumentato il testo del titolo
-                    fontWeight: 'bold', 
-                    fontFamily: 'var(--heading-font)'
-                }
+  if (Array.isArray(zone.rates) && zone.rates.length > 0) {
+    html.push(`<p class="card-text"><strong>Tariffe:</strong><br>`);
+zone.rates.forEach(rate => {
+  const from = rate.from || '';
+  const to = rate.to || '';
+  const cost = rate.cost !== undefined ? `€${rate.cost.toFixed(2)}` : 'gratis';
+  const unitMap = {
+    'hour': 'ora',
+    'day': 'giorno'
+  };
+  const unit = unitMap[rate.unit] || rate.unit || '';
+
+  if (rate.cost === 0) {
+    html.push(`${from}–${to}: <span class="badge bg-success">gratis</span><br>`);
+  } else {
+    html.push(`${from}–${to}: ${cost}/${unit}<br>`);
+  }
+});
+html.push(`</p>`);
+  }
+
+  html.push(`<div class="bar-label" id="percent-zone-${index}">${percentage}% di posti occupati</div>`);
+  html.push(`<div class="bar-container mt-auto">
+    <div class="bar-occupied" id="bar-occupied-zone-${index}" style="width: 0%"></div>
+    <div class="bar-free" id="bar-free-zone-${index}" style="width: 0%"></div>
+  </div>`);
+  html.push(`<div class="bar-abs">
+    <div class="bar-abs-left" id="abs-occupied-zone-${index}">${occupied} occupati</div>
+    <div class="bar-abs-right" id="abs-free-zone-${index}">${freeslots} liberi</div>
+  </div>`);
+  html.push(`</div></div>`);
+
+  return html.join('\n');
+}
+
+function drawGaugeZone(spacerate) {
+  console.log('Drawing gauge zone with spacerate:', spacerate);
+  const chartDom = document.getElementById('gauge_zone');
+  if (!chartDom) return;
+
+  const myChart = echarts.init(chartDom);
+
+  const option = {
+    series: [
+      {
+        type: 'gauge',
+        startAngle: 180,
+        endAngle: 0,
+        min: 0,
+        max: 100,
+        splitNumber: 4,
+        itemStyle: {
+          color: '#3498db'  // colore principale del gauge
+        },
+        progress: {
+          show: true,
+          roundCap: true,
+          width: 18
+        },
+        pointer: {
+          icon: 'path://M2090.36389,615.30999 L2090.36389,615.30999 C2091.48372,615.30999 2092.40383,616.194028 2092.44859,617.312956 L2096.90698,728.755929 C2097.05155,732.369577 2094.2393,735.416212 2090.62566,735.56078 C2090.53845,735.564269 2090.45117,735.566014 2090.36389,735.566014 L2090.36389,735.566014 C2086.74736,735.566014 2083.81557,732.63423 2083.81557,729.017692 C2083.81557,728.930412 2083.81732,728.84314 2083.82081,728.755929 L2088.2792,617.312956 C2088.32396,616.194028 2089.24407,615.30999 2090.36389,615.30999 Z',
+          length: '75%',
+          width: 16,
+          offsetCenter: [0, '5%']
+        },
+        axisLine: {
+          roundCap: true,
+          lineStyle: {
+            width: 18
+          }
+        },
+        axisTick: {
+          splitNumber: 2,
+          lineStyle: {
+            width: 2,
+            color: '#999'
+          }
+        },
+        splitLine: {
+          length: 12,
+          lineStyle: {
+            width: 3,
+            color: '#999'
+          }
+        },
+        axisLabel: {
+          distance: 30,
+          color: '#999',
+          fontSize: 20
+        },
+        detail: {
+          valueAnimation: true,
+          formatter: function (value) {
+            return '{value|' + value.toFixed(0) + '%}{unit|occupati}';
+          },
+          rich: {
+            value: {
+              fontSize: 50,
+              fontWeight: 'bolder',
+              color: '#777'
             },
-            tooltip: { 
-                trigger: 'axis', 
-                axisPointer: { type: 'shadow' } 
-            },
-            legend: { 
-                data: ['Parcheggi occupati', 'Parcheggi liberi'], 
-                bottom: '5%', // Avvicinata la legenda al grafico
-                left: 'center'
-            },
-            grid: {
-                left: '10%',  // Margine ridotto per evitare spazio extra
-                right: '10%',
-                bottom: '20%',
-                top: '25%', // Riduce ancora lo spazio tra il titolo e il grafico
-                containLabel: true
-            },
-            xAxis: { 
-                type: 'value',
-                max: parking.total / 2, // Ridotta la larghezza della barra impilata
-                show: false // Nasconde l'asse X
-            },
-            yAxis: { 
-                type: 'category', 
-                data: [''], // Mantiene l'orientamento orizzontale senza etichette
-                show: false // Nasconde l'asse Y
-            },
-            graphic: [
-                {
-                    type: 'text',
-                    left: '10%', // Allineato a sinistra
-                    top: '8%',
-                    style: {
-                        text: `Situazione al giorno ${lastime_parks}`, // Data sotto il titolo
-                        font: '14px var(--default-font)',
-                        fill: '#666',
-                        textAlign: 'left'
+            unit: {
+              fontSize: 20,
+              color: '#999',
+              padding: [0, 0, -20, 10]
+            }
+          },
+          backgroundColor: '#fff',
+          borderWidth: 0,
+          width: '100%',
+          lineHeight: 0,
+          height: 0,
+          borderRadius: 8,
+          offsetCenter: [0, '35%']
+        },
+        data: [
+          {
+            value: spacerate
+          }
+        ]
+      }
+    ]
+  };
+
+  myChart.setOption(option, true);
+  window.addEventListener('resize', () => myChart.resize());
+}
+
+
+function observeGaugeZone(spacerate) {
+  const chartContainer = document.getElementById('gauge_zone');
+  if (!chartContainer) return;
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        drawGaugeZone(spacerate);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(chartContainer);
+}
+
+
+function createCard(park, index, prefix) {
+  const capacity = park.capacity;
+  const free = park.freeslots;
+  const occupied = capacity - free;
+  const percentage = capacity > 0 ? Math.round((occupied / capacity) * 100) : 0;
+  const [lng, lat] = park.geom.replace('POINT(', '').replace(')', '').split(' ');
+  const date = new Date(park.lastReceivedTimestamp * 1000);
+  const giorno = date.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const ora = date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+  const apertura = park.opening || {};
+  const lunven = (apertura.lunven || []).join(', ');
+  const sab = (apertura.sab || []).join(', ');
+  const fes = (apertura.fes || []).join(', ');
+
+  const html = [];
+  // Card container with full height and flex column
+  html.push(`<div class="card h-100">`);
+  html.push(`  <div class="card-body d-flex flex-column">`);
+  // Contenuto testuale della card
+  html.push(`    <h5 class="card-title"><a href="${park.link}" target="_blank">${park.name}</a></h5>`);
+  if (lat && lng) {
+    const geoUrl = `geo:${lat},${lng}?z=19`;
+
+    if (park.address) {
+      const formattedAddress = formatAddress(park.address);
+      html.push(`<p class="card-text mb-1"><a href="${geoUrl}">${formattedAddress}</a></p>`);
+    } else {
+      html.push(`<p class="card-text mb-1"><a href="${geoUrl}">dove si trova</a></p>`);
+    }
+  }
+
+  
+  html.push(`    <p class="card-text"><em>${giorno} - ${ora}</em></p>`);
+  html.push(`    <p class="card-text"><strong>Capacità:</strong> ${capacity}<br/>`);
+  html.push(`    <strong>Spazi liberi:</strong> <span id="free-${prefix}-${index}">${free}</span><br/>`);
+  html.push(`    <strong>Spazi occupati:</strong> <span id="occupied-${prefix}-${index}">${occupied}</span><br/>`);
+
+
+  if (lunven || sab || fes) {
+    html.push(`<p class="card-text"><strong>Apertura:</strong><br>`);
+    if (lunven) html.push(`<strong>lun-ven:</strong> ${lunven}<br>`);
+    if (sab) html.push(`<strong>sabato:</strong> ${sab}<br>`);
+    if (fes) {
+      html.push(`<strong>festivi:</strong> ${fes}`);
+    } else {
+      html.push(`<strong>festivi:</strong> chiuso`);
+    }
+    html.push(`</p>`);
+  }
+  if (Array.isArray(park.rates) && park.rates.length > 0) {
+    html.push(`<p class="card-text"><strong>Tariffe:</strong><br>`);
+    park.rates.forEach(rate => {
+      const from = rate.from || '';
+      const to = rate.to || '';
+      const cost = rate.cost !== undefined ? `€${rate.cost.toFixed(2)}` : '';
+      const unit = rate.unit === 'hour' ? 'ora' : rate.unit || '';
+  
+      html.push(`${from}–${to}: ${cost}/${unit}<br>`);
+    });
+    html.push(`</p>`);
+  }
+  // Inizio sezione barra (allineata in fondo con mt-auto)
+  html.push(`    <div class="bar-section mt-auto">`);
+  //if (park.offline !== false) {
+  //  html.push(`<div class="bar-label text-danger">parcheggio non disponibile</div>`);
+  //} else {
+    html.push(`<div class="bar-label" id="percent-${prefix}-${index}">${percentage}% di posti occupati</div>`);
+  //}
+  
+  html.push(`      <div class="bar-container">` +
+            `        <div class="bar-occupied" id="bar-occupied-${prefix}-${index}" style="width: 0%"></div>` +
+            `        <div class="bar-free" id="bar-free-${prefix}-${index}" style="width: 0%"></div>` +
+            `      </div>`);
+  html.push(`<div class="bar-abs">
+              <div class="bar-abs-left" id="abs-occupied-${prefix}-${index}">${occupied} occupati</div>
+              <div class="bar-abs-right" id="abs-free-${prefix}-${index}">${free} liberi</div>
+            </div>`);
+  html.push(`    </div> <!-- /.bar-section -->`);
+  // Chiusura card-body e card
+  html.push(`  </div><!-- /.card-body -->`);
+  html.push(`</div><!-- /.card -->`);
+
+  return html.join('\n');
+}
+
+function formatAddress(address) {
+  return address
+    .toLowerCase()
+    .split(' ')
+    .map(word => {
+      if (word.startsWith('via') || word.startsWith('piaz')) {
+        return word.toLowerCase(); // via, piazza, piazzale ecc.
+      } else {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+    })
+    .join(' ');
+}
+
+function animateNumbers(park, index, prefix) {
+  const capacity = park.capacity;
+  const free = park.freeslots;
+  const occupied = capacity - free;
+  const percentage = capacity > 0 ? Math.round((occupied / capacity) * 100) : 0;
+  const freePercentage = 100 - percentage;
+
+  const freeEl = document.getElementById(`free-${prefix}-${index}`);
+  const occupiedEl = document.getElementById(`occupied-${prefix}-${index}`);
+  const percentEl = document.getElementById(`percent-${prefix}-${index}`);
+
+  
+  // Barre
+  const barOccupied = document.getElementById(`bar-occupied-${prefix}-${index}`);
+  const barFree = document.getElementById(`bar-free-${prefix}-${index}`);
+  if (barOccupied) barOccupied.style.width = `${percentage}%`;
+  if (barFree) barFree.style.width = `${freePercentage}%`;
+
+  // Assoluti sotto la barra
+  const absOcc = document.getElementById(`abs-occupied-${prefix}-${index}`);
+  const absFree = document.getElementById(`abs-free-${prefix}-${index}`);
+  animateValue(absOcc, 0, occupied, 1000, ' occupati');
+  animateValue(absFree, 0, free, 1000, ' liberi');
+}
+
+// Lazy loading streamgraph al momento della visibilità
+let streamgraphLoaded = false;
+
+function isInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom >= 0
+  );
+}
+
+function loadStreamgraph() {
+  const chartDom = document.getElementById('streamgraphContainer');
+  if (!chartDom || streamgraphLoaded) return;
+
+  if (isInViewport(chartDom)) {
+    streamgraphLoaded = true;
+    const myChart = echarts.init(chartDom);
+
+    fetch('data/streamgraph_parcheggi_park.json')
+      .then(response => response.json())
+      .then(rawData => {
+        const dataMap = new Map();
+        const allNames = new Set();
+
+        rawData.forEach(([time, value, name]) => {
+          if (!dataMap.has(time)) dataMap.set(time, {});
+          dataMap.get(time)[name] = value;
+          allNames.add(name);
+        });
+
+        const timestamps = Array.from(dataMap.keys()).sort();
+        const names = Array.from(allNames);
+
+        const series = names.map(name => ({
+          name,
+          type: 'line',
+          stack: 'occupazione',
+          areaStyle: { opacity: 0.8 },
+          symbol: 'none',
+          lineStyle: { width: 0 },
+          itemStyle: { color: '#199eb8' },
+          emphasis: { focus: 'series' },
+          data: timestamps.map(t => dataMap.get(t)[name] || 0)
+        }));
+
+        const option = {
+          title: {
+            //text: 'Occupazione parcheggi nelle ultime 24 ore',
+            //left: 'center'
+          },
+          tooltip: { trigger: 'axis' },
+          legend: { top: 'bottom', data: names },
+          xAxis: { type: 'category', 
+                  boundaryGap: false, 
+                  axisLabel: {
+                    formatter: function (value) {
+                      const date = new Date(value);
+                      return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
                     }
-                },
-                {
-                    type: 'text',
-                    left: '10%', // Allineato a sinistra
-                    top: '15%',
-                    style: {
-                        text: `${parking.percentOccupied}% posti occupati`, // Percentuale arrotondata
-                        font: 'bold 14px var(--default-font)',
-                        fill: '#666',
-                        textAlign: 'left'
-                    }
-                },
-                {
-                    type: 'text',
-                    left: '10%', // Allineato a sinistra
-                    top: '22%',
-                    style: {
-                        text: `${parking.occupied} su ${parking.total}`, // Numero di posti occupati su totale
-                        font: '12px var(--default-font)',
-                        fill: '#333',
-                        textAlign: 'left'
-                    }
-                }
-            ],
-            series: [
-                { 
-                    name: 'Parcheggi occupati', 
-                    type: 'bar', 
-                    stack: 'total', 
-                    data: [parking.occupied], 
-                    itemStyle: { color: '#50737a' }, // Cambiato il colore degli occupati
-                    label: {
-                        show: true,
-                        position: 'insideLeft', // Etichetta allineata a sinistra
-                        color: '#fff',
-                        formatter: `{c}` // Mostra il valore numerico
-                    }
-                },
-                { 
-                    name: 'Parcheggi liberi', 
-                    type: 'bar', 
-                    stack: 'total', 
-                    data: [parking.free], 
-                    itemStyle: { color: '#58D9F9' }, // Cambiato il colore dei liberi
-                    label: {
-                        show: true,
-                        position: 'insideLeft', // Etichetta allineata a sinistra
-                        color: '#000',
-                        formatter: `{c}` // Mostra il valore numerico
-                    }
-                }
-            ]
+                  },
+                  data: timestamps },
+          yAxis: { type: 'value' },
+          series
         };
 
-        // Memorizziamo l'opzione nel dizionario per essere usata nella funzione loadChart
-        optionsMap[chartDiv.id] = option;
+        myChart.setOption(option);
+      });
+  }
+}
 
-        // Aggiungiamo il div alla lista di osservazione per l'animazione on-scroll
-        observer.observe(chartDiv);
-    });
-});
+window.addEventListener('scroll', loadStreamgraph);
+window.addEventListener('DOMContentLoaded', loadStreamgraph);
