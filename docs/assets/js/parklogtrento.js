@@ -89,10 +89,12 @@ async function render() {
   summary.park.latestdate =  `${formattedDate} ore ${formattedTime}`;
 
   const filtered = data.filter(item => item.type === "bike" || item.type === "park");
+  summary.bike.totalspaces = 0;
   filtered.forEach(item => {
     const key = item.type; // "bike" o "park"
     summary[key].total += item.capacity || 0;
     summary[key].freeslots += item.freeslots || 0;
+    summary[key].totalspaces +=1 || 0;
   });
 
   ['bike', 'park'].forEach(type => {
@@ -201,8 +203,6 @@ window.addEventListener('load', startApp);
 
 
 function updatehero() {
-  // questo va calcolato!!!
-  const total_ciclobox=9;
 
   // Aggiorna dinamicamente i testi
   document.querySelectorAll('.extractiontime').forEach(el => {
@@ -215,7 +215,7 @@ function updatehero() {
 
   document.querySelector('span#total_zonespaces').textContent = summary.zone.total;
   document.querySelector('span#total_zones').textContent = total_zones;
-  document.querySelector('span#total_ciclobox').textContent = total_ciclobox;
+  document.querySelector('span#total_ciclobox').textContent = summary.bike.totalspaces
   
   document.querySelector('span#carparkspaces_rate').textContent = summary.park.spacerate + '%';
   document.querySelector('span#zonespaces_rate').textContent = summary.zone.spacerate + '%';
@@ -420,13 +420,13 @@ function createCardZone(zone, index) {
 
   if (Array.isArray(zone.rates) && zone.rates.length > 0) {
     html.push(`<p class="card-text"><strong>Tariffe:</strong><br>`);
-zone.rates.forEach(rate => {
-  const from = rate.from || '';
-  const to = rate.to || '';
-  const cost = rate.cost !== undefined ? `€${rate.cost.toFixed(2)}` : 'gratis';
-  const unitMap = {
-    'hour': 'ora',
-    'day': 'giorno'
+  zone.rates.forEach(rate => {
+    const from = rate.from || '';
+    const to = rate.to || '';
+    const cost = rate.cost !== undefined ? `€${rate.cost.toFixed(2)}` : 'gratis';
+    const unitMap = {
+      'hour': 'ora',
+      'day': 'giorno'
   };
   const unit = unitMap[rate.unit] || rate.unit || '';
 
