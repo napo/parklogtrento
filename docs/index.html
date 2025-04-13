@@ -47,7 +47,31 @@
 </head>
 
 <body class="index-page">
-
+	<!-- Cookie Policy -->
+	<div class="modal fade" id="cookie" tabindex="-1" role="dialog" aria-labelledby="titoloModale" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="titoloModale">Cookie Policy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi">
+      </button>
+          </div>
+          <div class="modal-body">
+      <p class="text-left">
+            Questo sito non utilizza cookie.<br/>
+      Durante la navigazione su questo sito non viene installato alcun cookie sul tuo dispositivo.<br/>
+      Non viene raccolto, memorizzato o tracciato alcun tipo di informazione personale tramite cookie o altre tecnologie di tracciamento.<br/>
+      Grazie per la tua visita!
+      </p>
+    </div>
+    <!--
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+          </div>
+    -->
+        </div>
+    </div>
+</div>
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
@@ -59,8 +83,15 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="#hero" class="active">Home</a></li>
-          <li><a href="#strutture">Strutture</a></li>
+          <li class="dropdown"><a href="#"><span>Stato attuale</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="#strutture">parcheggi/garage</a></li>
+              <li><a href="#zone-blu">stalli blu</a></li>
+              <li><a href="#ciclobox">ciclobox</a></li>
+            </ul>
+          </li>
           <li><a href="https://github.com/napo/parklogtrento">GitHub</a></li>
+          <li><a href="#" data-bs-toggle="modal" data-bs-target="#cookie">Cookie Policy</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -149,14 +180,7 @@
         </div>
 
         <div class="row" id="structureContainer">
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <h3 class="section-title">Occupazione nelle ultime 24 ore</h3>
-            <div id="streamgraphContainer" style="min-height: 500px;" class="echart"></div>
-          </div>
-        </div>
-        
+        </div>        
     </section>
 
     <hr class="section-divider">
@@ -205,7 +229,6 @@
           </div>
         </div>
 
-
         <div class="container">
           <div class="row">
             <div class="container">
@@ -215,9 +238,6 @@
           <div class="row" id="bikeContainer">
           </div>
 
-        </div>
-        <div class="row">
-          <div id="riverciclobox" style="min-height: 400px;" class="echart"></div>
         </div>
     </section>
   </main>
