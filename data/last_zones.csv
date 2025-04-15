@@ -1,9 +1,9 @@
 id,driver,name,type,city,color,capacity,freeslots,ts,stall_blu_capacity,stall_blu_freeslots,stall_blu_ts,stall_disabili_capacity,stall_disabili_freeslots,stall_disabili_ts,stall_carico-scarico_capacity,stall_carico-scarico_freeslots,stall_carico-scarico_ts
 1009,ID00,Zona Villa Bianca / Villa Igea,tariffe,Trento,#474a51,22,4,2025-04-15 22:05:26,22.0,4.0,1744754726.0,0.0,0.0,0.0,0.0,0.0,0.0
-1003,ID00,Area di 2a Corona zona rossa,tariffe,Trento,#ff0000,219,49,2025-04-15 23:31:59,219.0,49.0,1744759919.0,0.0,0.0,0.0,0.0,0.0,0.0
-1001,ID00,Area periferica zona gialla,tariffe,Trento,#ffff00,75,11,2025-04-15 23:26:48,75.0,11.0,1744759608.0,0.0,0.0,0.0,0.0,0.0,0.0
+1004,ID00,Area 2a Corona zona verde,tariffe,Trento,#008000,285,52,2025-04-15 23:42:25,285.0,52.0,1744760545.0,0.0,0.0,0.0,0.0,0.0,0.0
+1006,ID00,Area periferica zona gialla 0.50,tariffe,Trento,#ffff00,178,69,2025-04-15 23:44:40,178.0,69.0,1744760680.0,0.0,0.0,0.0,0.0,0.0,0.0
+1003,ID00,Area di 2a Corona zona rossa,tariffe,Trento,#ff0000,219,49,2025-04-15 23:45:23,219.0,49.0,1744760723.0,0.0,0.0,0.0,0.0,0.0,0.0
+1001,ID00,Area periferica zona gialla,tariffe,Trento,#ffff00,75,11,2025-04-15 23:48:07,75.0,11.0,1744760887.0,0.0,0.0,0.0,0.0,0.0,0.0
 1008,ID00,Area Ospedaliera zona S.Camillo,tariffe,Trento,#9a8161,16,4,2025-04-15 22:32:41,16.0,4.0,1744756361.0,0.0,0.0,0.0,0.0,0.0,0.0
-1006,ID00,Area periferica zona gialla 0.50,tariffe,Trento,#ffff00,178,69,2025-04-15 23:33:48,178.0,69.0,1744760028.0,0.0,0.0,0.0,0.0,0.0,0.0
-1004,ID00,Area 2a Corona zona verde,tariffe,Trento,#008000,285,52,2025-04-15 23:34:49,285.0,52.0,1744760089.0,0.0,0.0,0.0,0.0,0.0,0.0
-1005,ID00,Area di 1a corona,tariffe,Trento,#5f5f5f,293,116,2025-04-15 23:34:46,293.0,116.0,1744760086.0,32.0,23.0,1744760086.0,45.0,33.0,1744760086.0
+1005,ID00,Area di 1a corona,tariffe,Trento,#5f5f5f,293,117,2025-04-15 23:49:33,293.0,117.0,1744760973.0,32.0,23.0,1744760973.0,45.0,33.0,1744760973.0
 1000,ID00,Area 2a Corona-zona blu,tariffe,Trento,#0000ff,65,14,2025-04-15 22:59:09,65.0,14.0,1744757949.0,0.0,0.0,0.0,0.0,0.0,0.0
