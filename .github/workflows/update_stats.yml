@@ -1,7 +1,7 @@
 name: update stats
 on:
   schedule:
-    - cron: "0 1 * * *"
+    - cron: "13 1 * * *"
   workflow_dispatch:
 
 env:
