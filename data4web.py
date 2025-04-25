@@ -203,6 +203,15 @@ zones_blu.rename(columns={'ts': 'timestamp','stall_blu_capacity': 'capacity', 's
 max_capacity_per_name = zones_blu.groupby('name')['capacity'].max()
 zones_blu['capacity'] = zones_blu['name'].map(max_capacity_per_name)
 zones_blu_filled = fill_data(zones_blu)
+generateJson(weeklystats_name(zones_blu_filled), "occupazione_zones.json")
+zones_blu_filled_total = timestamp_aggregation(zones_blu_filled)
+zones_blu_filled_stats_total = weeklystats_name(zones_blu_filled_total)
+generateJson(zones_blu_filled_stats_total, "occupazione_zones_totale.json","Totale stalli blu")
+range_park = get_timestamp_range(zones_blu, "timestamp")
+with open(DEST + "timestamp_zones_totale.json", "w") as f:
+    json.dump(range_park, f, indent=2, ensure_ascii=False)
+with open(DEST + "timestamp_zone.json", "w") as f:
+    json.dump(range_park, f, indent=2, ensure_ascii=False)
 max_capacity_per_park = parks_park.groupby("name")["capacity"].max().reset_index()
 parks_max_capacity = max_capacity_per_park.set_index("name")["capacity"].to_dict()
 max_capacity_per_bike = parks_bike.groupby("name")["capacity"].max().reset_index()
