@@ -203,3 +203,15 @@ zones_blu.rename(columns={'ts': 'timestamp','stall_blu_capacity': 'capacity', 's
 max_capacity_per_name = zones_blu.groupby('name')['capacity'].max()
 zones_blu['capacity'] = zones_blu['name'].map(max_capacity_per_name)
 zones_blu_filled = fill_data(zones_blu)
+max_capacity_per_park = parks_park.groupby("name")["capacity"].max().reset_index()
+parks_max_capacity = max_capacity_per_park.set_index("name")["capacity"].to_dict()
+max_capacity_per_bike = parks_bike.groupby("name")["capacity"].max().reset_index()
+bikes_max_capacity = max_capacity_per_bike.set_index("name")["capacity"].to_dict()
+max_capacity_per_zones = zones_blu.groupby("name")["capacity"].max().reset_index()
+zones_max_capacity = max_capacity_per_zones.set_index("name")["capacity"].to_dict()
+with open(DEST + "max_capacity_zone.json", "w") as json_file:
+    json.dump(zones_max_capacity, json_file, indent=2, ensure_ascii=False)
+with open(DEST + "max_capacity_park.json", "w") as json_file:
+    json.dump(parks_max_capacity, json_file, indent=2, ensure_ascii=False)
+with open(DEST + "max_capacity_bike.json", "w") as json_file:
+    json.dump(bikes_max_capacity, json_file, indent=2, ensure_ascii=False)
