@@ -20,7 +20,19 @@
       <link rel="shortcut icon" href="../assets/img/favicon.ico" />
       <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/apple-touch-icon.png" />
       <link rel="manifest" href="../site.webmanifest" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://napo.github.io/parklogtrento" />
+    <meta property="og:title" content="Parklog Trento" />
+    <meta property="og:description" content="Disponibilità parcheggi comune di Trento" />
+    <meta property="og:image" content="../assets/img/preview.png}" />
 
+    <!-- Twitter -->
+    <meta property="twitter:card" content="Disponibilità parcheggi comune di Trento" />
+    <meta property="twitter:url" content="https://napo.github.io/parklogtrento" />
+    <meta property="twitter:title" content="Parklog Trento" />
+    <meta property="twitter:description" content="Disponibilità parcheggi comune di Trento" />
+    <meta property="twitter:image" content="../assets/img/preview.png" />
       <!-- Fonts -->
       <link href="https://fonts.googleapis.com" rel="preconnect">
       <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -116,7 +128,7 @@
     <header id="header" class="header d-flex align-items-center fixed-top">
       <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-        <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <a href="../index.html" class="logo d-flex align-items-center me-auto me-xl-0">
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <!-- <img src="assets/img/logo.png" alt=""> -->
           <h1 class="sitename">ParkLogTrento</h1>
@@ -124,20 +136,19 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="../#hero" class="active">Home</a></li>
-            <li class="dropdown"><a href="../#"><span>Stato attuale</span> <i
-                  class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li class="dropdown"><a href="#"><span>Stato attuale</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="../#strutture">parcheggi/garage</a></li>
-                <li><a href="../#zone-blu">stalli blu</a></li>
-                <li><a href="../#ciclobox">ciclobox</a></li>
+                <li><a href="../#strutture">Parcheggi/Garage</a></li>
+                <li><a href="../#zone-blu">Stalli Blu</a></li>
+                <li><a href="../#ciclobox">Ciclobox</a></li>
               </ul>
             </li>
             <li class="dropdown"><a href="#"><span>Statistiche</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#">trend</a></li>
+                <li><a href="../weeklystats/">Trend</a></li>
+                <li><a href="#curiosity">Curiosità</a></li>
               </ul>
             </li>
-
             <li class="dropdown"><a href="#"><span>Info</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 <li><a href="#" data-bs-toggle="modal" data-bs-target="#about">Cosa è?</a></li>
@@ -217,7 +228,7 @@
     <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
     <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <script src="../assets/js/main.js"></script>
-    <script src="../assets/js/weeklystats.js"></script>-->
+    <script src="../assets/js/weeklystats.js"></script>
   </body>
 
 </html>
