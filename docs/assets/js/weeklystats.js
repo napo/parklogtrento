@@ -89,6 +89,13 @@ function createChartTotal(pathJson, idSezione) {
                     }                    
                 },
                 legend: { bottom: 0 },
+                toolbox: {
+                    feature: {
+                      saveAsImage: {
+                        type: 'svg'
+                      }
+                    }
+                  },
                 xAxis: { type: 'category', data: ore, name: "Ora" },
                 yAxis: { type: 'value', name: 'Posti occupati' },
                 series: series,
@@ -185,6 +192,13 @@ function createChartIndividuals(pathJson, idSezione) {
                         }
                     },
                     legend: { bottom: 0 },
+                    toolbox: {
+                        feature: {
+                          saveAsImage: {
+                            type: 'svg'
+                          }
+                        }
+                      },
                     xAxis: { type: 'category', data: ore, name: "Ora" },
                     yAxis: { type: 'value', name: 'posti occupati' },
                     series: series,
