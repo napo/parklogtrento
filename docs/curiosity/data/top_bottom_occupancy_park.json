@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Parcheggio Area ex Zuffo - P9",
+    "average_occupancy": 0.7219,
+    "type": "top"
+  },
+  {
+    "name": "Garage Autosilo Buonconsiglio - P3",
+    "average_occupancy": 0.7131,
+    "type": "top"
+  },
+  {
+    "name": "Garage Centro Europa - P2",
+    "average_occupancy": 0.676,
+    "type": "top"
+  },
+  {
+    "name": "Parcheggio via Monte Baldo - P8",
+    "average_occupancy": 0.3385,
+    "type": "bottom"
+  },
+  {
+    "name": "Parcheggio Santa Chiara",
+    "average_occupancy": 0.3352,
+    "type": "bottom"
+  },
+  {
+    "name": "Parcheggio Cittadella dello studente - P6",
+    "average_occupancy": 0.0571,
+    "type": "bottom"
+  }
+]

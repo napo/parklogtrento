@@ -1,0 +1,98 @@
+[
+  {
+    "hour": 0,
+    "average_occupancy": 0.2827
+  },
+  {
+    "hour": 1,
+    "average_occupancy": 0.2489
+  },
+  {
+    "hour": 2,
+    "average_occupancy": 0.2626
+  },
+  {
+    "hour": 3,
+    "average_occupancy": 0.243
+  },
+  {
+    "hour": 4,
+    "average_occupancy": 0.2525
+  },
+  {
+    "hour": 5,
+    "average_occupancy": 0.2529
+  },
+  {
+    "hour": 6,
+    "average_occupancy": 0.2557
+  },
+  {
+    "hour": 7,
+    "average_occupancy": 0.2943
+  },
+  {
+    "hour": 8,
+    "average_occupancy": 0.4504
+  },
+  {
+    "hour": 9,
+    "average_occupancy": 0.5719
+  },
+  {
+    "hour": 10,
+    "average_occupancy": 0.6655
+  },
+  {
+    "hour": 11,
+    "average_occupancy": 0.6798
+  },
+  {
+    "hour": 12,
+    "average_occupancy": 0.6706
+  },
+  {
+    "hour": 13,
+    "average_occupancy": 0.6194
+  },
+  {
+    "hour": 14,
+    "average_occupancy": 0.6782
+  },
+  {
+    "hour": 15,
+    "average_occupancy": 0.6739
+  },
+  {
+    "hour": 16,
+    "average_occupancy": 0.6628
+  },
+  {
+    "hour": 17,
+    "average_occupancy": 0.5995
+  },
+  {
+    "hour": 18,
+    "average_occupancy": 0.5494
+  },
+  {
+    "hour": 19,
+    "average_occupancy": 0.4754
+  },
+  {
+    "hour": 20,
+    "average_occupancy": 0.4504
+  },
+  {
+    "hour": 21,
+    "average_occupancy": 0.4126
+  },
+  {
+    "hour": 22,
+    "average_occupancy": 0.3725
+  },
+  {
+    "hour": 23,
+    "average_occupancy": 0.3191
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Piedicastello",
+    "average_occupancy": 0.9704,
+    "type": "top"
+  },
+  {
+    "name": "Ex lavatoio pubblico",
+    "average_occupancy": 0.9139,
+    "type": "top"
+  },
+  {
+    "name": "Parcheggio Sanseverino",
+    "average_occupancy": 0.8278,
+    "type": "top"
+  },
+  {
+    "name": "Osp. Santa Chiara",
+    "average_occupancy": 0.2601,
+    "type": "bottom"
+  },
+  {
+    "name": "Area ex Zuffo",
+    "average_occupancy": 0.2113,
+    "type": "bottom"
+  },
+  {
+    "name": "Via Bartali",
+    "average_occupancy": 0.127,
+    "type": "bottom"
+  }
+]

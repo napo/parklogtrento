@@ -1,0 +1,30 @@
+[
+  {
+    "weekday": "Monday",
+    "average_occupancy": 0.4435
+  },
+  {
+    "weekday": "Tuesday",
+    "average_occupancy": 0.4964
+  },
+  {
+    "weekday": "Wednesday",
+    "average_occupancy": 0.5105
+  },
+  {
+    "weekday": "Thursday",
+    "average_occupancy": 0.512
+  },
+  {
+    "weekday": "Friday",
+    "average_occupancy": 0.4933
+  },
+  {
+    "weekday": "Saturday",
+    "average_occupancy": 0.483
+  },
+  {
+    "weekday": "Sunday",
+    "average_occupancy": 0.3855
+  }
+]
