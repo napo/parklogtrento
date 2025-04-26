@@ -1,0 +1,14 @@
+[
+  {
+    "day_type": "Holiday",
+    "average_occupancy": 0.5943
+  },
+  {
+    "day_type": "Weekday",
+    "average_occupancy": 0.5698
+  },
+  {
+    "day_type": "Weekend",
+    "average_occupancy": 0.5799
+  }
+]

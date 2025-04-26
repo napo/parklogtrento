@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Disponibilità parcheggi comune di Trento</title>
+    <meta name="description" content="parklogtrento monitora la disponibilità di parcheggi per auto e biciclette a 
+    parcheggi a Trento. Interroga periodicamente le API pubbliche e 
+    e aggiorna alcuni file di geoparquet, creando una serie temporale per l'analisi 
+    analisi storica e di previsione.">
+    <meta name="keywords"
+      content="trento, parcheggi, disponibilità, auto, biciclette, ciclobox, stalli blu, parcheggi a pagamento, statistiche, analisi, previsione">
+    <meta name="author" content="maurizio napolitano">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="../assets/img/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+    <link rel="shortcut icon" href="../assets/img/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/apple-touch-icon.png" />
+    <link rel="manifest" href="../site.webmanifest" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://napo.github.io/parklogtrento" />
+    <meta property="og:title" content="Parklog Trento" />
+    <meta property="og:description" content="Disponibilità parcheggi comune di Trento" />
+    <meta property="og:image" content="../assets/img/preview.png}" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="Disponibilità parcheggi comune di Trento" />
+    <meta property="twitter:url" content="https://napo.github.io/parklogtrento" />
+    <meta property="twitter:title" content="Parklog Trento" />
+    <meta property="twitter:description" content="Disponibilità parcheggi comune di Trento" />
+    <meta property="twitter:image" content="../assets/img/preview.png" />
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link href="../assets/css/style.css" rel="stylesheet">
+
+    <!-- =======================================================
+    * Template Name: Bell
+    * Template URL: https://bootstrapmade.com/bell-free-bootstrap-4-template/
+    * Updated: Aug 07 2024 with Bootstrap v5.3.3
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+    <style>
+      .chart-observer {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        background: white;
+      }
+
+      .chart-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      #container {
+        width: 100%;
+        height: 400px;
+      }
+    </style>
+  </head>
+
+  <body class="index-page">
+    <!-- about -->
+    <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="titoloModale" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="titoloModale">Il progetto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi">
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="text-left">
+              Il 10 marzo 2025 il Comune di Trento ha messo online i dati sui <a
+                href="https://parcheggi.comune.trento.it">parcheggi</a> per veicoli e biciclette, permettendo finalmente
+              a tutti di sapere in tempo reale quanti posti sono disponibili.<br />
+              Parklog Trento parte da questi dati registrando la situazione la situazione ogni 5 minuti
+              creando così uno storico che racconta come cambiano i parcheggi nel tempo e aiutando a capire meglio le
+              abitudini della città.<br />
+              Tutto il <a href="https://github.com/napo/parklogtrento/tree/main/data">dataset</a> raccolto è disponibile
+              su <a href="https://github.com/napo/parklogtrento">GitHub</a>, libero da usare per chi vuole analizzare,
+              creare nuove applicazioni o semplicemente scoprire qualcosa in più sul funzionamento della mobilità
+              cittadina.<br />
+              Più dati, più conoscenza: capire come si muove la città aiuta a pianificarla meglio.<br />
+              Parklog Trento è un progetto ideato e sviluppato da <a
+                href="https://www.linkedin.com/in/napolnx/">Maurizio Napolitano</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Cookie Policy -->
+    <div class="modal fade" id="cookie" tabindex="-1" role="dialog" aria-labelledby="titoloModale" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="titoloModale">Cookie Policy</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi">
+            </button>
+          </div>
+          <div class="modal-body">
+            <p class="text-left">
+              Questo sito non utilizza cookie.<br />
+              Durante la navigazione su questo sito non viene installato alcun cookie sul tuo dispositivo.<br />
+              Non viene raccolto, memorizzato o tracciato alcun tipo di informazione personale tramite cookie o altre
+              tecnologie di tracciamento.<br />
+              Grazie per la tua visita!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <header id="header" class="header d-flex align-items-center fixed-top">
+      <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+
+        <a href="../index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <!-- <img src="assets/img/logo.png" alt=""> -->
+          <h1 class="sitename">ParkLogTrento</h1>
+        </a>
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="../#hero" class="active">Home</a></li>
+            <li class="dropdown"><a href="#"><span>Stato attuale</span> <i
+                  class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="../#strutture">Parcheggi/Garage</a></li>
+                <li><a href="../#zone-blu">Stalli Blu</a></li>
+                <li><a href="../#ciclobox">Ciclobox</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#"><span>Statistiche</span> <i
+                  class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="../weeklystats/">trend</a></li>
+                <li><a href="#">curiosità</a></li>
+              </ul>
+            </li>
+            <li class="dropdown"><a href="#"><span>Info</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+              <ul>
+                <li><a href="#" data-bs-toggle="modal" data-bs-target="#about">Cosa è?</a></li>
+                <li><a href="#" data-bs-toggle="modal" data-bs-target="#cookie">Cookie Policy</a></li>
+                <li><a href="https://github.com/napo/parklogtrento">GitHub</a></li>
+              </ul>
+            </li>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+
+      <section id="curiosity" class="featured-services section">
+        <div class="container-fluid">
+          <div id="curiosity-preloader" class="text-center">
+            <div class="spinner-border text-info" role="status">
+              <span class="visually-hidden">Caricamento...</span>
+            </div>
+            <p class="mt-2">Caricamento curiosità in corso...</p>
+          </div>
+      
+          <div id="curiosityContent" class="d-none">
+      
+            <div class="my-5">
+              <h2 class="text-center position-relative">
+                Strutture
+                <hr class="mt-3" style="width: 60px; margin: auto; border-top: 3px solid #199eb8;">
+              </h2>
+              <p class="text-center mt-3">Dati e curiosità sui parcheggi coperti e garage della città di Trento.</p>
+              <div id="park"></div>
+            </div>
+      
+            <div class="my-5">
+              <h2 class="text-center position-relative">
+                Stalli Blu
+                <hr class="mt-3" style="width: 60px; margin: auto; border-top: 3px solid #199eb8;">
+              </h2>
+              <p class="text-center mt-3">Dati e curiosità sugli stalli blu a pagamento distribuiti nel centro urbano.</p>
+              <div id="zones"></div>
+            </div>
+      
+            <div class="my-5">
+              <h2 class="text-center position-relative">
+                Ciclobox
+                <hr class="mt-3" style="width: 60px; margin: auto; border-top: 3px solid #199eb8;">
+              </h2>
+              <p class="text-center mt-3">Dati e curiosità sui box per biciclette protette disponibili in città.</p>
+              <div id="bike"></div>
+            </div>
+      
+          </div>
+        </div>
+      </section>
+      
+
+
+    </main>
+    <footer id="footer" class="footer dark-background">
+      <div class="container copyright text-center mt-4">
+        <p>origine dati: <a href=" https://parcheggi.comune.trento.it/">https://parcheggi.comune.trento.it/</a></p>
+        <div class="credits">
+          un progetto di @napo<br />
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you've purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+          template html <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+      </div>
+
+    </footer>
+
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Preloader -->
+    <div id="preloader"></div>
+
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/aos/aos.js"></script>
+    <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="../assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+<script>
+// Traduzione giorno/mese in italiano
+const giorniSettimana = ["Dom", "Lun", "Mar", "Mer", "Gio", "Ven", "Sab"];
+const mesiAnno = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+
+function formattaData(dataString) {
+  const data = new Date(dataString);
+  return `${giorniSettimana[data.getDay()]} ${data.getDate().toString().padStart(2, '0')} ${mesiAnno[data.getMonth()]}`;
+}
+
+async function caricaCuriosita(categoria, containerId) {
+  const basePath = 'data/';
+
+  const curiosita = [
+    {file: `top_bottom_occupancy_${categoria}.json`, titolo: 'I parcheggi più pieni e più vuoti', tipo: 'topbottom'},
+    {file: `weekday_occupancy_${categoria}.json`, titolo: 'Giorni della settimana più occupati', tipo: 'weekday'},
+    {file: `hourly_occupancy_${categoria}.json`, titolo: 'Fasce orarie di maggiore utilizzo', tipo: 'hourly'},
+    {file: `weekend_holiday_comparison_${categoria}.json`, titolo: 'Confronto tra feriali, weekend e festivi', tipo: 'weekend'},
+    {file: `turnover_parks_${categoria}.json`, titolo: 'Parcheggi con maggiore turnazione', tipo: 'turnover'}
+  ];
+
+  const container = document.querySelector(`#${containerId}`);
+  if (!container) {
+    console.error('Container not found:', containerId);
+    return;
+  }
+
+  for (const item of curiosita) {
+    try {
+      const response = await fetch(basePath + item.file);
+      if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
+      const data = await response.json();
+
+      const sezione = document.createElement('div');
+      sezione.classList.add('mb-5', 'chart-observer');
+
+      const titolo = document.createElement('h4');
+      titolo.classList.add('mb-3', 'px-3');
+      titolo.innerText = item.titolo;
+      sezione.appendChild(titolo);
+
+      const grafico = document.createElement('div');
+      grafico.style.width = '100%';
+      grafico.style.height = '400px';
+      const graficoId = `grafico_${categoria}_${item.tipo}`;
+      grafico.id = graficoId;
+      sezione.appendChild(grafico);
+
+      container.appendChild(sezione);
+
+      creaGrafico(item.tipo, graficoId, data);
+
+    } catch (error) {
+      console.error('Errore caricamento', item.file, error);
+    }
+  }
+}
+
+function creaGrafico(tipo, id, dati) {
+  const container = document.getElementById(id);
+
+  setTimeout(() => {
+    const chart = echarts.init(container);
+
+    let xData = [];
+    let yData = [];
+    let rotateLabels = false;
+
+    if (tipo === 'topbottom') {
+      xData = dati.map(d => d.name);
+      yData = dati.map(d => +(d.average_occupancy * 100).toFixed(1));
+      rotateLabels = true;
+    } else if (tipo === 'turnover') {
+      xData = dati.map(d => d.name);
+      const maxTurnover = Math.max(...dati.map(d => d.total_turnover)) || 1; // evitiamo divisione per 0
+      yData = dati.map(d => +((d.total_turnover / maxTurnover) * 100).toFixed(1)); // normalizziamo in %
+      rotateLabels = true;
+    } else if (tipo === 'weekday') {
+      const giorniIT = {
+        Monday: 'Lunedì',
+        Tuesday: 'Martedì',
+        Wednesday: 'Mercoledì',
+        Thursday: 'Giovedì',
+        Friday: 'Venerdì',
+        Saturday: 'Sabato',
+        Sunday: 'Domenica'
+      };
+      xData = dati.map(d => giorniIT[d.weekday]);
+      yData = dati.map(d => +(d.average_occupancy * 100).toFixed(1));
+    } else if (tipo === 'hourly') {
+      xData = dati.map(d => d.hour + ':00');
+      yData = dati.map(d => +(d.average_occupancy * 100).toFixed(1));
+    } else if (tipo === 'weekend') {
+      xData = dati.map(d => {
+        if (d.day_type === "Weekday") return "Feriale";
+        if (d.day_type === "Weekend") return "Weekend";
+        if (d.day_type === "Holiday") return "Festivo";
+        return d.day_type;
+      });
+      yData = dati.map(d => +(d.average_occupancy * 100).toFixed(1));
+    }
+
+    let option = {
+      color: ['#199eb8'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        formatter: params => {
+          const val = params[0]?.value ?? 0;
+          return `${val}%`;
+        }
+      },
+      grid: { left: '5%', right: '5%', top: '15%', bottom: rotateLabels ? '25%' : '10%', containLabel: true },
+      xAxis: {
+        type: 'category',
+        data: xData,
+        axisLabel: {
+          interval: 0,
+          rotate: rotateLabels ? 30 : 0,
+          overflow: 'break'
+        }
+      },
+      yAxis: {
+        type: 'value',
+        min: 0,
+        max: 100,
+        axisLabel: { formatter: '{value} %' }
+      },
+      series: [{
+        type: (tipo === 'weekday' || tipo === 'hourly') ? 'line' : 'bar',
+        data: yData,
+        smooth: true
+      }]
+    };
+
+    chart.setOption(option);
+
+    window.addEventListener('resize', () => {
+      chart.resize();
+    });
+
+  }, 100);
+}
+
+
+// Observer per animazione fade in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('chart-visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+// Avvio caricamento
+window.addEventListener('load', async () => {
+  await Promise.all([
+    caricaCuriosita('park', 'park'),
+    caricaCuriosita('zones_blu', 'zones'),
+    caricaCuriosita('bike', 'bike')
+  ]);
+
+  const charts = document.querySelectorAll('.chart-observer');
+  charts.forEach(chart => observer.observe(chart));
+
+  document.getElementById('curiosity-preloader').classList.add('d-none');
+  document.getElementById('curiosityContent').classList.remove('d-none');
+});
+</script>
+
+      
+
+
+
+  </body>
+
+</html>
