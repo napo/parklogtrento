@@ -1,32 +1,32 @@
 [
   {
     "name": "Zona Villa Bianca / Villa Igea",
-    "average_occupancy": 0.7993,
+    "average_occupancy": 0.7987,
     "type": "top"
   },
   {
     "name": "Area periferica zona gialla",
-    "average_occupancy": 0.7977,
+    "average_occupancy": 0.7969,
     "type": "top"
   },
   {
     "name": "Area 2a Corona-zona blu",
-    "average_occupancy": 0.7959,
+    "average_occupancy": 0.7958,
     "type": "top"
   },
   {
     "name": "Area 2a Corona zona verde",
-    "average_occupancy": 0.7463,
+    "average_occupancy": 0.7458,
     "type": "bottom"
   },
   {
     "name": "Area Ospedaliera zona S.Camillo",
-    "average_occupancy": 0.7327,
+    "average_occupancy": 0.7331,
     "type": "bottom"
   },
   {
     "name": "Area periferica zona gialla 0.50",
-    "average_occupancy": 0.6106,
+    "average_occupancy": 0.6102,
     "type": "bottom"
   }
 ]
