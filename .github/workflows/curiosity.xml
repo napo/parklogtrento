@@ -8,7 +8,7 @@ env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
-  scrape-latest:
+  update-latest:
     runs-on: ubuntu-latest
 
     steps:
