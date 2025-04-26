@@ -205,3 +205,14 @@ createChartTotal("data/occupazione_zones_totale.json", "zone");
 createChartIndividuals("data/occupazione_zones.json", "zone");
 createChartTotal("data/occupazione_bike_totale.json", "bike");
 createChartIndividuals("data/occupazione_bike.json", "bike");
+
+function resizeAllCharts() {
+    ['totale_park', 'totale_zone', 'totale_bike'].forEach(id => {
+      echarts.getInstanceByDom(document.getElementById(id))?.resize();
+    });
+    document.querySelectorAll('#singoli_park > div, #singoli_zone > div, #singoli_bike > div').forEach(div => {
+      echarts.getInstanceByDom(div)?.resize();
+    });
+  }
+  
+  window.addEventListener('resize', resizeAllCharts);
