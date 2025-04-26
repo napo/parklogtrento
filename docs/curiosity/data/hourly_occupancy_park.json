@@ -49,43 +49,43 @@
   },
   {
     "hour": 12,
-    "average_occupancy": 0.6706
+    "average_occupancy": 0.6675
   },
   {
     "hour": 13,
-    "average_occupancy": 0.6194
+    "average_occupancy": 0.6157
   },
   {
     "hour": 14,
-    "average_occupancy": 0.6782
+    "average_occupancy": 0.6747
   },
   {
     "hour": 15,
-    "average_occupancy": 0.6739
+    "average_occupancy": 0.6717
   },
   {
     "hour": 16,
-    "average_occupancy": 0.6628
+    "average_occupancy": 0.6609
   },
   {
     "hour": 17,
-    "average_occupancy": 0.5995
+    "average_occupancy": 0.5991
   },
   {
     "hour": 18,
-    "average_occupancy": 0.5494
+    "average_occupancy": 0.5489
   },
   {
     "hour": 19,
-    "average_occupancy": 0.4754
+    "average_occupancy": 0.4755
   },
   {
     "hour": 20,
-    "average_occupancy": 0.4504
+    "average_occupancy": 0.4505
   },
   {
     "hour": 21,
-    "average_occupancy": 0.4126
+    "average_occupancy": 0.4128
   },
   {
     "hour": 22,
@@ -93,6 +93,6 @@
   },
   {
     "hour": 23,
-    "average_occupancy": 0.3191
+    "average_occupancy": 0.3188
   }
 ]
