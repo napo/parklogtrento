@@ -878,16 +878,16 @@
     ],
     "Sunday": [
       {
-        "media": 1102.5,
+        "media": 1075.7,
         "min": 736,
         "max": 1385,
-        "percentuale_media": 43.7
+        "percentuale_media": 43.0
       },
       {
-        "media": 987.5,
-        "min": 854,
+        "media": 926.1,
+        "min": 771,
         "max": 1133,
-        "percentuale_media": 37.7
+        "percentuale_media": 36.5
       },
       {
         "media": 788.1,
@@ -896,10 +896,10 @@
         "percentuale_media": 35.4
       },
       {
-        "media": 894.9,
+        "media": 870.9,
         "min": 569,
         "max": 1073,
-        "percentuale_media": 35.2
+        "percentuale_media": 34.8
       },
       {
         "media": 822.4,

@@ -878,16 +878,16 @@
     ],
     "Sunday": [
       {
-        "media": 205.0,
+        "media": 206.2,
         "min": 199,
-        "max": 212,
-        "percentuale_media": 46.2
+        "max": 215,
+        "percentuale_media": 46.4
       },
       {
-        "media": 205.5,
+        "media": 208.7,
         "min": 200,
-        "max": 212,
-        "percentuale_media": 46.3
+        "max": 215,
+        "percentuale_media": 47.0
       },
       {
         "media": 199.0,
@@ -896,10 +896,10 @@
         "percentuale_media": 44.8
       },
       {
-        "media": 204.8,
+        "media": 206.5,
         "min": 199,
-        "max": 212,
-        "percentuale_media": 46.1
+        "max": 215,
+        "percentuale_media": 46.5
       },
       {
         "media": 203.2,
