@@ -1,7 +1,13 @@
+/*
 const summary = {
   bike: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
-  park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }//,
-  //zone: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
+  park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
+  zone: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
+};
+*/
+const summary = {
+  bike: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
+  park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
 };
 var total_zones = 0;
 
@@ -43,14 +49,14 @@ function retryFetch() {
 }
 
 
-
+/*
 async function fetchZonesData() {
   const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://parcheggi.comune.trento.it/static/services/registry_zones.json");
   const response = await fetch(proxyUrl);
   const data = await response.json();
   return data;
 }
-
+*/
 async function render() {
   //const structureContainer = document.getElementById('parking-structure');
   //const bikeContainer = document.getElementById('bike-parking');
@@ -106,10 +112,11 @@ async function render() {
   updatehero();  
   observeGaugeAnimation(summary.park.spacerate); 
   observeGaugeBike(summary.bike.spacerate);
-  observeGaugeZone(summary.zone.spacerate);
+  //observeGaugeZone(summary.zone.spacerate);
   
-  document.querySelector('.total_zones').innerText = total_zones;
-  const zoneContainer = document.getElementById('zoneContainer');
+  //document.querySelector('.total_zones').innerText = total_zones;
+  //const zoneContainer = document.getElementById('zoneContainer');
+  /*
   datazones.forEach((zone, index) => {
     let total = 0, freeslots = 0;
     (zone.stalls || []).forEach(stall => {
@@ -125,7 +132,7 @@ async function render() {
     col.className = 'col-12 col-sm-6 col-md-4 mb-4 parking-card';
     col.innerHTML = cardHtml;
     zoneContainer.appendChild(col);
-  
+
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -134,9 +141,9 @@ async function render() {
         }
       });
     }, { threshold: 0.1 });
-  
     observer.observe(col);
-  });
+      
+  });*/
 
   
   let indexStructure = 0;
@@ -451,7 +458,7 @@ html.push(`</p>`);
 
   return html.join('\n');
 }
-
+/*
 function drawGaugeZone(spacerate) {
   console.log('Drawing gauge zone with spacerate:', spacerate);
   const chartDom = document.getElementById('gauge_zone');
@@ -561,7 +568,7 @@ function observeGaugeZone(spacerate) {
 
   observer.observe(chartContainer);
 }
-
+*/
 
 function createCard(park, index, prefix) {
   const capacity = park.capacity;
