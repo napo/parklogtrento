@@ -60,22 +60,24 @@
 
   <body class="index-page">
 
-<!-- Modale -->
-<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="infoModalLabel">Informazione</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
-      </div>
-      <div class="modal-body">
-        <p>Parklog è un progetto creato nel tempo libero, senza alcuna affiliazione ufficiale al Comune di Trento o a FBK.</p>
-        <p id="countdownText"><small>Questa finestra si chiuderà fra <strong id="countdown">5</strong> secondi.</small></p>
+    <!-- Modale -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="infoModalLabel">Informazione</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+          </div>
+          <div class="modal-body">
+            <p>Parklog è un progetto creato nel tempo libero, senza alcuna affiliazione ufficiale al Comune di Trento o
+              a FBK.</p>
+            <p id="countdownText"><small>Questa finestra si chiuderà fra <strong id="countdown">5</strong>
+                secondi.</small></p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-    
+
     <!-- Cookie Policy -->
     <div class="modal fade" id="cookie" tabindex="-1" role="dialog" aria-labelledby="titoloModale" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -141,16 +143,17 @@
             <li class="dropdown"><a href="#"><span>Stato attuale</span> <i
                   class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#strutture">parcheggi/garage</a></li>
-                <li><a href="#zone-blu">stalli blu</a></li>
+                <li><a href="#strutture">strutture</a></li>
+                <!--<li><a href="#zone-blu">stalli blu</a></li>-->
                 <li><a href="#ciclobox">ciclobox</a></li>
               </ul>
             </li>
-            <li class="dropdown"><a href="#"><span>Statistiche</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li class="dropdown"><a href="weeklystats/"><span>Statistiche</span> <i
+                  class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="weeklystats/">trend</a></li>
-                <li><a href="curiosity/">curiosità</a></li>
-
+                <li><a href="weeklystats/#strutture">strutture</a></li>
+                <li><a href="weeklystats/#ciclobox">ciclobox</a></li>
+                <!--<li><a href="../curiosity">Curiosità</a></li>-->
               </ul>
             </li>
 
@@ -311,47 +314,47 @@
         </div>
       </div>
 
-    </footerzone>
+      </footerzone>
 
-    <!-- Scroll Top -->
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
-        class="bi bi-arrow-up-short"></i></a>
+      <!-- Scroll Top -->
+      <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+          class="bi bi-arrow-up-short"></i></a>
 
-    <!-- Preloader -->
-    <div id="preloader"></div>
+      <!-- Preloader -->
+      <div id="preloader"></div>
 
-    <!-- Vendor JS Files -->
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/aos/aos.js"></script>
-    <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-    <!-- Main JS File -->
-    <script src="assets/js/main.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        var countdownElement = document.getElementById('countdown');
-        var countdown = 5; // Durata in secondi
-        var modalElement = document.getElementById('infoModal');
-        var myModal = new bootstrap.Modal(modalElement);
-        myModal.show();
-    
-        var interval = setInterval(function () {
-          countdown--;
-          if (countdownElement) {
-            countdownElement.textContent = countdown;
-          }
-          if (countdown <= 0) {
-            clearInterval(interval);
-            myModal.hide();
-          }
-        }, 1000);
-      });
-    </script>
-    <script src="assets/js/parklogtrento_nozone.js"></script>
+      <!-- Vendor JS Files -->
+      <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <script src="assets/vendor/aos/aos.js"></script>
+      <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+      <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+      <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+      <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+      <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+      <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+      <!-- Main JS File -->
+      <script src="assets/js/main.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          var countdownElement = document.getElementById('countdown');
+          var countdown = 5; // Durata in secondi
+          var modalElement = document.getElementById('infoModal');
+          var myModal = new bootstrap.Modal(modalElement);
+          myModal.show();
+
+          var interval = setInterval(function () {
+            countdown--;
+            if (countdownElement) {
+              countdownElement.textContent = countdown;
+            }
+            if (countdown <= 0) {
+              clearInterval(interval);
+              myModal.hide();
+            }
+          }, 1000);
+        });
+      </script>
+      <script src="assets/js/parklogtrento_nozone.js"></script>
   </body>
 
 </html>

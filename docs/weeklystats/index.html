@@ -20,19 +20,19 @@
       <link rel="shortcut icon" href="../assets/img/favicon.ico" />
       <link rel="apple-touch-icon" sizes="180x180" href="../assets/img/apple-touch-icon.png" />
       <link rel="manifest" href="../site.webmanifest" />
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://napo.github.io/parklogtrento" />
-    <meta property="og:title" content="Parklog Trento" />
-    <meta property="og:description" content="Disponibilità parcheggi comune di Trento" />
-    <meta property="og:image" content="../assets/img/preview.png}" />
+      <!-- Open Graph / Facebook -->
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://napo.github.io/parklogtrento" />
+      <meta property="og:title" content="Parklog Trento" />
+      <meta property="og:description" content="Disponibilità parcheggi comune di Trento" />
+      <meta property="og:image" content="../assets/img/preview.png}" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="Disponibilità parcheggi comune di Trento" />
-    <meta property="twitter:url" content="https://napo.github.io/parklogtrento" />
-    <meta property="twitter:title" content="Parklog Trento" />
-    <meta property="twitter:description" content="Disponibilità parcheggi comune di Trento" />
-    <meta property="twitter:image" content="../assets/img/preview.png" />
+      <!-- Twitter -->
+      <meta property="twitter:card" content="Disponibilità parcheggi comune di Trento" />
+      <meta property="twitter:url" content="https://napo.github.io/parklogtrento" />
+      <meta property="twitter:title" content="Parklog Trento" />
+      <meta property="twitter:description" content="Disponibilità parcheggi comune di Trento" />
+      <meta property="twitter:image" content="../assets/img/preview.png" />
       <!-- Fonts -->
       <link href="https://fonts.googleapis.com" rel="preconnect">
       <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -97,8 +97,8 @@
               cittadina.<br />
               Più dati, più conoscenza: capire come si muove la città aiuta a pianificarla meglio.<br />
               Parklog Trento è un progetto ideato e sviluppato da <a
-										  href="https://www.linkedin.com/in/napolnx/">Maurizio Napolitano</a>.<br/>
-									  <strong>il progetto non è collegato a fbk</strong>
+                href="https://www.linkedin.com/in/napolnx/">Maurizio Napolitano</a>.<br />
+              <strong>il progetto non è collegato a fbk</strong>
             </p>
           </div>
         </div>
@@ -137,17 +137,20 @@
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="../#hero" class="active">Home</a></li>
-            <li class="dropdown"><a href="#"><span>Stato attuale</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li class="dropdown"><a href="#"><span>Stato attuale</span> <i
+                  class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="../#strutture">Parcheggi/Garage</a></li>
-		<!--<li><a href="../#zone-blu">Stalli Blu</a></li>-->
-                <li><a href="../#ciclobox">Ciclobox</a></li>
+                <li><a href="../#strutture">strutture</a></li>
+                <!--<li><a href="../#zone-blu">Stalli Blu</a></li>-->
+                <li><a href="../#ciclobox">ciclobox</a></li>
               </ul>
             </li>
-            <li class="dropdown"><a href="#"><span>Statistiche</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li class="dropdown"><a href="#"><span>Statistiche</span> <i
+                  class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="#weeklystats">Trend</a></li>
-		<!--<li><a href="../curiosity">Curiosità</a></li>-->
+                <li><a href="#strutture">strutture</a></li>
+                <li><a href="#ciclobox">ciclobox</a></li>
+                <!--<li><a href="../curiosity">Curiosità</a></li>-->
               </ul>
             </li>
             <li class="dropdown"><a href="#"><span>Info</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -164,20 +167,23 @@
     </header>
 
     <main class="main">
+      <br /><br />
       <section id="weeklystats" class="featured-services section">
         <div class="container">
-          <br /><br />
           <h1 class="text-center mb-4">Statiche settimanali occupazione parcheggi</h1>
           <section id="park" class="featured-services section">
-            <h2 class="mt-5">Parcheggi in struttura</h2>
-            <h6 id="range-park" class="text-muted"></h6>
-            <h4>Capienza massima: <span id="park-totali"></span></h4>
-            <div class="mb-5">
-              <div id="totale_park" style="height: 400px;" />
+            <div id="strutture">
+              <br /><br />
+              <h2 class="mt-5">Parcheggi in struttura</h2>
+              <h6 id="range-park" class="text-muted"></h6>
+              <h4>Capienza massima: <span id="park-totali"></span></h4>
+              <div class="mb-5">
+                <div id="totale_park" style="height: 400px;" />
+              </div>
+              <br />
+              <div class="row" id="singoli_park"></div>
             </div>
-            <br />
-            <div class="row" id="singoli_park"></div>
-<!--
+            <!--
             <h2 class="mt-5">Area di sosta stalli blu</h2>
             <h6 id="range-park" class="text-muted"></h6>
             <h4>Capienza massima: <span id="zone-totali"></span></h4>
@@ -186,15 +192,21 @@
             </div>
             <br />
             <div class="row" id="singoli_zone"></div>
+            
 -->
-            <h2 class="mt-5">Utilizzo dei ciclobox</h2>
-            <h6 id="range-bike" class="text-muted"></h6>
-            <h4>Capienza massima: <span id="bike-totali"></span></h4>
-            <div class="mb-5">
-              <div id="totale_bike" style="height: 400px;" />
+            <hr class="section-divider">
+            <div id="ciclobox">
+              <br /><br />
+
+              <h2 class="mt-5">Utilizzo dei ciclobox</h2>
+              <h6 id="range-bike" class="text-muted"></h6>
+              <h4>Capienza massima: <span id="bike-totali"></span></h4>
+              <div class="mb-5">
+                <div id="totale_bike" style="height: 400px;" />
+              </div>
+              <br />
+              <div class="row" id="singoli_bike"></div>
             </div>
-            <br />
-            <div class="row" id="singoli_bike"></div>
         </div>
       </section>
     </main>
