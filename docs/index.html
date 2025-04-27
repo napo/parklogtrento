@@ -59,6 +59,23 @@
   </head>
 
   <body class="index-page">
+
+<!-- Modale -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">Informazione</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+      </div>
+      <div class="modal-body">
+        <p>Parklog è un progetto creato nel tempo libero, senza alcuna affiliazione ufficiale al Comune di Trento o a FBK.</p>
+        <p id="countdownText"><small>Questa finestra si chiuderà fra <strong id="countdown">5</strong> secondi.</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+    
     <!-- Cookie Policy -->
     <div class="modal fade" id="cookie" tabindex="-1" role="dialog" aria-labelledby="titoloModale" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -104,8 +121,7 @@
               cittadina.<br />
               Più dati, più conoscenza: capire come si muove la città aiuta a pianificarla meglio.<br />
               Parklog Trento è un progetto ideato e sviluppato da <a
-										  href="https://www.linkedin.com/in/napolnx/">Maurizio Napolitano</a>.<Br/>
-									  <strong>il progetto non è collegato a FBK</strong>
+                href="https://www.linkedin.com/in/napolnx/">Maurizio Napolitano</a>.
             </p>
           </div>
         </div>
@@ -126,14 +142,14 @@
                   class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 <li><a href="#strutture">parcheggi/garage</a></li>
-		<!--<li><a href="#zone-blu">stalli blu</a></li>-->
+                <li><a href="#zone-blu">stalli blu</a></li>
                 <li><a href="#ciclobox">ciclobox</a></li>
               </ul>
             </li>
             <li class="dropdown"><a href="#"><span>Statistiche</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
                 <li><a href="weeklystats/">trend</a></li>
-		<!--<li><a href="curiosity/">curiosità</a></li>-->
+                <li><a href="curiosity/">curiosità</a></li>
 
               </ul>
             </li>
@@ -311,7 +327,7 @@
         </div>
       </div>
 
-    </footer>
+    </footerzone>
 
     <!-- Scroll Top -->
     <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
@@ -331,6 +347,26 @@
     <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var countdownElement = document.getElementById('countdown');
+        var countdown = 5; // Durata in secondi
+        var modalElement = document.getElementById('infoModal');
+        var myModal = new bootstrap.Modal(modalElement);
+        myModal.show();
+    
+        var interval = setInterval(function () {
+          countdown--;
+          if (countdownElement) {
+            countdownElement.textContent = countdown;
+          }
+          if (countdown <= 0) {
+            clearInterval(interval);
+            myModal.hide();
+          }
+        }, 1000);
+      });
+    </script>
     <script src="assets/js/parklogtrento_nozone.js"></script>
   </body>
 
