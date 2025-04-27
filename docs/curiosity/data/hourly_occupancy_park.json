@@ -1,11 +1,11 @@
 [
   {
     "hour": 0,
-    "average_occupancy": 0.2827
+    "average_occupancy": 0.2824
   },
   {
     "hour": 1,
-    "average_occupancy": 0.2489
+    "average_occupancy": 0.2486
   },
   {
     "hour": 2,
@@ -13,7 +13,7 @@
   },
   {
     "hour": 3,
-    "average_occupancy": 0.243
+    "average_occupancy": 0.2427
   },
   {
     "hour": 4,

@@ -6,12 +6,12 @@
   },
   {
     "name": "Ex lavatoio pubblico",
-    "average_occupancy": 0.9147,
+    "average_occupancy": 0.9148,
     "type": "top"
   },
   {
     "name": "Parcheggio Sanseverino",
-    "average_occupancy": 0.8287,
+    "average_occupancy": 0.829,
     "type": "top"
   },
   {
@@ -26,7 +26,7 @@
   },
   {
     "name": "Via Bartali",
-    "average_occupancy": 0.1264,
+    "average_occupancy": 0.1263,
     "type": "bottom"
   }
 ]
