@@ -1,7 +1,7 @@
 const summary = {
   bike: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
-  park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
-  zone: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
+  park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }//,
+  //zone: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
 };
 var total_zones = 0;
 
@@ -55,22 +55,22 @@ async function render() {
   //const structureContainer = document.getElementById('parking-structure');
   //const bikeContainer = document.getElementById('bike-parking');
   const data = await fetchParkingData();
-  const datazones = await fetchZonesData();
-  total_zones = 0;
-  datazones.forEach(item => {
-    if (Array.isArray(item.stalls)) {
-      item.stalls.forEach(stall => {
-        if (stall.type === "blu") {
-          total_zones += 1;
-          summary.zone.total += stall.capacity || 0;
-          summary.zone.freeslots += stall.freeslots || 0;
-        }
-      });
-    }
-  });
-  summary['zone'].spacerate = summary['zone'].total > 0
-    ? 100 - Math.round((summary['zone'].freeslots / summary['zone'].total) * 100)
-    : 0;
+  //const datazones = await fetchZonesData();
+  //total_zones = 0;
+  //datazones.forEach(item => {
+  //  if (Array.isArray(item.stalls)) {
+  //    item.stalls.forEach(stall => {
+  //      if (stall.type === "blu") {
+  //        total_zones += 1;
+  //        summary.zone.total += stall.capacity || 0;
+  //        summary.zone.freeslots += stall.freeslots || 0;
+  //      }
+  //    });
+  //  }
+  //});
+  //summary['zone'].spacerate = summary['zone'].total > 0
+  //  ? 100 - Math.round((summary['zone'].freeslots / summary['zone'].total) * 100)
+  //  : 0;
 
   const parks = data.filter(item => item.type === "park");
   summary.park.totalspaces = parks.length;
@@ -213,18 +213,17 @@ function updatehero() {
   document.querySelectorAll('.total_parks').forEach(el => el.textContent = summary.park.totalspaces);
 
 
-  document.querySelector('span#total_zonespaces').textContent = summary.zone.total;
-  document.querySelector('span#total_zones').textContent = total_zones;
+  //document.querySelector('span#total_zonespaces').textContent = summary.zone.total;
+  //document.querySelector('span#total_zones').textContent = total_zones;
   document.querySelector('span#total_ciclobox').textContent = summary.bike.totalspaces
   
   document.querySelector('span#carparkspaces_rate').textContent = summary.park.spacerate + '%';
-  document.querySelector('span#zonespaces_rate').textContent = summary.zone.spacerate + '%';
+  //document.querySelector('span#zonespaces_rate').textContent = summary.zone.spacerate + '%';
   document.querySelector('span#bikespaces_rate').textContent = summary.bike.spacerate  + '%';
-  //document.querySelector('span#total_zonespaces_free').textContent = total_zonespaces_free + '%';
-  // aggiorna i contatori
+
   document.getElementById('total_carparkspaces_free').setAttribute('data-purecounter-end', summary.park.freeslots);
   document.getElementById('total_bikespaces_free').setAttribute('data-purecounter-end', summary.bike.freeslots);
-  document.getElementById('total_zonespaces_free').setAttribute('data-purecounter-end', summary.zone.freeslots);
+  //document.getElementById('total_zonespaces_free').setAttribute('data-purecounter-end', summary.zone.freeslots);
 
   // inizializza PureCounter dopo aver impostato i dati
   new PureCounter();

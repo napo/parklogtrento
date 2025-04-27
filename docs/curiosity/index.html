@@ -311,25 +311,22 @@ function creaGrafico(tipo, id, dati) {
     let xData = [];
     let yData = [];
     let rotateLabels = false;
+    let largerBarWidth = false;
 
     if (tipo === 'topbottom') {
       xData = dati.map(d => d.name);
       yData = dati.map(d => +(d.average_occupancy * 100).toFixed(1));
       rotateLabels = true;
+      largerBarWidth = true; // <-- ora gestisco la larghezza barre
     } else if (tipo === 'turnover') {
       xData = dati.map(d => d.name);
-      const maxTurnover = Math.max(...dati.map(d => d.total_turnover)) || 1; // evitiamo divisione per 0
-      yData = dati.map(d => +((d.total_turnover / maxTurnover) * 100).toFixed(1)); // normalizziamo in %
+      const maxTurnover = Math.max(...dati.map(d => d.total_turnover)) || 1;
+      yData = dati.map(d => +((d.total_turnover / maxTurnover) * 100).toFixed(1));
       rotateLabels = true;
     } else if (tipo === 'weekday') {
       const giorniIT = {
-        Monday: 'Lunedì',
-        Tuesday: 'Martedì',
-        Wednesday: 'Mercoledì',
-        Thursday: 'Giovedì',
-        Friday: 'Venerdì',
-        Saturday: 'Sabato',
-        Sunday: 'Domenica'
+        Monday: 'Lunedì', Tuesday: 'Martedì', Wednesday: 'Mercoledì',
+        Thursday: 'Giovedì', Friday: 'Venerdì', Saturday: 'Sabato', Sunday: 'Domenica'
       };
       xData = dati.map(d => giorniIT[d.weekday]);
       yData = dati.map(d => +(d.average_occupancy * 100).toFixed(1));
@@ -356,9 +353,10 @@ function creaGrafico(tipo, id, dati) {
           return `${val}%`;
         }
       },
-      grid: { left: '5%', right: '5%', top: '15%', bottom: rotateLabels ? '25%' : '10%', containLabel: true },
+      grid: { left: '5%', right: '5%', top: '15%', bottom: rotateLabels ? '30%' : '10%', containLabel: true },
       xAxis: {
         type: 'category',
+        boundaryGap: tipo === 'topbottom' ? true : false, // <-- importantissimo qui
         data: xData,
         axisLabel: {
           interval: 0,
@@ -375,6 +373,7 @@ function creaGrafico(tipo, id, dati) {
       series: [{
         type: (tipo === 'weekday' || tipo === 'hourly') ? 'line' : 'bar',
         data: yData,
+        barWidth: largerBarWidth ? '50%' : undefined, // <-- barre belle larghe solo per "topbottom"
         smooth: true
       }]
     };
@@ -387,6 +386,7 @@ function creaGrafico(tipo, id, dati) {
 
   }, 100);
 }
+
 
 
 // Observer per animazione fade in
