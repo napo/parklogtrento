@@ -80,68 +80,68 @@ def expand_opening(df):
     return df
 
 parks = pd.read_json(URL_PARKS)
-zones = pd.read_json(URL_ZONES)
+#zones = pd.read_json(URL_ZONES)
 
 parks = expand_opening(parks)
 del parks['distances']
 
-for index, row in zones.iterrows():
-    if 'stalls' in row:
-        for stall in row.stalls:
-            stalltype = stall['type']
-            capacity = stall['capacity']
-            freeslots = stall['freeslots']
-            ts = stall['ts'] 
-            zones.at[index, 'stall_' + stalltype + "_capacity"] = capacity
-            zones.at[index, 'stall_' + stalltype + "_freeslots"] = freeslots
-            zones.at[index, 'stall_' + stalltype + "_ts"] = ts
+#for index, row in zones.iterrows():
+#    if 'stalls' in row:
+#        for stall in row.stalls:
+#            stalltype = stall['type']
+#            capacity = stall['capacity']
+#            freeslots = stall['freeslots']
+#            ts = stall['ts'] 
+#            zones.at[index, 'stall_' + stalltype + "_capacity"] = capacity
+#            zones.at[index, 'stall_' + stalltype + "_freeslots"] = freeslots
+#            zones.at[index, 'stall_' + stalltype + "_ts"] = ts
 
 
-zones.drop(columns=['stalls'], inplace=True)
-zones.fillna(0, inplace=True)
+#zones.drop(columns=['stalls'], inplace=True)
+#zones.fillna(0, inplace=True)
 
-for col in zones.columns:
-    if col.startswith('_ts'):
-        zones[col] = pd.to_datetime(zones[col], unit='s')
+#for col in zones.columns:
+#    if col.startswith('_ts'):
+#        zones[col] = pd.to_datetime(zones[col], unit='s')
 
 # Convert the 'geom' column to geometric shapes
-zones['geom'] = zones['geom'].apply(wkt.loads)
+#zones['geom'] = zones['geom'].apply(wkt.loads)
 # Create a GeoDataFrame
-zones = gpd.GeoDataFrame(zones, geometry='geom')
+#zones = gpd.GeoDataFrame(zones, geometry='geom')
 # Convert the 'geom' column to geometric shapes
 parks['geom'] = parks['geom'].apply(wkt.loads)
 # Create a GeoDataFrame
 parks = gpd.GeoDataFrame(parks, geometry='geom')
 parks = parks.set_crs(epsg=4326, inplace=True)
-zones = zones.set_crs(epsg=4326, inplace=True)
+#zones = zones.set_crs(epsg=4326, inplace=True)
 
-zones['ts'] = pd.to_datetime(zones['ts'], unit='s')
+#zones['ts'] = pd.to_datetime(zones['ts'], unit='s')
 parks['currentTimestamp'] = pd.to_datetime(parks['currentTimestamp'], unit='s')
 
 #max_timestamp = parks.currentTimestamp.max()
 #formatted_timestamp = max_timestamp.strftime('%d/%m/%Y %H:%M:%S')
 if os.path.exists(ZONES_GEOPARQUET) and os.path.exists(PARKS_GEOPARQUET):
-    zones_history = gpd.read_parquet(ZONES_GEOPARQUET)
+ #   zones_history = gpd.read_parquet(ZONES_GEOPARQUET)
     parks_history = gpd.read_parquet(PARKS_GEOPARQUET)
     if parks_history.currentTimestamp.max() < parks.currentTimestamp.max():
         parks_history = gpd.GeoDataFrame(pd.concat([parks_history, parks], ignore_index=True))
         parks_history.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
         print("new parks create " + str(parks.currentTimestamp.max()))
-    if zones_history.ts.max() < zones.ts.max():
-        zones_history = gpd.GeoDataFrame(pd.concat([zones_history, zones], ignore_index=True))
-        to_int = ['stall_blu_capacity','stall_blu_freeslots',
-          'stall_carico-scarico_capacity','stall_carico-scarico_freeslots',
-          'stall_disabili_capacity','stall_disabili_freeslots']
-        zones_history[to_int] = zones_history[to_int].astype(int)
-        zones_history.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
-        print("new zones create " + str(zones_history.ts.max()))
+#    if zones_history.ts.max() < zones.ts.max():
+#        zones_history = gpd.GeoDataFrame(pd.concat([zones_history, zones], ignore_index=True))
+#        to_int = ['stall_blu_capacity','stall_blu_freeslots',
+#          'stall_carico-scarico_capacity','stall_carico-scarico_freeslots',
+#          'stall_disabili_capacity','stall_disabili_freeslots']
+#        zones_history[to_int] = zones_history[to_int].astype(int)
+#        zones_history.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
+#        print("new zones create " + str(zones_history.ts.max()))
 
 else:
     parks.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
-    zones.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
+#    zones.to_parquet(ZONES_GEOPARQUET, engine='pyarrow')
 
 del parks['geom']
-del zones['geom']
+#del zones['geom']
 parks.to_csv(PARKS_CSV,index=False)
-zones.to_csv(ZONES_CSV,index=False)
+#zones.to_csv(ZONES_CSV,index=False)
 
