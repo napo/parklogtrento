@@ -2,22 +2,22 @@
   "Garage Autosilo Buonconsiglio - P3": {
     "Monday": [
       {
-        "media": 52.9,
+        "media": 53.0,
         "min": 14,
         "max": 108,
-        "percentuale_media": 28.1
+        "percentuale_media": 28.2
       },
       {
         "media": 48.6,
         "min": 13,
         "max": 106,
-        "percentuale_media": 25.8
+        "percentuale_media": 25.9
       },
       {
-        "media": 54.8,
+        "media": 55.0,
         "min": 12,
         "max": 92,
-        "percentuale_media": 29.1
+        "percentuale_media": 29.2
       },
       {
         "media": 53.1,
@@ -902,121 +902,121 @@
         "percentuale_media": 41.8
       },
       {
-        "media": 74.4,
+        "media": 74.8,
         "min": 30,
         "max": 188,
-        "percentuale_media": 39.6
+        "percentuale_media": 39.8
       },
       {
         "media": 77.2,
         "min": 30,
         "max": 188,
-        "percentuale_media": 41.0
+        "percentuale_media": 41.1
       },
       {
-        "media": 70.3,
+        "media": 70.4,
         "min": 30,
         "max": 188,
-        "percentuale_media": 37.4
+        "percentuale_media": 37.5
       },
       {
-        "media": 68.6,
+        "media": 68.7,
         "min": 32,
         "max": 188,
-        "percentuale_media": 36.5
+        "percentuale_media": 36.6
       },
       {
-        "media": 72.0,
+        "media": 72.2,
         "min": 29,
         "max": 188,
-        "percentuale_media": 38.3
+        "percentuale_media": 38.4
       },
       {
-        "media": 74.9,
+        "media": 75.3,
         "min": 30,
         "max": 188,
-        "percentuale_media": 39.9
+        "percentuale_media": 40.1
       },
       {
-        "media": 88.7,
+        "media": 89.4,
         "min": 30,
-        "max": 188,
-        "percentuale_media": 47.2
-      },
-      {
-        "media": 95.3,
-        "min": 30,
-        "max": 188,
-        "percentuale_media": 50.7
-      },
-      {
-        "media": 98.7,
-        "min": 35,
-        "max": 188,
-        "percentuale_media": 52.5
-      },
-      {
-        "media": 89.3,
-        "min": 33,
         "max": 188,
         "percentuale_media": 47.5
       },
       {
-        "media": 97.4,
-        "min": 27,
+        "media": 95.8,
+        "min": 30,
         "max": 188,
-        "percentuale_media": 51.8
+        "percentuale_media": 50.9
       },
       {
-        "media": 91.7,
+        "media": 99.4,
+        "min": 35,
+        "max": 188,
+        "percentuale_media": 52.9
+      },
+      {
+        "media": 89.8,
+        "min": 33,
+        "max": 188,
+        "percentuale_media": 47.8
+      },
+      {
+        "media": 98.4,
+        "min": 27,
+        "max": 188,
+        "percentuale_media": 52.3
+      },
+      {
+        "media": 92.7,
         "min": 20,
         "max": 188,
-        "percentuale_media": 48.8
+        "percentuale_media": 49.3
       },
       {
-        "media": 94.5,
+        "media": 95.4,
         "min": 18,
         "max": 188,
-        "percentuale_media": 50.2
+        "percentuale_media": 50.7
       },
       {
-        "media": 89.1,
+        "media": 89.6,
         "min": 18,
         "max": 188,
-        "percentuale_media": 47.4
+        "percentuale_media": 47.7
       },
       {
-        "media": 88.2,
+        "media": 88.5,
         "min": 27,
         "max": 188,
-        "percentuale_media": 46.9
+        "percentuale_media": 47.1
       },
       {
-        "media": 81.4,
+        "media": 81.6,
         "min": 32,
         "max": 177,
-        "percentuale_media": 43.3
+        "percentuale_media": 43.4
       },
       {
-        "media": 79.9,
+        "media": 80.4,
         "min": 32,
         "max": 168,
-        "percentuale_media": 42.5
+        "percentuale_media": 42.8
       },
       {
-        "media": 68.8,
+        "media": 69.2,
         "min": 26,
         "max": 144,
-        "percentuale_media": 36.6
+        "percentuale_media": 36.8
       },
       {
-        "media": 61.4,
+        "media": 61.6,
         "min": 24,
         "max": 124,
-        "percentuale_media": 32.7
+        "percentuale_media": 32.8
       },
       {
-        "media": 54.5,
+        "media": 54.6,
         "min": 14,
         "max": 116,
         "percentuale_media": 29.0
@@ -1026,28 +1026,28 @@
   "Garage Centro Europa - P2": {
     "Monday": [
       {
-        "media": 168.0,
+        "media": 165.7,
         "min": 0,
         "max": 234,
-        "percentuale_media": 51.6
+        "percentuale_media": 51.5
       },
       {
-        "media": 177.1,
+        "media": 177.0,
         "min": 40,
         "max": 234,
         "percentuale_media": 53.7
       },
       {
-        "media": 150.7,
+        "media": 149.8,
         "min": 0,
         "max": 226,
-        "percentuale_media": 48.4
+        "percentuale_media": 48.3
       },
       {
-        "media": 160.1,
+        "media": 157.2,
         "min": 40,
         "max": 226,
-        "percentuale_media": 48.7
+        "percentuale_media": 48.6
       },
       {
         "media": 170.6,
@@ -1926,152 +1926,152 @@
         "percentuale_media": 48.9
       },
       {
-        "media": 167.3,
-        "min": 0,
-        "max": 246,
-        "percentuale_media": 52.4
-      },
-      {
-        "media": 171.6,
-        "min": 0,
-        "max": 246,
-        "percentuale_media": 53.2
-      },
-      {
-        "media": 172.4,
-        "min": 0,
-        "max": 246,
-        "percentuale_media": 53.3
-      },
-      {
-        "media": 174.8,
-        "min": 0,
-        "max": 246,
-        "percentuale_media": 53.4
-      },
-      {
-        "media": 169.1,
+        "media": 164.4,
         "min": 0,
         "max": 246,
         "percentuale_media": 52.3
       },
       {
-        "media": 175.6,
+        "media": 168.4,
         "min": 0,
-        "max": 241,
-        "percentuale_media": 53.8
+        "max": 246,
+        "percentuale_media": 53.1
       },
       {
-        "media": 172.5,
+        "media": 169.5,
+        "min": 0,
+        "max": 246,
+        "percentuale_media": 53.2
+      },
+      {
+        "media": 173.4,
+        "min": 0,
+        "max": 246,
+        "percentuale_media": 53.4
+      },
+      {
+        "media": 165.9,
+        "min": 0,
+        "max": 246,
+        "percentuale_media": 52.3
+      },
+      {
+        "media": 173.5,
+        "min": 0,
+        "max": 241,
+        "percentuale_media": 53.7
+      },
+      {
+        "media": 170.2,
         "min": 0,
         "max": 234,
         "percentuale_media": 53.1
       },
       {
-        "media": 173.0,
+        "media": 170.9,
         "min": 0,
         "max": 254,
-        "percentuale_media": 53.0
+        "percentuale_media": 52.9
       },
       {
-        "media": 174.3,
+        "media": 171.4,
         "min": 0,
         "max": 266,
-        "percentuale_media": 53.6
+        "percentuale_media": 53.5
       },
       {
-        "media": 176.8,
+        "media": 175.5,
         "min": 0,
         "max": 261,
         "percentuale_media": 53.7
       },
       {
-        "media": 166.9,
+        "media": 163.1,
+        "min": 0,
+        "max": 233,
+        "percentuale_media": 51.9
+      },
+      {
+        "media": 170.7,
+        "min": 0,
+        "max": 247,
+        "percentuale_media": 53.2
+      },
+      {
+        "media": 171.9,
+        "min": 0,
+        "max": 247,
+        "percentuale_media": 53.2
+      },
+      {
+        "media": 167.9,
         "min": 0,
         "max": 233,
         "percentuale_media": 52.0
       },
       {
-        "media": 173.6,
-        "min": 0,
-        "max": 247,
-        "percentuale_media": 53.4
-      },
-      {
-        "media": 174.0,
-        "min": 0,
-        "max": 247,
-        "percentuale_media": 53.3
-      },
-      {
-        "media": 169.7,
-        "min": 0,
-        "max": 233,
-        "percentuale_media": 52.1
-      },
-      {
-        "media": 168.3,
-        "min": 0,
-        "max": 234,
-        "percentuale_media": 51.6
-      },
-      {
-        "media": 172.5,
-        "min": 0,
-        "max": 234,
-        "percentuale_media": 52.8
-      },
-      {
-        "media": 165.1,
-        "min": 0,
-        "max": 233,
-        "percentuale_media": 51.0
-      },
-      {
-        "media": 169.3,
-        "min": 0,
-        "max": 234,
-        "percentuale_media": 51.9
-      },
-      {
-        "media": 167.7,
+        "media": 165.2,
         "min": 0,
         "max": 234,
         "percentuale_media": 51.5
       },
       {
-        "media": 171.3,
+        "media": 171.0,
         "min": 0,
         "max": 234,
-        "percentuale_media": 52.4
+        "percentuale_media": 52.8
+      },
+      {
+        "media": 162.7,
+        "min": 0,
+        "max": 233,
+        "percentuale_media": 50.9
+      },
+      {
+        "media": 167.2,
+        "min": 0,
+        "max": 234,
+        "percentuale_media": 51.8
+      },
+      {
+        "media": 165.4,
+        "min": 0,
+        "max": 234,
+        "percentuale_media": 51.4
+      },
+      {
+        "media": 169.6,
+        "min": 0,
+        "max": 234,
+        "percentuale_media": 52.3
       }
     ]
   },
   "Garage Parcheggio Duomo - P5": {
     "Monday": [
       {
-        "media": 28.7,
+        "media": 28.0,
         "min": 0,
         "max": 119,
-        "percentuale_media": 24.1
+        "percentuale_media": 23.5
       },
       {
-        "media": 30.9,
+        "media": 30.8,
         "min": 2,
         "max": 119,
-        "percentuale_media": 26.0
+        "percentuale_media": 25.9
       },
       {
-        "media": 18.9,
+        "media": 18.6,
         "min": 0,
         "max": 119,
-        "percentuale_media": 15.9
+        "percentuale_media": 15.7
       },
       {
-        "media": 32.4,
+        "media": 31.1,
         "min": 0,
         "max": 119,
-        "percentuale_media": 27.2
+        "percentuale_media": 26.2
       },
       {
         "media": 25.1,
@@ -2950,134 +2950,134 @@
         "percentuale_media": 24.6
       },
       {
-        "media": 28.5,
+        "media": 27.6,
         "min": 4,
         "max": 119,
-        "percentuale_media": 24.0
+        "percentuale_media": 23.2
       },
       {
-        "media": 28.7,
+        "media": 27.9,
         "min": 2,
         "max": 119,
-        "percentuale_media": 24.2
+        "percentuale_media": 23.4
       },
       {
-        "media": 25.8,
+        "media": 25.1,
         "min": 2,
         "max": 119,
-        "percentuale_media": 21.7
+        "percentuale_media": 21.1
       },
       {
-        "media": 22.8,
+        "media": 22.5,
         "min": 0,
         "max": 119,
-        "percentuale_media": 19.2
+        "percentuale_media": 18.9
       },
       {
-        "media": 24.3,
+        "media": 23.4,
         "min": 0,
         "max": 119,
-        "percentuale_media": 20.4
+        "percentuale_media": 19.7
       },
       {
-        "media": 26.7,
+        "media": 26.1,
         "min": 1,
         "max": 119,
-        "percentuale_media": 22.4
+        "percentuale_media": 21.9
       },
       {
-        "media": 32.3,
+        "media": 31.5,
         "min": 1,
         "max": 119,
-        "percentuale_media": 27.2
+        "percentuale_media": 26.5
       },
       {
-        "media": 40.4,
+        "media": 39.6,
         "min": 6,
         "max": 119,
-        "percentuale_media": 34.0
+        "percentuale_media": 33.3
       },
       {
-        "media": 46.5,
-        "min": 10,
+        "media": 45.2,
+        "min": 8,
         "max": 119,
-        "percentuale_media": 39.0
+        "percentuale_media": 38.0
       },
       {
-        "media": 42.3,
-        "min": 11,
+        "media": 41.8,
+        "min": 9,
         "max": 119,
-        "percentuale_media": 35.6
+        "percentuale_media": 35.2
       },
       {
-        "media": 53.9,
+        "media": 51.7,
         "min": 6,
         "max": 119,
-        "percentuale_media": 45.3
+        "percentuale_media": 43.4
       },
       {
-        "media": 44.0,
+        "media": 42.7,
         "min": 4,
         "max": 119,
-        "percentuale_media": 37.0
+        "percentuale_media": 35.9
       },
       {
-        "media": 46.0,
+        "media": 45.1,
         "min": 2,
         "max": 119,
-        "percentuale_media": 38.6
+        "percentuale_media": 37.9
       },
       {
-        "media": 41.0,
-        "min": 2,
+        "media": 40.1,
+        "min": 1,
         "max": 119,
-        "percentuale_media": 34.4
+        "percentuale_media": 33.7
       },
       {
-        "media": 42.2,
-        "min": 3,
-        "max": 119,
-        "percentuale_media": 35.5
-      },
-      {
-        "media": 39.3,
-        "min": 3,
-        "max": 119,
-        "percentuale_media": 33.0
-      },
-      {
-        "media": 35.2,
-        "min": 3,
-        "max": 119,
-        "percentuale_media": 29.6
-      },
-      {
-        "media": 33.1,
-        "min": 2,
-        "max": 119,
-        "percentuale_media": 27.8
-      },
-      {
-        "media": 31.7,
+        "media": 40.6,
         "min": 0,
         "max": 119,
-        "percentuale_media": 26.7
+        "percentuale_media": 34.1
       },
       {
-        "media": 28.8,
+        "media": 38.6,
         "min": 0,
         "max": 119,
-        "percentuale_media": 24.2
+        "percentuale_media": 32.4
+      },
+      {
+        "media": 34.0,
+        "min": 0,
+        "max": 119,
+        "percentuale_media": 28.6
+      },
+      {
+        "media": 32.1,
+        "min": 0,
+        "max": 119,
+        "percentuale_media": 27.0
+      },
+      {
+        "media": 30.9,
+        "min": 0,
+        "max": 119,
+        "percentuale_media": 25.9
+      },
+      {
+        "media": 28.2,
+        "min": 0,
+        "max": 119,
+        "percentuale_media": 23.7
       }
     ]
   },
   "Garage piazza Fiera - P4": {
     "Monday": [
       {
-        "media": 115.3,
+        "media": 115.5,
         "min": 82,
         "max": 208,
-        "percentuale_media": 25.7
+        "percentuale_media": 25.8
       },
       {
         "media": 117.4,
@@ -3092,7 +3092,7 @@
         "percentuale_media": 26.5
       },
       {
-        "media": 114.5,
+        "media": 114.7,
         "min": 81,
         "max": 163,
         "percentuale_media": 25.6
@@ -3974,121 +3974,121 @@
         "percentuale_media": 28.2
       },
       {
-        "media": 122.2,
+        "media": 122.6,
         "min": 87,
         "max": 174,
-        "percentuale_media": 27.3
+        "percentuale_media": 27.4
       },
       {
-        "media": 124.6,
+        "media": 124.9,
         "min": 87,
         "max": 218,
-        "percentuale_media": 27.8
+        "percentuale_media": 27.9
       },
       {
-        "media": 125.4,
+        "media": 125.6,
         "min": 86,
         "max": 217,
         "percentuale_media": 28.0
       },
       {
-        "media": 127.6,
+        "media": 127.7,
         "min": 85,
         "max": 216,
         "percentuale_media": 28.5
       },
       {
-        "media": 128.6,
+        "media": 128.9,
         "min": 86,
         "max": 208,
-        "percentuale_media": 28.7
+        "percentuale_media": 28.8
       },
       {
-        "media": 135.7,
+        "media": 136.0,
         "min": 91,
         "max": 341,
-        "percentuale_media": 30.3
+        "percentuale_media": 30.4
       },
       {
-        "media": 163.7,
+        "media": 164.0,
         "min": 100,
         "max": 435,
-        "percentuale_media": 36.5
+        "percentuale_media": 36.6
       },
       {
-        "media": 186.2,
+        "media": 186.4,
         "min": 101,
         "max": 448,
         "percentuale_media": 41.6
       },
       {
-        "media": 204.8,
+        "media": 205.2,
         "min": 108,
         "max": 437,
-        "percentuale_media": 45.7
+        "percentuale_media": 45.8
       },
       {
-        "media": 203.3,
+        "media": 203.4,
         "min": 106,
         "max": 448,
         "percentuale_media": 45.4
       },
       {
-        "media": 199.7,
+        "media": 200.8,
         "min": 98,
         "max": 438,
-        "percentuale_media": 44.6
+        "percentuale_media": 44.8
       },
       {
-        "media": 195.5,
+        "media": 197.3,
         "min": 88,
         "max": 448,
-        "percentuale_media": 43.6
+        "percentuale_media": 44.0
       },
       {
-        "media": 207.8,
+        "media": 209.1,
         "min": 89,
         "max": 435,
-        "percentuale_media": 46.4
+        "percentuale_media": 46.7
       },
       {
-        "media": 205.2,
+        "media": 205.5,
         "min": 98,
         "max": 434,
-        "percentuale_media": 45.8
-      },
-      {
-        "media": 205.9,
-        "min": 113,
-        "max": 428,
         "percentuale_media": 45.9
       },
       {
-        "media": 190.8,
+        "media": 206.0,
+        "min": 113,
+        "max": 428,
+        "percentuale_media": 46.0
+      },
+      {
+        "media": 191.2,
         "min": 111,
         "max": 394,
-        "percentuale_media": 42.6
+        "percentuale_media": 42.7
       },
       {
-        "media": 195.6,
+        "media": 196.1,
         "min": 120,
         "max": 341,
-        "percentuale_media": 43.7
+        "percentuale_media": 43.8
       },
       {
-        "media": 177.6,
+        "media": 177.7,
         "min": 106,
         "max": 326,
         "percentuale_media": 39.7
       },
       {
-        "media": 154.1,
+        "media": 154.2,
         "min": 86,
         "max": 309,
         "percentuale_media": 34.4
       },
       {
-        "media": 129.1,
+        "media": 129.2,
         "min": 82,
         "max": 260,
         "percentuale_media": 28.8
@@ -4098,28 +4098,28 @@
   "Parcheggio Area ex Zuffo - P9": {
     "Monday": [
       {
-        "media": 408.4,
+        "media": 414.4,
         "min": 199,
         "max": 692,
-        "percentuale_media": 60.7
+        "percentuale_media": 61.5
       },
       {
-        "media": 427.7,
+        "media": 428.0,
         "min": 224,
         "max": 692,
-        "percentuale_media": 62.2
+        "percentuale_media": 62.3
       },
       {
-        "media": 397.3,
+        "media": 402.3,
         "min": 201,
         "max": 692,
-        "percentuale_media": 60.9
+        "percentuale_media": 61.5
       },
       {
-        "media": 388.8,
+        "media": 391.7,
         "min": 203,
         "max": 692,
-        "percentuale_media": 57.7
+        "percentuale_media": 58.1
       },
       {
         "media": 388.9,
@@ -4998,124 +4998,124 @@
         "percentuale_media": 67.6
       },
       {
-        "media": 428.4,
+        "media": 434.7,
         "min": 244,
         "max": 692,
-        "percentuale_media": 67.1
+        "percentuale_media": 67.7
       },
       {
-        "media": 467.5,
+        "media": 471.5,
         "min": 244,
         "max": 692,
-        "percentuale_media": 70.5
+        "percentuale_media": 70.9
       },
       {
-        "media": 479.9,
+        "media": 484.0,
         "min": 254,
         "max": 692,
-        "percentuale_media": 71.6
+        "percentuale_media": 72.1
       },
       {
-        "media": 527.1,
+        "media": 528.5,
         "min": 266,
         "max": 692,
-        "percentuale_media": 78.1
+        "percentuale_media": 78.3
       },
       {
-        "media": 548.5,
+        "media": 552.1,
         "min": 276,
         "max": 692,
-        "percentuale_media": 81.8
+        "percentuale_media": 82.2
       },
       {
-        "media": 581.9,
+        "media": 584.2,
         "min": 291,
         "max": 692,
-        "percentuale_media": 86.6
+        "percentuale_media": 86.9
       },
       {
-        "media": 592.0,
+        "media": 595.0,
         "min": 327,
-        "max": 692,
-        "percentuale_media": 88.5
+        "max": 693,
+        "percentuale_media": 88.8
       },
       {
-        "media": 600.4,
+        "media": 602.8,
         "min": 334,
-        "max": 692,
-        "percentuale_media": 88.9
+        "max": 693,
+        "percentuale_media": 89.2
       },
       {
-        "media": 599.5,
+        "media": 602.9,
         "min": 340,
-        "max": 692,
-        "percentuale_media": 89.4
+        "max": 693,
+        "percentuale_media": 89.8
       },
       {
-        "media": 600.6,
+        "media": 602.1,
         "min": 321,
         "max": 693,
-        "percentuale_media": 88.6
+        "percentuale_media": 88.8
       },
       {
-        "media": 608.4,
+        "media": 612.7,
         "min": 318,
         "max": 693,
-        "percentuale_media": 91.5
+        "percentuale_media": 91.9
       },
       {
-        "media": 592.0,
+        "media": 595.8,
         "min": 323,
         "max": 693,
-        "percentuale_media": 88.6
+        "percentuale_media": 89.0
       },
       {
-        "media": 593.9,
+        "media": 596.5,
         "min": 372,
         "max": 693,
-        "percentuale_media": 88.7
+        "percentuale_media": 89.0
       },
       {
-        "media": 574.0,
+        "media": 576.7,
         "min": 356,
-        "max": 692,
-        "percentuale_media": 85.2
+        "max": 693,
+        "percentuale_media": 85.5
       },
       {
-        "media": 556.1,
+        "media": 561.8,
         "min": 277,
-        "max": 692,
-        "percentuale_media": 83.7
+        "max": 693,
+        "percentuale_media": 84.4
       },
       {
-        "media": 504.0,
+        "media": 507.3,
         "min": 246,
-        "max": 692,
-        "percentuale_media": 74.9
+        "max": 693,
+        "percentuale_media": 75.4
       },
       {
-        "media": 491.7,
+        "media": 497.5,
         "min": 238,
         "max": 692,
-        "percentuale_media": 74.4
+        "percentuale_media": 75.1
       },
       {
-        "media": 462.7,
+        "media": 468.6,
         "min": 228,
         "max": 692,
-        "percentuale_media": 69.0
+        "percentuale_media": 69.7
       },
       {
-        "media": 443.5,
+        "media": 449.1,
         "min": 231,
         "max": 692,
-        "percentuale_media": 66.9
+        "percentuale_media": 67.6
       },
       {
-        "media": 421.1,
+        "media": 424.6,
         "min": 215,
         "max": 692,
-        "percentuale_media": 62.8
+        "percentuale_media": 63.2
       }
     ]
   },
@@ -6022,13 +6022,13 @@
         "percentuale_media": 0.5
       },
       {
-        "media": 1.7,
+        "media": 1.6,
         "min": 0,
         "max": 6,
-        "percentuale_media": 1.2
+        "percentuale_media": 1.1
       },
       {
-        "media": 1.2,
+        "media": 1.1,
         "min": 0,
         "max": 6,
         "percentuale_media": 0.8
@@ -6040,113 +6040,113 @@
         "percentuale_media": 1.1
       },
       {
-        "media": 6.9,
+        "media": 6.8,
         "min": 0,
         "max": 139,
-        "percentuale_media": 4.9
+        "percentuale_media": 4.8
       },
       {
-        "media": 13.6,
+        "media": 13.0,
         "min": 0,
         "max": 139,
-        "percentuale_media": 9.5
+        "percentuale_media": 9.1
       },
       {
-        "media": 10.0,
-        "min": 0,
-        "max": 139,
-        "percentuale_media": 7.0
-      },
-      {
-        "media": 10.4,
-        "min": 0,
-        "max": 139,
-        "percentuale_media": 7.3
-      },
-      {
-        "media": 13.2,
-        "min": 0,
-        "max": 139,
-        "percentuale_media": 9.2
-      },
-      {
-        "media": 14.7,
-        "min": 0,
-        "max": 139,
-        "percentuale_media": 10.3
-      },
-      {
-        "media": 9.6,
+        "media": 9.7,
         "min": 0,
         "max": 139,
         "percentuale_media": 6.8
       },
       {
-        "media": 22.3,
+        "media": 10.1,
         "min": 0,
         "max": 139,
-        "percentuale_media": 15.6
+        "percentuale_media": 7.1
       },
       {
-        "media": 15.7,
+        "media": 12.8,
         "min": 0,
         "max": 139,
-        "percentuale_media": 11.0
+        "percentuale_media": 9.0
       },
       {
-        "media": 15.6,
+        "media": 14.2,
         "min": 0,
         "max": 139,
-        "percentuale_media": 10.9
+        "percentuale_media": 9.9
       },
       {
-        "media": 15.6,
+        "media": 9.5,
         "min": 0,
-        "max": 145,
-        "percentuale_media": 10.9
+        "max": 139,
+        "percentuale_media": 6.7
       },
       {
-        "media": 18.8,
+        "media": 21.2,
         "min": 0,
-        "max": 145,
-        "percentuale_media": 13.1
+        "max": 139,
+        "percentuale_media": 14.8
       },
       {
-        "media": 15.1,
+        "media": 15.2,
+        "min": 0,
+        "max": 139,
+        "percentuale_media": 10.6
+      },
+      {
+        "media": 15.2,
+        "min": 0,
+        "max": 139,
+        "percentuale_media": 10.6
+      },
+      {
+        "media": 15.2,
         "min": 0,
         "max": 145,
         "percentuale_media": 10.6
       },
       {
-        "media": 15.4,
+        "media": 18.0,
         "min": 0,
         "max": 145,
-        "percentuale_media": 10.7
+        "percentuale_media": 12.5
       },
       {
-        "media": 10.6,
+        "media": 14.8,
         "min": 0,
         "max": 145,
-        "percentuale_media": 7.3
+        "percentuale_media": 10.3
       },
       {
-        "media": 10.0,
+        "media": 14.9,
         "min": 0,
         "max": 145,
-        "percentuale_media": 6.9
+        "percentuale_media": 10.3
       },
       {
-        "media": 9.1,
+        "media": 10.3,
         "min": 0,
         "max": 145,
-        "percentuale_media": 6.3
+        "percentuale_media": 7.1
+      },
+      {
+        "media": 9.7,
+        "min": 0,
+        "max": 145,
+        "percentuale_media": 6.7
+      },
+      {
+        "media": 8.9,
+        "min": 0,
+        "max": 145,
+        "percentuale_media": 6.1
       }
     ]
   },
   "Parcheggio Santa Chiara": {
     "Monday": [
       {
-        "media": 16.4,
+        "media": 16.3,
         "min": 0,
         "max": 134,
         "percentuale_media": 8.0
@@ -6161,7 +6161,7 @@
         "media": 6.0,
         "min": 0,
         "max": 14,
-        "percentuale_media": 3.0
+        "percentuale_media": 3.1
       },
       {
         "media": 12.3,
@@ -7052,7 +7052,7 @@
         "percentuale_media": 3.8
       },
       {
-        "media": 7.0,
+        "media": 7.1,
         "min": 0,
         "max": 20,
         "percentuale_media": 3.5
@@ -7082,98 +7082,98 @@
         "percentuale_media": 6.7
       },
       {
-        "media": 16.2,
+        "media": 16.3,
         "min": 0,
         "max": 32,
-        "percentuale_media": 8.0
+        "percentuale_media": 8.1
       },
       {
-        "media": 19.3,
+        "media": 19.6,
         "min": 0,
         "max": 36,
-        "percentuale_media": 9.5
+        "percentuale_media": 9.7
       },
       {
-        "media": 19.4,
+        "media": 19.9,
         "min": 0,
         "max": 37,
-        "percentuale_media": 9.6
+        "percentuale_media": 9.9
       },
       {
-        "media": 21.4,
+        "media": 21.5,
         "min": 0,
         "max": 43,
         "percentuale_media": 10.5
       },
       {
-        "media": 28.5,
+        "media": 28.7,
         "min": 0,
         "max": 61,
-        "percentuale_media": 14.2
+        "percentuale_media": 14.4
       },
       {
-        "media": 49.1,
+        "media": 48.8,
         "min": 21,
         "max": 93,
-        "percentuale_media": 24.3
+        "percentuale_media": 24.2
       },
       {
-        "media": 55.1,
+        "media": 55.0,
         "min": 28,
         "max": 110,
         "percentuale_media": 27.2
       },
       {
-        "media": 51.0,
+        "media": 51.1,
         "min": 26,
         "max": 117,
-        "percentuale_media": 25.0
+        "percentuale_media": 25.2
       },
       {
-        "media": 39.5,
+        "media": 39.6,
         "min": 19,
         "max": 124,
-        "percentuale_media": 19.5
+        "percentuale_media": 19.6
       },
       {
-        "media": 29.8,
+        "media": 29.7,
         "min": 6,
         "max": 129,
         "percentuale_media": 14.6
       },
       {
-        "media": 20.8,
+        "media": 20.6,
         "min": 2,
         "max": 130,
-        "percentuale_media": 10.2
+        "percentuale_media": 10.1
       },
       {
-        "media": 19.5,
+        "media": 19.3,
         "min": 0,
         "max": 131,
         "percentuale_media": 9.5
       },
       {
-        "media": 17.1,
+        "media": 17.0,
         "min": 0,
         "max": 132,
         "percentuale_media": 8.4
       },
       {
-        "media": 18.9,
+        "media": 18.8,
         "min": 0,
         "max": 133,
-        "percentuale_media": 9.3
+        "percentuale_media": 9.2
       }
     ]
   },
   "Parcheggio piazzale Sanseverino - P7": {
     "Monday": [
       {
-        "media": 63.5,
+        "media": 63.9,
         "min": -7,
         "max": 308,
-        "percentuale_media": 19.7
+        "percentuale_media": 19.8
       },
       {
         "media": 49.7,
@@ -7182,16 +7182,16 @@
         "percentuale_media": 15.4
       },
       {
-        "media": 62.2,
+        "media": 62.4,
         "min": 0,
         "max": 308,
         "percentuale_media": 19.3
       },
       {
-        "media": 67.0,
+        "media": 67.2,
         "min": -9,
         "max": 308,
-        "percentuale_media": 20.7
+        "percentuale_media": 20.8
       },
       {
         "media": 94.8,
@@ -8070,46 +8070,46 @@
         "percentuale_media": 29.9
       },
       {
-        "media": 89.3,
+        "media": 89.1,
         "min": 0,
         "max": 138,
         "percentuale_media": 27.6
       },
       {
-        "media": 86.1,
+        "media": 86.0,
         "min": 0,
         "max": 140,
-        "percentuale_media": 26.7
+        "percentuale_media": 26.6
       },
       {
-        "media": 86.4,
+        "media": 86.2,
         "min": 0,
         "max": 144,
         "percentuale_media": 26.7
       },
       {
-        "media": 85.7,
+        "media": 85.6,
         "min": 0,
         "max": 182,
         "percentuale_media": 26.5
       },
       {
-        "media": 107.1,
+        "media": 106.5,
         "min": 0,
         "max": 323,
-        "percentuale_media": 33.2
+        "percentuale_media": 33.0
       },
       {
-        "media": 131.1,
+        "media": 130.8,
         "min": 0,
         "max": 323,
-        "percentuale_media": 40.6
+        "percentuale_media": 40.5
       },
       {
-        "media": 177.0,
+        "media": 176.5,
         "min": 0,
         "max": 323,
-        "percentuale_media": 54.8
+        "percentuale_media": 54.6
       },
       {
         "media": 204.4,
@@ -8118,46 +8118,46 @@
         "percentuale_media": 63.3
       },
       {
-        "media": 216.1,
+        "media": 216.9,
         "min": 0,
         "max": 323,
-        "percentuale_media": 66.9
+        "percentuale_media": 67.2
       },
       {
-        "media": 203.2,
+        "media": 204.2,
         "min": 0,
         "max": 323,
-        "percentuale_media": 62.9
+        "percentuale_media": 63.2
       },
       {
-        "media": 244.5,
+        "media": 247.0,
         "min": 0,
         "max": 323,
-        "percentuale_media": 75.7
+        "percentuale_media": 76.5
       },
       {
-        "media": 222.8,
+        "media": 225.6,
         "min": 0,
         "max": 323,
-        "percentuale_media": 69.0
+        "percentuale_media": 69.8
       },
       {
-        "media": 226.4,
+        "media": 228.5,
         "min": 0,
         "max": 323,
-        "percentuale_media": 70.1
+        "percentuale_media": 70.7
       },
       {
-        "media": 206.9,
+        "media": 207.6,
         "min": 0,
         "max": 323,
-        "percentuale_media": 64.1
+        "percentuale_media": 64.3
       },
       {
-        "media": 208.1,
+        "media": 207.6,
         "min": 0,
         "max": 323,
-        "percentuale_media": 64.4
+        "percentuale_media": 64.3
       },
       {
         "media": 187.8,
@@ -8166,38 +8166,38 @@
         "percentuale_media": 58.1
       },
       {
-        "media": 169.1,
+        "media": 168.8,
         "min": 0,
         "max": 323,
-        "percentuale_media": 52.3
+        "percentuale_media": 52.2
       },
       {
-        "media": 146.0,
+        "media": 145.9,
         "min": 0,
         "max": 308,
         "percentuale_media": 45.2
       },
       {
-        "media": 114.4,
+        "media": 114.5,
         "min": 0,
         "max": 308,
         "percentuale_media": 35.4
       },
       {
-        "media": 79.8,
+        "media": 80.2,
         "min": 0,
         "max": 308,
-        "percentuale_media": 24.7
+        "percentuale_media": 24.8
       }
     ]
   },
   "Parcheggio via Monte Baldo - P8": {
     "Monday": [
       {
-        "media": 26.1,
+        "media": 25.4,
         "min": 0,
         "max": 58,
-        "percentuale_media": 13.1
+        "percentuale_media": 12.7
       },
       {
         "media": 25.1,
@@ -8206,16 +8206,16 @@
         "percentuale_media": 12.7
       },
       {
-        "media": 26.8,
-        "min": 14,
+        "media": 26.4,
+        "min": 3,
         "max": 53,
-        "percentuale_media": 13.3
+        "percentuale_media": 13.1
       },
       {
-        "media": 26.1,
+        "media": 25.2,
         "min": 0,
         "max": 58,
-        "percentuale_media": 13.0
+        "percentuale_media": 12.6
       },
       {
         "media": 27.5,
@@ -9094,124 +9094,124 @@
         "percentuale_media": 15.2
       },
       {
+        "media": 25.1,
+        "min": 7,
+        "max": 202,
+        "percentuale_media": 12.6
+      },
+      {
+        "media": 28.8,
+        "min": 7,
+        "max": 202,
+        "percentuale_media": 14.4
+      },
+      {
         "media": 25.9,
-        "min": 9,
+        "min": 7,
         "max": 202,
         "percentuale_media": 13.0
       },
       {
-        "media": 29.6,
-        "min": 10,
-        "max": 202,
-        "percentuale_media": 14.8
-      },
-      {
-        "media": 26.6,
-        "min": 10,
-        "max": 202,
-        "percentuale_media": 13.3
-      },
-      {
-        "media": 22.6,
+        "media": 22.3,
         "min": 0,
         "max": 202,
-        "percentuale_media": 11.3
+        "percentuale_media": 11.2
       },
       {
-        "media": 22.0,
+        "media": 21.5,
         "min": 1,
         "max": 57,
-        "percentuale_media": 11.1
+        "percentuale_media": 10.8
       },
       {
-        "media": 24.8,
+        "media": 24.4,
         "min": 1,
         "max": 78,
-        "percentuale_media": 12.5
+        "percentuale_media": 12.2
       },
       {
-        "media": 30.7,
+        "media": 30.1,
         "min": 4,
         "max": 137,
-        "percentuale_media": 15.3
+        "percentuale_media": 15.0
       },
       {
-        "media": 38.2,
+        "media": 37.7,
         "min": 5,
         "max": 191,
-        "percentuale_media": 19.1
+        "percentuale_media": 18.8
       },
       {
-        "media": 43.1,
+        "media": 42.3,
         "min": 5,
         "max": 202,
-        "percentuale_media": 21.5
+        "percentuale_media": 21.1
       },
       {
-        "media": 42.1,
+        "media": 41.9,
         "min": 5,
         "max": 202,
-        "percentuale_media": 21.0
+        "percentuale_media": 20.9
       },
       {
-        "media": 52.6,
+        "media": 51.4,
         "min": 5,
         "max": 202,
-        "percentuale_media": 26.2
-      },
-      {
-        "media": 53.0,
-        "min": 5,
-        "max": 202,
-        "percentuale_media": 26.4
+        "percentuale_media": 25.6
       },
       {
         "media": 52.1,
         "min": 5,
-        "max": 199,
+        "max": 202,
         "percentuale_media": 25.9
       },
       {
-        "media": 45.4,
+        "media": 51.4,
+        "min": 5,
+        "max": 199,
+        "percentuale_media": 25.6
+      },
+      {
+        "media": 44.8,
         "min": 5,
         "max": 165,
-        "percentuale_media": 22.6
+        "percentuale_media": 22.3
       },
       {
-        "media": 39.4,
+        "media": 38.3,
         "min": 2,
         "max": 126,
-        "percentuale_media": 19.7
+        "percentuale_media": 19.1
       },
       {
-        "media": 32.9,
+        "media": 32.4,
         "min": 0,
         "max": 81,
-        "percentuale_media": 16.4
+        "percentuale_media": 16.2
       },
       {
-        "media": 31.8,
+        "media": 30.9,
         "min": 0,
         "max": 71,
-        "percentuale_media": 15.9
+        "percentuale_media": 15.5
       },
       {
-        "media": 28.5,
+        "media": 27.9,
         "min": 0,
         "max": 60,
-        "percentuale_media": 14.3
+        "percentuale_media": 14.0
       },
       {
-        "media": 27.5,
+        "media": 26.8,
         "min": 0,
         "max": 56,
-        "percentuale_media": 13.8
+        "percentuale_media": 13.5
       },
       {
-        "media": 25.5,
+        "media": 25.1,
         "min": 0,
         "max": 58,
-        "percentuale_media": 12.8
+        "percentuale_media": 12.6
       }
     ]
   }
