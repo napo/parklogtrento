@@ -6,7 +6,7 @@ const summary = {
 var total_zones = 0;
 
 async function fetchParkingData(timeout = 5000) {
-    const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://parcheggi.comune.trento.it/static/services/registry_parks.json");
+    const proxyUrl = "https://corsproxy.io?url=" + encodeURIComponent("https://parcheggi.comune.trento.it/static/services/registry_parks.json");
 
     const controller = new AbortController();
     const signal = controller.signal;
