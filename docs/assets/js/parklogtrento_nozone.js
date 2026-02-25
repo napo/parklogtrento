@@ -43,7 +43,7 @@ async function fetchParkingData(timeout = 5000) {
     const response = await fetch(proxyUrl, { signal });
     clearTimeout(timer);
 
-    if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
+    if (!response.ok) throw new Error("Errore HTTP: " + response.status);
 
     const data = await response.json();
     if (!Array.isArray(data)) throw new Error("Formato JSON inatteso: non è un array");
