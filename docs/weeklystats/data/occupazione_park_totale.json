@@ -628,46 +628,46 @@
         "percentuale_media": 30.8
       },
       {
-        "media": 924.1,
+        "media": 922.3,
         "min": 363,
         "max": 1324,
-        "percentuale_media": 36.1
+        "percentuale_media": 36.0
       },
       {
-        "media": 1280.1,
+        "media": 1278.2,
         "min": 200,
         "max": 1894,
-        "percentuale_media": 50.4
+        "percentuale_media": 50.3
       },
       {
-        "media": 1610.8,
+        "media": 1608.8,
         "min": 201,
         "max": 2341,
-        "percentuale_media": 63.3
+        "percentuale_media": 63.2
       },
       {
-        "media": 1828.6,
+        "media": 1825.7,
         "min": 256,
         "max": 2475,
-        "percentuale_media": 72.1
+        "percentuale_media": 72.0
       },
       {
-        "media": 1861.5,
+        "media": 1859.2,
         "min": 858,
         "max": 2423,
-        "percentuale_media": 73.5
+        "percentuale_media": 73.4
       },
       {
-        "media": 1760.1,
+        "media": 1757.8,
         "min": 553,
         "max": 2285,
-        "percentuale_media": 70.2
+        "percentuale_media": 70.1
       },
       {
-        "media": 1701.6,
+        "media": 1697.0,
         "min": 564,
         "max": 2302,
-        "percentuale_media": 66.8
+        "percentuale_media": 66.6
       },
       {
         "media": 1709.5,
@@ -676,72 +676,72 @@
         "percentuale_media": 68.5
       },
       {
-        "media": 1722.7,
+        "media": 1719.8,
         "min": 475,
         "max": 2281,
-        "percentuale_media": 68.9
+        "percentuale_media": 68.8
       },
       {
-        "media": 1684.8,
+        "media": 1683.2,
         "min": 937,
         "max": 2266,
-        "percentuale_media": 67.0
+        "percentuale_media": 66.9
       },
       {
-        "media": 1636.7,
+        "media": 1633.1,
         "min": 521,
         "max": 2193,
-        "percentuale_media": 64.7
+        "percentuale_media": 64.5
       },
       {
-        "media": 1543.3,
+        "media": 1541.0,
         "min": 492,
         "max": 2118,
-        "percentuale_media": 61.5
-      },
-      {
-        "media": 1510.7,
-        "min": 514,
-        "max": 1994,
-        "percentuale_media": 59.4
+        "percentuale_media": 61.4
       },
       {
         "media": 1506.4,
+        "min": 514,
+        "max": 1994,
+        "percentuale_media": 59.2
+      },
+      {
+        "media": 1504.0,
         "min": 558,
         "max": 1964,
-        "percentuale_media": 60.3
+        "percentuale_media": 60.2
       },
       {
-        "media": 1497.3,
+        "media": 1493.9,
         "min": 892,
         "max": 1948,
-        "percentuale_media": 59.0
+        "percentuale_media": 58.9
       },
       {
-        "media": 1387.3,
+        "media": 1384.9,
         "min": 550,
         "max": 1849,
-        "percentuale_media": 55.3
+        "percentuale_media": 55.2
       },
       {
-        "media": 1219.6,
+        "media": 1216.6,
         "min": 464,
         "max": 1740,
-        "percentuale_media": 48.3
+        "percentuale_media": 48.2
       }
     ],
     "Saturday": [
       {
-        "media": 1027.1,
+        "media": 1025.7,
         "min": 447,
         "max": 1432,
-        "percentuale_media": 41.3
+        "percentuale_media": 41.2
       },
       {
-        "media": 964.2,
+        "media": 960.4,
         "min": 444,
         "max": 1308,
-        "percentuale_media": 37.7
+        "percentuale_media": 37.6
       },
       {
         "media": 763.8,
@@ -756,10 +756,10 @@
         "percentuale_media": 32.5
       },
       {
-        "media": 742.1,
+        "media": 740.5,
         "min": 204,
         "max": 1231,
-        "percentuale_media": 31.6
+        "percentuale_media": 31.5
       },
       {
         "media": 792.3,
