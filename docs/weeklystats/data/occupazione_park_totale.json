@@ -2,16 +2,16 @@
   "Totale parcheggi in struttura": {
     "Monday": [
       {
-        "media": 803.3,
+        "media": 803.2,
         "min": 195,
         "max": 1317,
         "percentuale_media": 32.7
       },
       {
-        "media": 787.6,
+        "media": 787.3,
         "min": 178,
         "max": 1301,
-        "percentuale_media": 31.9
+        "percentuale_media": 32.0
       },
       {
         "media": 662.4,
@@ -20,7 +20,7 @@
         "percentuale_media": 30.9
       },
       {
-        "media": 596.7,
+        "media": 599.0,
         "min": 144,
         "max": 1290,
         "percentuale_media": 27.1
@@ -32,7 +32,7 @@
         "percentuale_media": 31.4
       },
       {
-        "media": 776.9,
+        "media": 778.7,
         "min": 180,
         "max": 1491,
         "percentuale_media": 33.1
@@ -914,7 +914,7 @@
         "percentuale_media": 35.7
       },
       {
-        "media": 890.4,
+        "media": 890.5,
         "min": 123,
         "max": 1587,
         "percentuale_media": 36.4
@@ -926,7 +926,7 @@
         "percentuale_media": 38.4
       },
       {
-        "media": 1006.4,
+        "media": 1005.7,
         "min": 277,
         "max": 1531,
         "percentuale_media": 40.6
@@ -938,85 +938,85 @@
         "percentuale_media": 44.6
       },
       {
-        "media": 1254.3,
+        "media": 1255.1,
         "min": 458,
         "max": 1856,
-        "percentuale_media": 50.3
+        "percentuale_media": 50.4
       },
       {
-        "media": 1365.6,
+        "media": 1366.6,
         "min": 406,
         "max": 1995,
         "percentuale_media": 54.4
       },
       {
-        "media": 1423.5,
+        "media": 1424.1,
         "min": 588,
         "max": 2058,
         "percentuale_media": 57.3
       },
       {
-        "media": 1371.0,
+        "media": 1371.7,
         "min": 567,
         "max": 2093,
         "percentuale_media": 54.1
       },
       {
-        "media": 1516.5,
+        "media": 1516.6,
         "min": 663,
         "max": 2141,
         "percentuale_media": 61.2
       },
       {
-        "media": 1470.5,
+        "media": 1471.0,
         "min": 538,
         "max": 2197,
-        "percentuale_media": 58.9
+        "percentuale_media": 59.0
       },
       {
-        "media": 1477.7,
+        "media": 1478.1,
         "min": 598,
         "max": 2191,
         "percentuale_media": 59.1
       },
       {
-        "media": 1405.8,
+        "media": 1405.9,
         "min": 448,
         "max": 2107,
         "percentuale_media": 55.7
       },
       {
-        "media": 1339.4,
+        "media": 1339.0,
         "min": 498,
         "max": 1961,
         "percentuale_media": 53.8
       },
       {
-        "media": 1212.2,
+        "media": 1212.8,
         "min": 482,
         "max": 1797,
-        "percentuale_media": 48.4
+        "percentuale_media": 48.5
       },
       {
-        "media": 1157.4,
+        "media": 1158.8,
         "min": 535,
         "max": 1694,
         "percentuale_media": 46.9
       },
       {
-        "media": 1071.0,
+        "media": 1072.2,
         "min": 468,
         "max": 1657,
         "percentuale_media": 42.8
       },
       {
-        "media": 969.6,
+        "media": 970.3,
         "min": 331,
         "max": 1605,
         "percentuale_media": 39.1
       },
       {
-        "media": 878.8,
+        "media": 878.9,
         "min": 242,
         "max": 1506,
         "percentuale_media": 35.4
