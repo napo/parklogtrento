@@ -792,7 +792,7 @@
         "percentuale_media": 45.1
       },
       {
-        "media": 200.3,
+        "media": 200.4,
         "min": 170,
         "max": 222,
         "percentuale_media": 45.1
@@ -810,13 +810,13 @@
         "percentuale_media": 45.0
       },
       {
-        "media": 199.4,
+        "media": 199.5,
         "min": 170,
         "max": 223,
         "percentuale_media": 44.9
       },
       {
-        "media": 200.1,
+        "media": 200.2,
         "min": 170,
         "max": 223,
         "percentuale_media": 45.1
@@ -831,19 +831,19 @@
         "media": 199.6,
         "min": 170,
         "max": 223,
-        "percentuale_media": 44.9
+        "percentuale_media": 45.0
       },
       {
-        "media": 199.6,
+        "media": 199.7,
         "min": 170,
         "max": 224,
         "percentuale_media": 45.0
       },
       {
-        "media": 200.0,
+        "media": 200.1,
         "min": 170,
         "max": 226,
-        "percentuale_media": 45.0
+        "percentuale_media": 45.1
       },
       {
         "media": 199.7,
@@ -852,22 +852,22 @@
         "percentuale_media": 45.0
       },
       {
-        "media": 200.2,
+        "media": 200.3,
         "min": 172,
         "max": 226,
         "percentuale_media": 45.1
       },
       {
-        "media": 200.0,
+        "media": 200.1,
         "min": 173,
         "max": 226,
-        "percentuale_media": 45.0
+        "percentuale_media": 45.1
       },
       {
         "media": 200.9,
         "min": 173,
         "max": 226,
-        "percentuale_media": 45.2
+        "percentuale_media": 45.3
       },
       {
         "media": 200.6,
@@ -878,13 +878,13 @@
     ],
     "Sunday": [
       {
-        "media": 201.3,
+        "media": 201.4,
         "min": 172,
         "max": 226,
-        "percentuale_media": 45.3
+        "percentuale_media": 45.4
       },
       {
-        "media": 200.6,
+        "media": 200.7,
         "min": 172,
         "max": 226,
         "percentuale_media": 45.2
@@ -896,7 +896,7 @@
         "percentuale_media": 44.3
       },
       {
-        "media": 203.7,
+        "media": 203.9,
         "min": 185,
         "max": 226,
         "percentuale_media": 45.9
