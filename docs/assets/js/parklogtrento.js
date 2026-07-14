@@ -33,27 +33,55 @@ const summary = {
 };
 var total_zones = 0;
 
-async function fetchParkingData(timeout = 5000) {
-  const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://parcheggi.comune.trento.it/static/services/registry_parks.json");
+async function fetchParkingData(timeoutPerAttempt = 8000) {
+    const TARGET = "https://parcheggi.comune.trento.it/static/services/registry_parks.json";
 
-  const controller = new AbortController();
-  const signal = controller.signal;
+    // Lista di proxy CORS: ognuno prende l'URL di destinazione in modo diverso.
+    // Si parte da uno a caso e, se fallisce (timeout, CORS, 5xx, Cloudflare...),
+    // si passa al successivo finché uno non risponde con dati validi.
+    const buildProxyUrls = () => [
+        TARGET, // tentativo diretto: funziona se il Comune abilita CORS
+        "https://corsproxy.io/?url=" + encodeURIComponent(TARGET),
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(TARGET),
+        "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(TARGET),
+        "https://thingproxy.freeboard.io/fetch/" + TARGET,
+        "https://proxy.cors.sh/" + TARGET,
+        "https://cors-anywhere.herokuapp.com/" + TARGET
+    ];
 
-  // Timeout manuale
-  const timer = setTimeout(() => controller.abort(), timeout);
+    // Mescola l'ordine (Fisher-Yates) così non si martella sempre lo stesso servizio
+    const shuffle = (arr) => {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    };
 
-  try {
-    const response = await fetch(proxyUrl, { signal });
-    clearTimeout(timer); // Se la fetch va a buon fine, annullo il timer
-    if (!response.ok) throw new Error("Errore nel fetch");
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error("Errore nel caricamento dei dati:", err.message || err);
-    // Qui puoi mostrare un messaggio all'utente o offrire un refresh
+    const urls = shuffle(buildProxyUrls());
+
+    for (const url of urls) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutPerAttempt);
+        try {
+            const response = await fetch(url, { signal: controller.signal });
+            clearTimeout(timer);
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+                console.info("Dati parcheggi caricati da: " + url);
+                return data;
+            }
+            throw new Error("risposta vuota o non valida");
+        } catch (err) {
+            clearTimeout(timer);
+            console.warn("Sorgente non disponibile (" + url + "): " + (err.message || err));
+        }
+    }
+
+    console.error("Nessun proxy disponibile: dati non caricati");
     showErrorAndRefreshOption();
     return null;
-  }
 }
 
 function showErrorAndRefreshOption() {
