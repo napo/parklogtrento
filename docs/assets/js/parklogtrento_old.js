@@ -1,35 +1,7 @@
-
-// Restituisce il timestamp del parcheggio in millisecondi, provando i vari
-// nomi di campo usati nel tempo dall'API del Comune (lastReceivedTimestamp
-// non esiste più: oggi il campo è currentTimestamp, in secondi epoch).
-function getParkTimestampMs(p) {
-    const candidates = [
-        p.lastReceivedTimestamp,
-        p.currentTimestamp,
-        p.timestamp,
-        p.updated_at
-    ];
-    for (const v of candidates) {
-        if (v === undefined || v === null || v === '' || v === 0) continue;
-        if (typeof v === 'number') {
-            // euristica: > 1e12 = millisecondi, altrimenti secondi
-            return v > 1e12 ? v : v * 1000;
-        }
-        const parsed = Date.parse(v);
-        if (!Number.isNaN(parsed)) return parsed;
-    }
-    return null;
-}
-/*
 const summary = {
   bike: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
   park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
   zone: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
-};
-*/
-const summary = {
-  bike: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 },
-  park: { total: 0, freeslots: 0, spacerate: 0, latestdate: '', totalspaces:0 }
 };
 var total_zones = 0;
 
@@ -71,54 +43,50 @@ function retryFetch() {
 }
 
 
-/*
+
 async function fetchZonesData() {
   const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://parcheggi.comune.trento.it/static/services/registry_zones.json");
   const response = await fetch(proxyUrl);
   const data = await response.json();
   return data;
 }
-*/
+
 async function render() {
   //const structureContainer = document.getElementById('parking-structure');
   //const bikeContainer = document.getElementById('bike-parking');
   const data = await fetchParkingData();
-  //const datazones = await fetchZonesData();
-  //total_zones = 0;
-  //datazones.forEach(item => {
-  //  if (Array.isArray(item.stalls)) {
-  //    item.stalls.forEach(stall => {
-  //      if (stall.type === "blu") {
-  //        total_zones += 1;
-  //        summary.zone.total += stall.capacity || 0;
-  //        summary.zone.freeslots += stall.freeslots || 0;
-  //      }
-  //    });
-  //  }
-  //});
-  //summary['zone'].spacerate = summary['zone'].total > 0
-  //  ? 100 - Math.round((summary['zone'].freeslots / summary['zone'].total) * 100)
-  //  : 0;
+  const datazones = await fetchZonesData();
+  total_zones = 0;
+  datazones.forEach(item => {
+    if (Array.isArray(item.stalls)) {
+      item.stalls.forEach(stall => {
+        if (stall.type === "blu") {
+          total_zones += 1;
+          summary.zone.total += stall.capacity || 0;
+          summary.zone.freeslots += stall.freeslots || 0;
+        }
+      });
+    }
+  });
+  summary['zone'].spacerate = summary['zone'].total > 0
+    ? 100 - Math.round((summary['zone'].freeslots / summary['zone'].total) * 100)
+    : 0;
 
   const parks = data.filter(item => item.type === "park");
   summary.park.totalspaces = parks.length;
-  const validTimestamps = parks.map(getParkTimestampMs).filter(t => t !== null);
-  if (validTimestamps.length > 0) {
-    const latestDate = new Date(Math.max(...validTimestamps));
-    const formattedDate = latestDate.toLocaleDateString('it-IT', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-    const formattedTime = latestDate.toLocaleTimeString('it-IT', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-    summary.park.latestdate = `${formattedDate} ore ${formattedTime}`;
-  } else {
-    summary.park.latestdate = 'data non disponibile';
-  }
+  const latestTimestamp = Math.max(...parks.map(p => p.lastReceivedTimestamp || 0));
+  const latestDate = new Date(latestTimestamp * 1000);
+  const formattedDate = latestDate.toLocaleDateString('it-IT', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  const formattedTime = latestDate.toLocaleTimeString('it-IT', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  summary.park.latestdate =  `${formattedDate} ore ${formattedTime}`;
 
   const filtered = data.filter(item => item.type === "bike" || item.type === "park");
   summary.bike.totalspaces = 0;
@@ -138,11 +106,10 @@ async function render() {
   updatehero();  
   observeGaugeAnimation(summary.park.spacerate); 
   observeGaugeBike(summary.bike.spacerate);
-  //observeGaugeZone(summary.zone.spacerate);
+  observeGaugeZone(summary.zone.spacerate);
   
-  //document.querySelector('.total_zones').innerText = total_zones;
-  //const zoneContainer = document.getElementById('zoneContainer');
-  /*
+  document.querySelector('.total_zones').innerText = total_zones;
+  const zoneContainer = document.getElementById('zoneContainer');
   datazones.forEach((zone, index) => {
     let total = 0, freeslots = 0;
     (zone.stalls || []).forEach(stall => {
@@ -158,7 +125,7 @@ async function render() {
     col.className = 'col-12 col-sm-6 col-md-4 mb-4 parking-card';
     col.innerHTML = cardHtml;
     zoneContainer.appendChild(col);
-
+  
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -167,9 +134,9 @@ async function render() {
         }
       });
     }, { threshold: 0.1 });
+  
     observer.observe(col);
-      
-  });*/
+  });
 
   
   let indexStructure = 0;
@@ -246,17 +213,18 @@ function updatehero() {
   document.querySelectorAll('.total_parks').forEach(el => el.textContent = summary.park.totalspaces);
 
 
-  //document.querySelector('span#total_zonespaces').textContent = summary.zone.total;
-  //document.querySelector('span#total_zones').textContent = total_zones;
+  document.querySelector('span#total_zonespaces').textContent = summary.zone.total;
+  document.querySelector('span#total_zones').textContent = total_zones;
   document.querySelector('span#total_ciclobox').textContent = summary.bike.totalspaces
   
   document.querySelector('span#carparkspaces_rate').textContent = summary.park.spacerate + '%';
-  //document.querySelector('span#zonespaces_rate').textContent = summary.zone.spacerate + '%';
+  document.querySelector('span#zonespaces_rate').textContent = summary.zone.spacerate + '%';
   document.querySelector('span#bikespaces_rate').textContent = summary.bike.spacerate  + '%';
-
+  //document.querySelector('span#total_zonespaces_free').textContent = total_zonespaces_free + '%';
+  // aggiorna i contatori
   document.getElementById('total_carparkspaces_free').setAttribute('data-purecounter-end', summary.park.freeslots);
   document.getElementById('total_bikespaces_free').setAttribute('data-purecounter-end', summary.bike.freeslots);
-  //document.getElementById('total_zonespaces_free').setAttribute('data-purecounter-end', summary.zone.freeslots);
+  document.getElementById('total_zonespaces_free').setAttribute('data-purecounter-end', summary.zone.freeslots);
 
   // inizializza PureCounter dopo aver impostato i dati
   new PureCounter();
@@ -484,7 +452,7 @@ html.push(`</p>`);
 
   return html.join('\n');
 }
-/*
+
 function drawGaugeZone(spacerate) {
   console.log('Drawing gauge zone with spacerate:', spacerate);
   const chartDom = document.getElementById('gauge_zone');
@@ -594,7 +562,7 @@ function observeGaugeZone(spacerate) {
 
   observer.observe(chartContainer);
 }
-*/
+
 
 function createCard(park, index, prefix) {
   const capacity = park.capacity;
@@ -602,10 +570,9 @@ function createCard(park, index, prefix) {
   const occupied = capacity - free;
   const percentage = capacity > 0 ? Math.round((occupied / capacity) * 100) : 0;
   const [lng, lat] = park.geom.replace('POINT(', '').replace(')', '').split(' ');
-  const tsMs = getParkTimestampMs(park);
-  const date = tsMs !== null ? new Date(tsMs) : null;
-  const giorno = date ? date.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'data non disponibile';
-  const ora = date ? date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) : '--:--';
+  const date = new Date(park.lastReceivedTimestamp * 1000);
+  const giorno = date.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const ora = date.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
   const apertura = park.opening || {};
   const lunven = (apertura.lunven || []).join(', ');
   const sab = (apertura.sab || []).join(', ');
