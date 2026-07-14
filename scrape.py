@@ -12,6 +12,34 @@ ZONES_GEOPARQUET = "data" + os.sep + "zones.geoparquet"
 PARKS_CSV = "data" + os.sep + "last_parks.csv"
 ZONES_CSV = "data" + os.sep + "last_zones.csv"
 
+def normalize_names_by_geometry(gdf, timestamp_col="currentTimestamp", name_col="name"):
+    """
+    Uniforma il nome di tutte le osservazioni che hanno la stessa geometria,
+    usando il nome presente nell'osservazione più recente.
+    """
+    gdf = gdf.copy()
+
+    # La geometria WKB diventa l'identificatore stabile del luogo
+    gdf["_geometry_key"] = gdf.geometry.to_wkb(hex=True)
+
+    # Ordiniamo cronologicamente: l'ultima riga di ogni gruppo
+    # contiene il nome più recente
+    latest_names = (
+        gdf.dropna(subset=[timestamp_col, name_col])
+        .sort_values(timestamp_col)
+        .groupby("_geometry_key")[name_col]
+        .last()
+    )
+
+    # Sostituisce tutti i nomi storici con il nome più recente
+    gdf[name_col] = (
+        gdf["_geometry_key"]
+        .map(latest_names)
+        .fillna(gdf[name_col])
+    )
+
+    return gdf.drop(columns="_geometry_key")
+    
 def expand_stalls(df):
     """
     Expands the 'stalls' column in the given DataFrame into separate columns.
@@ -124,7 +152,11 @@ if os.path.exists(ZONES_GEOPARQUET) and os.path.exists(PARKS_GEOPARQUET):
  #   zones_history = gpd.read_parquet(ZONES_GEOPARQUET)
     parks_history = gpd.read_parquet(PARKS_GEOPARQUET)
     if parks_history.currentTimestamp.max() < parks.currentTimestamp.max():
-        parks_history = gpd.GeoDataFrame(pd.concat([parks_history, parks], ignore_index=True))
+        parks_history = gpd.GeoDataFrame(
+            pd.concat([parks_history, parks], ignore_index=True),
+            geometry="geom",
+            crs="EPSG:4326"
+        )
         parks_history.to_parquet(PARKS_GEOPARQUET, engine='pyarrow')
         print("new parks create " + str(parks.currentTimestamp.max()))
 #    if zones_history.ts.max() < zones.ts.max():
