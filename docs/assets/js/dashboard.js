@@ -1,232 +1,379 @@
 /*
- * Dashboard andamento parcheggi.
- * Tre categorie tenute rigorosamente separate, ciascuna dal proprio JSON:
- *   struttura  -> parcheggi in struttura (auto)
- *   ciclobox   -> parcheggi ciclobox (bici)
- *   stalliblu  -> stalli blu (dato storico, non più aggiornato)
- * Nessun dato viene mai mescolato tra categorie: ogni sezione carica ed
- * elabora esclusivamente il file della propria categoria.
+ * Pagina statistiche / andamenti dei parcheggi.
+ *
+ * Tre categorie separate (parcheggi in struttura, ciclobox, stalli blu),
+ * ciascuna dal proprio JSON e con il PROPRIO pannello filtri. Ogni parcheggio
+ * ha una matrice GIORNO x ORA di occupazione media; da questa la pagina
+ * ricostruisce heatmap, andamento, giornata tipica, classifica e copertura,
+ * applicando i filtri del blocco (intervallo di date, giorni della settimana,
+ * mesi, fascia oraria) lato browser.
+ *
+ * - la tendina di ogni blocco ha "Tutti" (aggregato di categoria, default) e poi
+ *   i singoli parcheggi in ordine alfabetico;
+ * - il blocco stalli (deprecato) ha una toolbar dedicata limitata al periodo di
+ *   raccolta dei dati (niente mesi);
+ * - ogni grafico può essere aperto a schermo intero.
  */
 
 const CATEGORIES = [
-  { key: 'struttura', file: 'data/dashboard_struttura.json', color: '#185FA5' },
-  { key: 'ciclobox', file: 'data/dashboard_ciclobox.json', color: '#0F6E56' },
-  { key: 'stalliblu', file: 'data/dashboard_stalliblu.json', color: '#993C1D' }
+  { key: 'parcheggi', file: '../data/dashboard_struttura.json', color: '#185FA5' },
+  { key: 'ciclobox', file: '../data/dashboard_ciclobox.json', color: '#0F6E56' },
+  { key: 'stalli', file: '../data/dashboard_stalliblu.json', color: '#993C1D' }
 ];
 
-const charts = []; // per il resize globale
+const WD = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+const MO = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+const MO_FULL = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const PALETTE = ['#185FA5', '#E24B4A', '#0F6E56', '#EF9F27', '#7F77DD', '#993C1D', '#2AA9A0', '#B0568A'];
 
-async function loadCategory(cfg) {
-  const section = document.getElementById('dash-' + cfg.key);
-  if (!section) return;
+const registry = {};
+const allCharts = [];
 
-  let payload;
+async function boot() {
+  const preloader = document.getElementById('preloader');
   try {
-    const res = await fetch(cfg.file);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    payload = await res.json();
-  } catch (err) {
-    console.error('Dashboard: impossibile caricare ' + cfg.file, err);
-    section.querySelector('[data-role="status"]').textContent =
-      'Dati non disponibili per questa categoria.';
-    return;
+    await Promise.all(CATEGORIES.map(async cfg => {
+      const section = document.getElementById(cfg.key);
+      if (!section) return;
+      try {
+        const res = await fetch(cfg.file);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        prepare(cfg, await res.json(), section);
+      } catch (err) {
+        console.error('Statistiche: errore nel caricamento di ' + cfg.file, err);
+        const st = section.querySelector('[data-role="status"]');
+        if (st) st.textContent = 'Dati non disponibili per questa categoria.';
+      }
+    }));
+    Object.keys(registry).forEach(renderCategory);
+    setupFullscreen();
+  } finally {
+    if (preloader) preloader.remove();
+    requestAnimationFrame(() => allCharts.forEach(c => c.resize()));
+    setTimeout(() => allCharts.forEach(c => c.resize()), 120);
   }
-
-  renderCategory(cfg, payload, section);
 }
 
-function renderCategory(cfg, data, section) {
+function parseDate(iso) { const [y, m, d] = iso.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)); }
+function hoursInBand(flt) { const out = []; for (let h = flt.hFrom; h <= flt.hTo; h++) out.push(h); return out; }
+function itLabelDate(d) { return d.getUTCDate() + ' ' + MO_FULL[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+
+function fillSelect(sel, structures, withAll) {
+  sel.innerHTML = '';
+  if (withAll) { const o = document.createElement('option'); o.value = '__all__'; o.textContent = 'Tutti'; sel.appendChild(o); }
+  structures.map((s, i) => ({ i, name: s.name }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'it'))
+    .forEach(({ i, name }) => { const o = document.createElement('option'); o.value = String(i); o.textContent = name; sel.appendChild(o); });
+}
+
+function prepare(cfg, data, section) {
   const meta = data.meta;
-
-  // intestazione: etichetta + periodo + eventuale banner "non aggiornato"
   section.querySelector('[data-role="label"]').textContent = meta.label;
-  const period = 'Periodo dei dati: dal ' + itDate(meta.period_start) +
-    ' al ' + itDate(meta.period_end) + ' · ' + meta.n_structures + ' parcheggi';
-  section.querySelector('[data-role="period"]').textContent = period;
-
   const banner = section.querySelector('[data-role="banner"]');
-  if (!meta.updated) {
-    banner.textContent = '⚠️ ' + (meta.note || 'Dati non più aggiornati.');
-    banner.style.display = '';
-  } else {
-    banner.style.display = 'none';
-  }
+  if (!meta.updated) { banner.textContent = '\u26A0\uFE0F ' + (meta.note || 'Dati non piu aggiornati.'); banner.style.display = ''; }
+  else banner.style.display = 'none';
+  const st = section.querySelector('[data-role="status"]'); if (st) st.style.display = 'none';
 
-  const status = section.querySelector('[data-role="status"]');
-  if (status) status.style.display = 'none';
+  data.structures.forEach(s => {
+    const start = parseDate(s.start);
+    s._dates = s.matrix.map((_, i) => { const dt = new Date(start.getTime()); dt.setUTCDate(dt.getUTCDate() + i); return dt; });
+  });
 
-  // composizione stalli (solo stalli blu)
+  const select = section.querySelector('[data-role="select"]');
+  const select2 = section.querySelector('[data-role="select2"]');
+  fillSelect(select, data.structures, true);
+  select.value = '__all__';
+  if (select2) { fillSelect(select2, data.structures, false); }
+
+  const mode = section.querySelector('[data-role="mode"]');
+  const sec2wrap = section.querySelector('[data-role="select2-wrap"]');
+  const syncMode = () => { if (sec2wrap) sec2wrap.style.display = (mode && mode.value === 'due' && select.value !== '__all__') ? '' : 'none'; };
+  if (mode) { mode.addEventListener('change', () => { syncMode(); renderCategory(cfg.key); }); }
+  select.addEventListener('change', () => { syncMode(); renderCategory(cfg.key); });
+  if (select2) select2.addEventListener('change', () => renderCategory(cfg.key));
+  syncMode();
+
   const compEl = section.querySelector('[data-role="composition"]');
   if (compEl) {
     if (data.composition) {
       compEl.style.display = '';
-      renderComposition(compEl.querySelector('[data-role="comp-chart"]'), data.composition);
-    } else {
-      compEl.style.display = 'none';
-    }
+      const c = echarts.init(compEl.querySelector('[data-role="comp-chart"]')); allCharts.push(c);
+      c.setOption({
+        tooltip: { trigger: 'item', formatter: '{b}: {c} stalli ({d}%)' },
+        legend: { bottom: 0, textStyle: { fontSize: 11 } },
+        series: [{ type: 'pie', radius: ['40%', '68%'], center: ['50%', '44%'], itemStyle: { borderColor: '#fff', borderWidth: 2 }, label: { formatter: '{b}\n{c}', fontSize: 11 },
+          data: [
+            { name: 'Stalli blu', value: data.composition.blu, itemStyle: { color: '#378ADD' } },
+            { name: 'Carico/scarico', value: data.composition.carico_scarico, itemStyle: { color: '#EF9F27' } },
+            { name: 'Disabili', value: data.composition.disabili, itemStyle: { color: '#7F77DD' } }
+          ] }]
+      });
+    } else compEl.style.display = 'none';
   }
 
-  // selettore parcheggio -> pilota heatmap + profilo orario
-  const select = section.querySelector('[data-role="select"]');
-  select.innerHTML = '';
-  data.structures.forEach((s, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = s.name;
-    select.appendChild(opt);
-  });
-
-  const heatEl = section.querySelector('[data-role="heatmap"]');
-  const hourEl = section.querySelector('[data-role="hourly"]');
-  const heatChart = echarts.init(heatEl);
-  const hourChart = echarts.init(hourEl);
-  charts.push(heatChart, hourChart);
-
-  const drawSelected = () => {
-    const s = data.structures[Number(select.value)];
-    drawHeatmap(heatChart, s, data.weekdays);
-    drawHourly(hourChart, s, cfg.color);
-    const info = section.querySelector('[data-role="struct-info"]');
-    if (info) {
-      info.textContent =
-        'Capacità ' + s.capacity + ' · occupazione media ' + s.occ_mean + '%' +
-        (s.saturation_hour !== null ? ' · ora di punta ~' + s.saturation_hour + ':00' : '') +
-        ' · sensore attivo ' + s.uptime_pct + '% del tempo';
-    }
+  const charts = {
+    trend: echarts.init(section.querySelector('[data-role="trend"]')),
+    heatmap: echarts.init(section.querySelector('[data-role="heatmap"]')),
+    hourly: echarts.init(section.querySelector('[data-role="hourly"]')),
+    ranking: echarts.init(section.querySelector('[data-role="ranking"]')),
+    coverage: echarts.init(section.querySelector('[data-role="coverage"]'))
   };
-  select.addEventListener('change', drawSelected);
-  drawSelected();
+  Object.values(charts).forEach(c => allCharts.push(c));
 
-  // ranking occupazione media (tutte le strutture)
-  const rankEl = section.querySelector('[data-role="ranking"]');
-  const rankChart = echarts.init(rankEl);
-  charts.push(rankChart);
-  drawRanking(rankChart, data.ranking, cfg.color);
-
-  // qualità del dato: uptime per sensore
-  const upEl = section.querySelector('[data-role="uptime"]');
-  const upChart = echarts.init(upEl);
-  charts.push(upChart);
-  drawUptime(upChart, data.ranking);
+  const filter = { from: null, to: null, weekdays: new Set(), months: new Set(), hFrom: 0, hTo: 23 };
+  const R = { cfg, data, section, select, select2, mode, charts, filter };
+  registry[cfg.key] = R;
+  setupBlockFilter(R);
 }
 
-function drawHeatmap(chart, s, weekdays) {
-  const hours = Array.from({ length: 24 }, (_, h) => h + ':00');
-  chart.setOption({
-    tooltip: {
-      position: 'top',
-      formatter: p => weekdays[p.value[1]] + ' ' + p.value[0] + ':00 → ' +
-        (p.value[2] == null ? 'n/d' : p.value[2] + '% occupato')
-    },
-    grid: { top: 10, bottom: 60, left: 45, right: 10 },
-    xAxis: { type: 'category', data: hours, splitArea: { show: true },
-      axisLabel: { interval: 2, fontSize: 10 } },
-    yAxis: { type: 'category', data: weekdays, splitArea: { show: true } },
-    visualMap: {
-      min: 0, max: 100, calculable: true, orient: 'horizontal',
-      left: 'center', bottom: 5,
-      inRange: { color: ['#E1F5EE', '#F9E79F', '#E24B4A'] },
-      text: ['pieno', 'libero'], textStyle: { fontSize: 10 }
-    },
-    series: [{
-      name: 'occupazione', type: 'heatmap',
-      data: s.heatmap.map(d => [d[0], d[1], d[2] == null ? '-' : d[2]]),
-      emphasis: { itemStyle: { shadowBlur: 6, shadowColor: 'rgba(0,0,0,0.3)' } }
-    }]
+/* ------- filtro DEL BLOCCO (tollerante ai controlli mancanti) ------- */
+function setupBlockFilter(R) {
+  const section = R.section, flt = R.filter;
+  let min = null, max = null;
+  R.data.structures.forEach(s => {
+    const a = s._dates[0], b = s._dates[s._dates.length - 1];
+    if (!min || a < min) min = a; if (!max || b > max) max = b;
+  });
+  if (!min) return;
+  const iso = d => d.toISOString().slice(0, 10);
+  const rerender = () => renderCategory(R.cfg.key);
+
+  // etichetta del periodo di raccolta (toolbar dedicata stalli)
+  const periodEl = section.querySelector('[data-role="flt-period"]');
+  if (periodEl) periodEl.textContent = itLabelDate(min) + ' – ' + itLabelDate(max);
+
+  const fromEl = section.querySelector('[data-role="flt-from"]');
+  const toEl = section.querySelector('[data-role="flt-to"]');
+  if (fromEl && toEl) {
+    fromEl.min = toEl.min = iso(min); fromEl.max = toEl.max = iso(max);
+    fromEl.value = iso(min); toEl.value = iso(max);
+    flt.from = min; flt.to = max;
+    const clamp = (d) => d < min ? min : (d > max ? max : d);
+    fromEl.addEventListener('change', () => { let d = fromEl.value ? parseDate(fromEl.value) : min; d = clamp(d); fromEl.value = iso(d); flt.from = d; rerender(); });
+    toEl.addEventListener('change', () => { let d = toEl.value ? parseDate(toEl.value) : max; d = clamp(d); toEl.value = iso(d); flt.to = d; rerender(); });
+  } else { flt.from = min; flt.to = max; }
+
+  const hFrom = section.querySelector('[data-role="flt-hfrom"]');
+  const hTo = section.querySelector('[data-role="flt-hto"]');
+  if (hFrom && hTo) {
+    for (let h = 0; h < 24; h++) { hFrom.appendChild(new Option(h + ':00', h)); hTo.appendChild(new Option(h + ':00', h)); }
+    hFrom.value = '0'; hTo.value = '23';
+    const onBand = () => {
+      let a = parseInt(hFrom.value, 10), b = parseInt(hTo.value, 10);
+      if (a > b) { const t = a; a = b; b = t; hFrom.value = a; hTo.value = b; }
+      flt.hFrom = a; flt.hTo = b; rerender();
+    };
+    hFrom.addEventListener('change', onBand); hTo.addEventListener('change', onBand);
+  }
+
+  const wdBox = section.querySelector('[data-role="flt-weekdays"]');
+  if (wdBox) WD.forEach((lbl, i) => wdBox.appendChild(makeChip(lbl, () => { toggle(flt.weekdays, i); rerender(); })));
+  const moBox = section.querySelector('[data-role="flt-months"]');
+  if (moBox) MO.forEach((lbl, i) => moBox.appendChild(makeChip(lbl, () => { toggle(flt.months, i); rerender(); })));
+
+  const reset = section.querySelector('[data-role="flt-reset"]');
+  if (reset) reset.addEventListener('click', () => {
+    flt.from = min; flt.to = max; flt.weekdays.clear(); flt.months.clear(); flt.hFrom = 0; flt.hTo = 23;
+    if (fromEl) fromEl.value = iso(min); if (toEl) toEl.value = iso(max);
+    if (hFrom) hFrom.value = '0'; if (hTo) hTo.value = '23';
+    section.querySelectorAll('.flt-chip.active').forEach(c => c.classList.remove('active'));
+    rerender();
   });
 }
 
-function drawHourly(chart, s, color) {
-  const hours = Array.from({ length: 24 }, (_, h) => h + ':00');
+function selectedIndices(structure, flt) {
+  const out = [], wd = flt.weekdays, mo = flt.months;
+  for (let i = 0; i < structure._dates.length; i++) {
+    const d = structure._dates[i];
+    if (flt.from && d < flt.from) continue;
+    if (flt.to && d > flt.to) continue;
+    if (wd.size && !wd.has((d.getUTCDay() + 6) % 7)) continue;
+    if (mo.size && !mo.has(d.getUTCMonth())) continue;
+    out.push(i);
+  }
+  return out;
+}
+
+function aggregate(structs, flt) {
+  const band = hoursInBand(flt);
+  const hourSum = {}, hourCnt = {}, hmSum = {}, hmCnt = {}, trendMap = {};
+  let cellSum = 0, cellCnt = 0, cellTot = 0, daySet = new Set();
+  for (const structure of structs) {
+    for (const i of selectedIndices(structure, flt)) {
+      const row = structure.matrix[i], d = structure._dates[i];
+      const dow = (d.getUTCDay() + 6) % 7, isoD = d.toISOString().slice(0, 10);
+      daySet.add(isoD);
+      for (const h of band) {
+        cellTot++;
+        const v = row[h];
+        if (v == null) continue;
+        hourSum[h] = (hourSum[h] || 0) + v; hourCnt[h] = (hourCnt[h] || 0) + 1;
+        const k = dow * 24 + h; hmSum[k] = (hmSum[k] || 0) + v; hmCnt[k] = (hmCnt[k] || 0) + 1;
+        if (!trendMap[isoD]) trendMap[isoD] = [0, 0];
+        trendMap[isoD][0] += v; trendMap[isoD][1]++;
+        cellSum += v; cellCnt++;
+      }
+    }
+  }
+  const hourly = band.map(h => hourCnt[h] ? Math.round(hourSum[h] / hourCnt[h]) : null);
+  const heatmap = [];
+  for (let dow = 0; dow < 7; dow++) for (const h of band) { const k = dow * 24 + h; heatmap.push([h, dow, hmCnt[k] ? Math.round(hmSum[k] / hmCnt[k]) : '-']); }
+  const trend = Object.keys(trendMap).sort().map(x => [x, Math.round(trendMap[x][0] / trendMap[x][1])]);
+  let satH = -1, satV = -1;
+  band.forEach((h, i) => { if (hourly[i] != null && hourly[i] > satV) { satV = hourly[i]; satH = h; } });
+  return { nDays: daySet.size, band, hourly, heatmap, trend,
+    mean: cellCnt ? Math.round((cellSum / cellCnt) * 10) / 10 : null,
+    coverage: cellTot ? Math.round((cellCnt / cellTot) * 1000) / 10 : 0, saturationHour: satH };
+}
+
+function seriesForMode(R) {
+  const structs = R.data.structures, val = R.select.value;
+  const modeVal = R.mode ? R.mode.value : 'single';
+  if (val === '__all__') {
+    if (modeVal === 'tutti') return structs.map(s => ({ name: s.name, list: [s] }));
+    return [{ name: 'Tutti (media categoria)', list: structs }];
+  }
+  const primary = structs[Number(val)];
+  if (modeVal === 'media') return [{ name: primary.name, list: [primary] }, { name: 'Media categoria', list: structs }];
+  if (modeVal === 'due') { const b = structs[Number(R.select2.value)]; return [{ name: primary.name, list: [primary] }, { name: b.name, list: [b] }]; }
+  if (modeVal === 'tutti') return structs.map(s => ({ name: s.name, list: [s] }));
+  return [{ name: primary.name, list: [primary] }];
+}
+
+function renderCategory(key) {
+  const R = registry[key]; if (!R) return;
+  const color = R.cfg.color, flt = R.filter;
+  const isAll = R.select.value === '__all__';
+  const primaryList = isAll ? R.data.structures : [R.data.structures[Number(R.select.value)]];
+  const primAgg = aggregate(primaryList, flt);
+
+  const info = R.section.querySelector('[data-role="struct-info"]');
+  if (info) {
+    const who = isAll ? 'Tutti (media categoria)' : R.data.structures[Number(R.select.value)].name;
+    if (primAgg.nDays === 0) info.innerHTML = '<span class="dash-warn">Nessun dato nel periodo selezionato.</span>';
+    else info.textContent = who + ' \u00B7 ' + primAgg.nDays + ' giorni nel filtro \u00B7 occupazione media ' +
+      (primAgg.mean == null ? 'n/d' : primAgg.mean + '%') +
+      (primAgg.saturationHour >= 0 ? ' \u00B7 ora di punta ~' + primAgg.saturationHour + ':00' : '') +
+      ' \u00B7 copertura ' + primAgg.coverage + '%';
+  }
+
+  const series = seriesForMode(R).map((s, i) => ({ name: s.name, agg: aggregate(s.list, flt), color: i === 0 ? color : PALETTE[(i + 1) % PALETTE.length] }));
+  drawTrend(R.charts.trend, series);
+  drawHourly(R.charts.hourly, series);
+  drawHeatmap(R.charts.heatmap, primAgg);
+
+  const rows = R.data.structures.map(st => { const a = aggregate([st], flt); return { name: st.name, mean: a.mean, coverage: a.coverage, nDays: a.nDays }; }).filter(r => r.nDays > 0);
+  drawRanking(R.charts.ranking, rows, color);
+  drawCoverage(R.charts.coverage, rows);
+}
+
+function drawTrend(chart, series) {
   chart.setOption({
-    tooltip: { trigger: 'axis',
-      formatter: p => p[0].axisValue + ' → ' +
-        (p[0].data == null ? 'n/d' : p[0].data + '% occupato') },
-    grid: { top: 20, bottom: 40, left: 45, right: 15 },
-    xAxis: { type: 'category', data: hours, boundaryGap: false,
-      axisLabel: { interval: 2, fontSize: 10 } },
+    tooltip: { trigger: 'axis' },
+    legend: series.length > 1 ? { top: 0, type: 'scroll', textStyle: { fontSize: 10 } } : undefined,
+    grid: { top: series.length > 1 ? 32 : 15, bottom: 55, left: 45, right: 15 },
+    dataZoom: [{ type: 'slider', height: 16, bottom: 8 }, { type: 'inside' }],
+    xAxis: { type: 'time', axisLabel: { fontSize: 10 } },
     yAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
-    series: [{
-      type: 'line', smooth: true, data: s.hourly, connectNulls: true,
-      showSymbol: false, lineStyle: { color: color, width: 2.5 },
-      areaStyle: { color: color, opacity: 0.12 },
-      markLine: s.saturation_hour !== null ? {
-        symbol: 'none', silent: true,
-        data: [{ xAxis: s.saturation_hour + ':00', label: { formatter: 'punta' } }],
-        lineStyle: { color: color, type: 'dashed', opacity: 0.6 }
-      } : undefined
-    }]
-  });
+    series: series.map(s => ({ name: s.name, type: 'line', showSymbol: false, data: s.agg.trend, lineStyle: { color: s.color, width: 1.5 }, itemStyle: { color: s.color }, areaStyle: series.length === 1 ? { color: s.color, opacity: 0.1 } : undefined }))
+  }, true);
 }
 
-function drawRanking(chart, ranking, color) {
-  const items = ranking.slice().reverse(); // barre orizzontali: più alto in cima
+function drawHourly(chart, series) {
+  const band = series[0].agg.band, hours = band.map(h => h + ':00');
   chart.setOption({
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
-      formatter: p => {
-        const r = items[p[0].dataIndex];
-        return r.name + '<br/>occupazione media ' + r.occ_mean + '%' +
-          (r.saturation_hour !== null ? '<br/>ora di punta ~' + r.saturation_hour + ':00' : '');
-      } },
+    tooltip: { trigger: 'axis' },
+    legend: series.length > 1 ? { top: 0, type: 'scroll', textStyle: { fontSize: 10 } } : undefined,
+    grid: { top: series.length > 1 ? 32 : 20, bottom: 40, left: 45, right: 15 },
+    xAxis: { type: 'category', data: hours, boundaryGap: false, axisLabel: { interval: band.length > 12 ? 2 : 0, fontSize: 10 } },
+    yAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
+    series: series.map(s => ({ name: s.name, type: 'line', smooth: true, connectNulls: true, showSymbol: false, data: s.agg.hourly, lineStyle: { color: s.color, width: 2.2 }, areaStyle: series.length === 1 ? { color: s.color, opacity: 0.12 } : undefined }))
+  }, true);
+}
+
+function drawHeatmap(chart, agg) {
+  const hours = agg.band.map(h => h + ':00');
+  chart.setOption({
+    tooltip: { position: 'top', formatter: p => WD[p.value[1]] + ' ' + p.value[0] + ':00 \u2192 ' + (p.value[2] === '-' ? 'n/d' : p.value[2] + '% occupato') },
+    grid: { top: 10, bottom: 60, left: 45, right: 10 },
+    xAxis: { type: 'category', data: hours, splitArea: { show: true }, axisLabel: { interval: agg.band.length > 12 ? 2 : 0, fontSize: 10 } },
+    yAxis: { type: 'category', data: WD, splitArea: { show: true } },
+    visualMap: { min: 0, max: 100, calculable: true, orient: 'horizontal', left: 'center', bottom: 5, inRange: { color: ['#E1F5EE', '#F9E79F', '#E24B4A'] }, text: ['pieno', 'libero'], textStyle: { fontSize: 10 } },
+    series: [{ type: 'heatmap', data: agg.heatmap, emphasis: { itemStyle: { shadowBlur: 6, shadowColor: 'rgba(0,0,0,.3)' } } }]
+  }, true);
+}
+
+function drawRanking(chart, rows, color) {
+  const items = rows.slice().sort((a, b) => a.mean - b.mean);
+  chart.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: p => items[p[0].dataIndex].name + '<br/>occupazione media ' + p[0].data + '%' },
     grid: { top: 10, bottom: 30, left: 5, right: 40, containLabel: true },
     xAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
-    yAxis: { type: 'category', data: items.map(r => r.name),
-      axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
-    series: [{
-      type: 'bar', data: items.map(r => r.occ_mean),
-      itemStyle: { color: color, borderRadius: [0, 4, 4, 0] },
-      label: { show: true, position: 'right', formatter: '{c}%', fontSize: 10 }
-    }]
-  });
+    yAxis: { type: 'category', data: items.map(r => r.name), axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
+    series: [{ type: 'bar', data: items.map(r => r.mean), itemStyle: { color: color, borderRadius: [0, 4, 4, 0] }, label: { show: true, position: 'right', formatter: '{c}%', fontSize: 10 } }]
+  }, true);
 }
 
-function drawUptime(chart, ranking) {
-  const items = ranking.slice().sort((a, b) => a.uptime_pct - b.uptime_pct);
+function drawCoverage(chart, rows) {
+  const items = rows.slice().sort((a, b) => a.coverage - b.coverage);
   chart.setOption({
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
-      formatter: p => items[p[0].dataIndex].name + '<br/>sensore attivo ' +
-        p[0].data + '% del tempo (offline ' + (100 - p[0].data).toFixed(1) + '%)' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: p => items[p[0].dataIndex].name + '<br/>copertura ' + p[0].data + '%' },
     grid: { top: 10, bottom: 30, left: 5, right: 40, containLabel: true },
     xAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
-    yAxis: { type: 'category', data: items.map(r => r.name),
-      axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
-    series: [{
-      type: 'bar', data: items.map(r => r.uptime_pct),
-      itemStyle: {
-        borderRadius: [0, 4, 4, 0],
-        color: p => p.value >= 95 ? '#1D9E75' : (p.value >= 85 ? '#EF9F27' : '#E24B4A')
-      },
-      label: { show: true, position: 'right', formatter: '{c}%', fontSize: 10 }
-    }]
+    yAxis: { type: 'category', data: items.map(r => r.name), axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
+    series: [{ type: 'bar', data: items.map(r => r.coverage), itemStyle: { borderRadius: [0, 4, 4, 0], color: p => p.value >= 95 ? '#1D9E75' : (p.value >= 80 ? '#EF9F27' : '#E24B4A') }, label: { show: true, position: 'right', formatter: '{c}%', fontSize: 10 } }]
+  }, true);
+}
+
+/* ------- schermo intero per ogni grafico ------- */
+function setupFullscreen() {
+  document.querySelectorAll('.dash-chart').forEach(div => {
+    const inst = echarts.getInstanceByDom(div);
+    if (!inst) return;
+    const card = div.closest('.dash-card');
+    if (!card || card.querySelector('.chart-expand-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'chart-expand-btn'; btn.type = 'button';
+    btn.title = 'Schermo intero'; btn.setAttribute('aria-label', 'Schermo intero');
+    btn.innerHTML = '<i class="bi bi-arrows-fullscreen"></i>';
+    btn.addEventListener('click', () => openFullscreen(inst));
+    card.appendChild(btn);
   });
 }
 
-function renderComposition(el, comp) {
-  const chart = echarts.init(el);
-  charts.push(chart);
-  chart.setOption({
-    tooltip: { trigger: 'item', formatter: '{b}: {c} stalli ({d}%)' },
-    legend: { bottom: 0, textStyle: { fontSize: 11 } },
-    series: [{
-      type: 'pie', radius: ['40%', '68%'], center: ['50%', '44%'],
-      avoidLabelOverlap: true,
-      itemStyle: { borderColor: '#fff', borderWidth: 2 },
-      label: { show: true, formatter: '{b}\n{c}', fontSize: 11 },
-      data: [
-        { name: 'Stalli blu', value: comp.blu, itemStyle: { color: '#378ADD' } },
-        { name: 'Carico/scarico', value: comp.carico_scarico, itemStyle: { color: '#EF9F27' } },
-        { name: 'Disabili', value: comp.disabili, itemStyle: { color: '#7F77DD' } }
-      ]
-    }]
-  });
+function openFullscreen(sourceInst) {
+  const overlay = document.createElement('div');
+  overlay.className = 'chart-fs-overlay';
+  const inner = document.createElement('div'); inner.className = 'chart-fs-inner';
+  const closeBtn = document.createElement('button'); closeBtn.className = 'chart-fs-close'; closeBtn.type = 'button';
+  closeBtn.innerHTML = '<i class="bi bi-x-lg"></i> Chiudi';
+  const chartDiv = document.createElement('div'); chartDiv.className = 'chart-fs-chart';
+  inner.appendChild(closeBtn); inner.appendChild(chartDiv); overlay.appendChild(inner);
+  document.body.appendChild(overlay);
+
+  const fs = echarts.init(chartDiv);
+  fs.setOption(sourceInst.getOption());
+  const onResize = () => fs.resize();
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+  function close() {
+    window.removeEventListener('resize', onResize);
+    document.removeEventListener('keydown', onKey);
+    fs.dispose(); overlay.remove();
+  }
+  window.addEventListener('resize', onResize);
+  document.addEventListener('keydown', onKey);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  setTimeout(() => fs.resize(), 50);
 }
 
-function itDate(iso) {
-  const M = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno',
-    'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
-  const [y, m, d] = iso.split('-').map(Number);
-  return d + ' ' + M[m - 1] + ' ' + y;
+function makeChip(label, onToggle) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'flt-chip'; b.textContent = label;
+  b.addEventListener('click', () => { b.classList.toggle('active'); onToggle(); });
+  return b;
 }
+function toggle(set, val) { if (set.has(val)) set.delete(val); else set.add(val); }
 
-window.addEventListener('resize', () => charts.forEach(c => c.resize()));
-window.addEventListener('load', () => CATEGORIES.forEach(loadCategory));
+window.addEventListener('resize', () => allCharts.forEach(c => c.resize()));
+window.addEventListener('load', boot);

@@ -74,3 +74,24 @@
   font-weight: bold;
   color: #dc3545; /* Bootstrap red */
 }
+
+/* --- FIX MENU A TENDINA CHE ESCE DALLO SCHERMO --- */
+/* Gli ultimi due menu principali aprono il sottomenu verso sinistra,
+   così non escono mai dal bordo destro della finestra. */
+@media (min-width: 1200px) {
+  .navmenu > ul > li:last-child > ul,
+  .navmenu > ul > li:nth-last-child(2) > ul {
+    left: auto;
+    right: 0;
+  }
+  .navmenu > ul > li:last-child > ul .dropdown > ul,
+  .navmenu > ul > li:nth-last-child(2) > ul .dropdown > ul {
+    left: auto;
+    right: 100%;
+  }
+  /* i sottomenu non vengono tagliati: possono allargarsi al contenuto */
+  .navmenu .dropdown > ul {
+    max-width: 90vw;
+    white-space: nowrap;
+  }
+}
