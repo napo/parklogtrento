@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Statistiche e andamenti · parklogtrento</title>
+  <meta name="description" content="Statistiche storiche dei parcheggi di Trento: andamenti, heatmap, confronti e filtri per data, giorno, mese e fascia oraria. Parcheggi, ciclobox e stalli blu separati.">
+  <meta name="author" content="maurizio napolitano">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/css/main.css" rel="stylesheet">
+  <link href="../assets/css/style.css" rel="stylesheet">
+  <style>
+    .stats-main { padding-top: 90px; }
+    .stats-wrap { max-width: 1120px; margin: 0 auto; padding: 1rem 1rem 4rem; }
+    .stats-intro { max-width: 820px; margin: 0 auto 2rem; }
+    .block-filter { background: #f7f8fa; border: 1px solid #e6e6e6; border-radius: 10px; padding: .8rem 1rem; margin: .6rem 0 1rem; }
+    .bf-title { font-size: .82rem; font-weight: 600; color: #444; display: inline-flex; align-items: center; gap: .35rem; margin-bottom: .5rem; }
+    .filter-row { display: flex; flex-wrap: wrap; gap: .9rem 1.3rem; align-items: flex-end; }
+    .filter-block label { display: block; font-size: .72rem; color: #666; margin-bottom: .28rem; text-transform: uppercase; letter-spacing: .03em; }
+    .filter-block input[type=date], .filter-block select, .band-inline select { border: 1px solid #ccc; border-radius: 6px; padding: .3rem .45rem; font-size: .86rem; }
+    .band-inline { display: flex; align-items: center; gap: .35rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: .28rem; }
+    .flt-chip { border: 1px solid #ccc; background: #fff; color: #444; border-radius: 999px; padding: .2rem .6rem; font-size: .78rem; cursor: pointer; transition: all .15s; }
+    .flt-chip:hover { border-color: #999; }
+    .flt-chip.active { background: #185FA5; border-color: #185FA5; color: #fff; }
+    .btn-reset { border: none; border-radius: 999px; padding: .32rem .9rem; font-size: .82rem; cursor: pointer; background: #eceff3; color: #555; }
+    .dash-section { margin-bottom: 4rem; scroll-margin-top: 90px; }
+    .dash-section h2 { display: flex; align-items: center; gap: .5rem; margin-bottom: .25rem; font-size: 1.4rem; }
+    .dash-badge { font-size: .68rem; font-weight: 600; padding: .2rem .6rem; border-radius: 999px; color: #fff; text-transform: uppercase; letter-spacing: .03em; }
+    .dash-badge.parcheggi { background: #185FA5; } .dash-badge.ciclobox { background: #0F6E56; } .dash-badge.stalli { background: #993C1D; }
+    .dash-banner { background: #FAECE7; border: 1px solid #F0997B; color: #712B13; padding: .6rem .9rem; border-radius: 8px; font-size: .9rem; margin: .5rem 0 1rem; }
+    .dash-controls { display: flex; align-items: flex-end; gap: .8rem; margin: .4rem 0; flex-wrap: wrap; }
+    .dash-controls label { font-size: .72rem; color: #666; text-transform: uppercase; letter-spacing: .03em; display: block; margin-bottom: .25rem; }
+    .dash-controls select { border: 1px solid #ccc; border-radius: 6px; padding: .3rem .45rem; font-size: .86rem; max-width: 320px; }
+    .struct-info { color: #555; font-size: .85rem; margin: .5rem 0 .8rem; }
+    .dash-warn { color: #b02a17; font-weight: 600; }
+    .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    @media (max-width: 820px) { .dash-grid { grid-template-columns: 1fr; } }
+    .dash-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 12px; padding: 1rem 1.1rem; }
+    .dash-card.full { grid-column: 1 / -1; }
+    .dash-card h3 { font-size: 1rem; margin-bottom: .1rem; }
+    .dash-card .hint { color: #777; font-size: .82rem; margin-bottom: .6rem; }
+    .dash-chart { width: 100%; height: 280px; }
+    .dash-chart.tall { height: 340px; }
+    .dash-status { color: #999; font-style: italic; }
+  </style>
+</head>
+
+<body class="index-page">
+  <div id="preloader" data-managed><div class="preloader-inner"><div class="preloader-spinner" role="status" aria-live="polite"></div><p class="preloader-message">Caricamento delle statistiche in corso…</p></div></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+      <a href="../" class="logo d-flex align-items-center me-auto me-xl-0"><h1 class="sitename">ParkLogTrento</h1></a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="../">Home</a></li>
+          <li class="dropdown"><a href="#"><span>Statistiche</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="#parcheggi">parcheggi</a></li>
+              <li><a href="#ciclobox">ciclobox</a></li>
+              <li><a href="#stalli">stalli blu</a></li>
+              <li><a href="../curiosity/">curiosità</a></li>
+            </ul>
+          </li>
+          <li><a href="../info/">Info</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main stats-main">
+    <div class="stats-wrap">
+      <div class="stats-intro text-center">
+        <h1>Statistiche e andamenti</h1>
+        <p class="text-muted">Lo storico dei parcheggi dal marzo 2025. Le tre tipologie sono mostrate separatamente perché misurano cose diverse. Ogni blocco ha i suoi filtri e all'apertura mostra tutto il periodo disponibile. Ricorda che intervalli con pochi giorni o poca copertura non sono ugualmente comparabili.</p>
+      </div>
+      <section class="dash-section" id="parcheggi">
+        <h2><span class="dash-badge parcheggi">auto</span> <span data-role="label">Parcheggi in struttura</span></h2>
+        <p class="dash-banner" data-role="banner" style="display:none"></p>
+        <p class="dash-status" data-role="status">Caricamento dati…</p>
+
+        <div class="block-filter">
+          <span class="bf-title"><i class="bi bi-funnel"></i> Filtra questo blocco</span>
+          <div class="filter-row">
+            <div class="filter-block"><label>Dal</label><input type="date" data-role="flt-from"></div>
+            <div class="filter-block"><label>Al</label><input type="date" data-role="flt-to"></div>
+            <div class="filter-block"><label>Fascia oraria</label>
+              <div class="band-inline"><select data-role="flt-hfrom"></select><span>–</span><select data-role="flt-hto"></select></div>
+            </div>
+            <div class="filter-block"><label>Giorni</label><div class="chips" data-role="flt-weekdays"></div></div>
+            <div class="filter-block"><label>Mesi</label><div class="chips" data-role="flt-months"></div></div>
+            <div class="filter-block"><label>&nbsp;</label><button class="btn-reset" data-role="flt-reset">Azzera</button></div>
+          </div>
+        </div>
+
+        <div class="dash-controls">
+          <div><label>Parcheggio</label><select data-role="select"></select></div>
+          <div><label>Confronto</label>
+            <select data-role="mode">
+              <option value="single">singolo</option>
+              <option value="media">vs media categoria</option>
+              <option value="due">confronta due</option>
+              <option value="tutti">tutti insieme</option>
+            </select>
+          </div>
+          <div data-role="select2-wrap" style="display:none"><label>Confronta con</label><select data-role="select2"></select></div>
+        </div>
+        <p class="struct-info" data-role="struct-info"></p>
+
+        <div class="dash-grid">
+          <div class="dash-card full"><h3>Andamento nel tempo</h3><p class="hint">Occupazione media giornaliera nel periodo e nella fascia oraria scelti (trascina per zoomare)</p><div class="dash-chart" data-role="trend"></div></div>
+          <div class="dash-card"><h3>Quando si riempie</h3><p class="hint">Heatmap: occupazione media per ora e giorno</p><div class="dash-chart tall" data-role="heatmap"></div></div>
+          <div class="dash-card"><h3>Giornata tipica</h3><p class="hint">Occupazione media ora per ora</p><div class="dash-chart tall" data-role="hourly"></div></div>
+          <div class="dash-card"><h3>Classifica occupazione</h3><p class="hint">Occupazione media nel periodo</p><div class="dash-chart" data-role="ranking"></div></div>
+          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Quota di rilevazioni disponibili (verde ≥95%)</p><div class="dash-chart" data-role="coverage"></div></div>
+        </div>
+      </section>
+      <section class="dash-section" id="ciclobox">
+        <h2><span class="dash-badge ciclobox">bici</span> <span data-role="label">Parcheggi ciclobox</span></h2>
+        <p class="dash-banner" data-role="banner" style="display:none"></p>
+        <p class="dash-status" data-role="status">Caricamento dati…</p>
+
+        <div class="block-filter">
+          <span class="bf-title"><i class="bi bi-funnel"></i> Filtra questo blocco</span>
+          <div class="filter-row">
+            <div class="filter-block"><label>Dal</label><input type="date" data-role="flt-from"></div>
+            <div class="filter-block"><label>Al</label><input type="date" data-role="flt-to"></div>
+            <div class="filter-block"><label>Fascia oraria</label>
+              <div class="band-inline"><select data-role="flt-hfrom"></select><span>–</span><select data-role="flt-hto"></select></div>
+            </div>
+            <div class="filter-block"><label>Giorni</label><div class="chips" data-role="flt-weekdays"></div></div>
+            <div class="filter-block"><label>Mesi</label><div class="chips" data-role="flt-months"></div></div>
+            <div class="filter-block"><label>&nbsp;</label><button class="btn-reset" data-role="flt-reset">Azzera</button></div>
+          </div>
+        </div>
+
+        <div class="dash-controls">
+          <div><label>Ciclobox</label><select data-role="select"></select></div>
+          <div><label>Confronto</label>
+            <select data-role="mode">
+              <option value="single">singolo</option>
+              <option value="media">vs media categoria</option>
+              <option value="due">confronta due</option>
+              <option value="tutti">tutti insieme</option>
+            </select>
+          </div>
+          <div data-role="select2-wrap" style="display:none"><label>Confronta con</label><select data-role="select2"></select></div>
+        </div>
+        <p class="struct-info" data-role="struct-info"></p>
+
+        <div class="dash-grid">
+          <div class="dash-card full"><h3>Andamento nel tempo</h3><p class="hint">Occupazione media giornaliera nel periodo e nella fascia oraria scelti (trascina per zoomare)</p><div class="dash-chart" data-role="trend"></div></div>
+          <div class="dash-card"><h3>Quando si riempie</h3><p class="hint">Heatmap: occupazione media per ora e giorno</p><div class="dash-chart tall" data-role="heatmap"></div></div>
+          <div class="dash-card"><h3>Giornata tipica</h3><p class="hint">Occupazione media ora per ora</p><div class="dash-chart tall" data-role="hourly"></div></div>
+          <div class="dash-card"><h3>Classifica occupazione</h3><p class="hint">Occupazione media nel periodo</p><div class="dash-chart" data-role="ranking"></div></div>
+          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Quota di rilevazioni disponibili (verde ≥95%)</p><div class="dash-chart" data-role="coverage"></div></div>
+        </div>
+      </section>
+      <section class="dash-section" id="stalli">
+        <h2><span class="dash-badge stalli">storico</span> <span data-role="label">Stalli blu</span></h2>
+        <p class="dash-banner" data-role="banner" style="display:none"></p>
+        <p class="dash-status" data-role="status">Caricamento dati…</p>
+        <div class="dash-card full" data-role="composition" style="display:none; margin-bottom:1.25rem;">
+          <h3>Composizione degli stalli monitorati</h3><p class="hint">Tipologie di stallo nelle aree regolamentate</p>
+          <div class="dash-chart" data-role="comp-chart"></div>
+        </div>
+
+        <div class="block-filter">
+          <span class="bf-title"><i class="bi bi-funnel"></i> Filtra questo blocco</span>
+          <div class="filter-row">
+            <div class="filter-block"><label>Dal</label><input type="date" data-role="flt-from"></div>
+            <div class="filter-block"><label>Al</label><input type="date" data-role="flt-to"></div>
+            <div class="filter-block"><label>Fascia oraria</label>
+              <div class="band-inline"><select data-role="flt-hfrom"></select><span>–</span><select data-role="flt-hto"></select></div>
+            </div>
+            <div class="filter-block"><label>Giorni</label><div class="chips" data-role="flt-weekdays"></div></div>
+            <div class="filter-block"><label>Mesi</label><div class="chips" data-role="flt-months"></div></div>
+            <div class="filter-block"><label>&nbsp;</label><button class="btn-reset" data-role="flt-reset">Azzera</button></div>
+          </div>
+        </div>
+
+        <div class="dash-controls">
+          <div><label>Area</label><select data-role="select"></select></div>
+          <div><label>Confronto</label>
+            <select data-role="mode">
+              <option value="single">singola</option>
+              <option value="media">vs media categoria</option>
+              <option value="due">confronta due</option>
+              <option value="tutti">tutte insieme</option>
+            </select>
+          </div>
+          <div data-role="select2-wrap" style="display:none"><label>Confronta con</label><select data-role="select2"></select></div>
+        </div>
+        <p class="struct-info" data-role="struct-info"></p>
+
+        <div class="dash-grid">
+          <div class="dash-card full"><h3>Andamento nel tempo</h3><p class="hint">Occupazione media giornaliera degli stalli blu nel periodo coperto</p><div class="dash-chart" data-role="trend"></div></div>
+          <div class="dash-card"><h3>Quando si riempiva</h3><p class="hint">Heatmap: occupazione media per ora e giorno</p><div class="dash-chart tall" data-role="heatmap"></div></div>
+          <div class="dash-card"><h3>Giornata tipica</h3><p class="hint">Occupazione media ora per ora</p><div class="dash-chart tall" data-role="hourly"></div></div>
+          <div class="dash-card"><h3>Classifica occupazione</h3><p class="hint">Occupazione media nel periodo</p><div class="dash-chart" data-role="ranking"></div></div>
+          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Quota di rilevazioni disponibili (verde ≥95%)</p><div class="dash-chart" data-role="coverage"></div></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>origine dati: <a href="https://parcheggi.comune.trento.it/">https://parcheggi.comune.trento.it/</a></p>
+      <div class="credits">un progetto di @napo<br />template html <a href="https://bootstrapmade.com/">BootstrapMade</a></div>
+    </div>
+  </footer>
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script src="../assets/js/dashboard.js"></script>
+</body>
+</html>
