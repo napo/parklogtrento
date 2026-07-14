@@ -44,7 +44,16 @@
     .dash-warn { color: #b02a17; font-weight: 600; }
     .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
     @media (max-width: 820px) { .dash-grid { grid-template-columns: 1fr; } }
-    .dash-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 12px; padding: 1rem 1.1rem; }
+    .dash-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 12px; padding: 1rem 1.1rem; position: relative; }
+    .chart-expand-btn { position: absolute; top: 8px; right: 8px; z-index: 5; border: none; background: rgba(255,255,255,.9); border: 1px solid #e6e6e6; border-radius: 6px; width: 30px; height: 30px; cursor: pointer; color: #555; display: flex; align-items: center; justify-content: center; }
+    .chart-expand-btn:hover { color: #185FA5; border-color: #185FA5; }
+    .chart-fs-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 100000; display: flex; align-items: center; justify-content: center; }
+    .chart-fs-inner { background: #fff; border-radius: 12px; width: 94vw; height: 88vh; padding: 1rem 1.1rem; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+    .chart-fs-close { align-self: flex-end; border: none; background: #eceff3; color: #333; border-radius: 999px; padding: .4rem 1rem; cursor: pointer; margin-bottom: .5rem; font-size: .9rem; }
+    .chart-fs-close:hover { background: #e0e4ea; }
+    .chart-fs-chart { flex: 1; width: 100%; min-height: 0; }
+    .bf-period { font-size: .82rem; color: #6a4a3a; margin: .25rem 0 .6rem; }
+    .block-filter-stalli { background: #faf2ee; border-color: #e7c9bb; }
     .dash-card.full { grid-column: 1 / -1; }
     .dash-card h3 { font-size: 1rem; margin-bottom: .1rem; }
     .dash-card .hint { color: #777; font-size: .82rem; margin-bottom: .6rem; }
@@ -175,8 +184,9 @@
           <div class="dash-chart" data-role="comp-chart"></div>
         </div>
 
-        <div class="block-filter">
-          <span class="bf-title"><i class="bi bi-funnel"></i> Filtra questo blocco</span>
+        <div class="block-filter block-filter-stalli">
+          <span class="bf-title"><i class="bi bi-archive"></i> Filtra il periodo storico</span>
+          <p class="bf-period">Dati non piu aggiornati, raccolti dal <strong data-role="flt-period"></strong>. Il filtro agisce solo entro questo periodo.</p>
           <div class="filter-row">
             <div class="filter-block"><label>Dal</label><input type="date" data-role="flt-from"></div>
             <div class="filter-block"><label>Al</label><input type="date" data-role="flt-to"></div>
@@ -184,7 +194,6 @@
               <div class="band-inline"><select data-role="flt-hfrom"></select><span>–</span><select data-role="flt-hto"></select></div>
             </div>
             <div class="filter-block"><label>Giorni</label><div class="chips" data-role="flt-weekdays"></div></div>
-            <div class="filter-block"><label>Mesi</label><div class="chips" data-role="flt-months"></div></div>
             <div class="filter-block"><label>&nbsp;</label><button class="btn-reset" data-role="flt-reset">Azzera</button></div>
           </div>
         </div>
