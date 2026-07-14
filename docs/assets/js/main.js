@@ -62,7 +62,7 @@
    * Preloader
    */
   const preloader = document.querySelector('#preloader');
-  if (preloader) {
+  if (preloader && !preloader.hasAttribute('data-managed')) {
     window.addEventListener('load', () => {
       preloader.remove();
     });
