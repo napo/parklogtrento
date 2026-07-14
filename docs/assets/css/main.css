@@ -515,19 +515,63 @@ h6 {
   overflow: hidden;
   background: var(--background-color);
   transition: all 0.6s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#preloader:before {
-  content: "";
-  position: fixed;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
+#preloader .preloader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+#preloader .preloader-spinner {
   border: 6px solid #ffffff;
   border-color: var(--accent-color) transparent var(--accent-color) transparent;
   border-radius: 50%;
   width: 60px;
   height: 60px;
   animation: animate-preloader 1.5s linear infinite;
+}
+
+#preloader .preloader-message {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--default-color, #444);
+  max-width: 32ch;
+}
+
+/* stato di errore: lo spinner smette di girare e diventa un cerchio rosso statico */
+#preloader.preloader-error .preloader-spinner {
+  animation: none;
+  border-color: #d9534f transparent #d9534f transparent;
+}
+
+#preloader .preloader-retry {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent-color);
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+#preloader .preloader-retry:hover {
+  filter: brightness(0.92);
+}
+
+/* rispetta chi ha attivato "riduci animazioni" */
+@media (prefers-reduced-motion: reduce) {
+  #preloader .preloader-spinner {
+    animation-duration: 3s;
+  }
 }
 
 @keyframes animate-preloader {

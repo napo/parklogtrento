@@ -108,9 +108,12 @@ async function fetchZonesData() {
 }
 */
 async function render() {
-  //const structureContainer = document.getElementById('parking-structure');
-  //const bikeContainer = document.getElementById('bike-parking');
+  const structureContainer = document.getElementById('structureContainer');
+  const bikeContainer = document.getElementById('bikeContainer');
   const data = await fetchParkingData();
+  if (!Array.isArray(data)) {
+    throw new Error('dati parcheggi non disponibili');
+  }
   //const datazones = await fetchZonesData();
   //total_zones = 0;
   //datazones.forEach(item => {
@@ -200,28 +203,39 @@ async function render() {
   });*/
 
   
+  if (structureContainer) structureContainer.innerHTML = '';
+  if (bikeContainer) bikeContainer.innerHTML = '';
+
+  // La lista dei parcheggi viene generata interamente dal JSON.
+  const renderable = data.filter(item => item.type === 'bike' || item.type === 'park');
+
   let indexStructure = 0;
   let indexBike = 0;
-  data.forEach((park) => {
+  renderable.forEach((park) => {
     const prefix = park.type === 'bike' ? 'bike' : 'structure';
     const index = park.type === 'bike' ? indexBike++ : indexStructure++;
-    /* card */
-    const cardHtml = createCard(park, index, prefix);
-    const col = document.createElement('div');
-    col.className = 'col-md-4 mb-4 parking-card';
-    col.innerHTML = cardHtml;
     const container = park.type === 'bike' ? bikeContainer : structureContainer;
-    container.appendChild(col);
+    if (!container) return;
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateNumbers(park, index, prefix);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    observer.observe(col);
+    try {
+      const cardHtml = createCard(park, index, prefix);
+      const col = document.createElement('div');
+      col.className = 'col-md-4 mb-4 parking-card';
+      col.innerHTML = cardHtml;
+      container.appendChild(col);
+
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateNumbers(park, index, prefix);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      observer.observe(col);
+    } catch (err) {
+      console.error(`Impossibile generare la card per "${park.name || 'senza nome'}":`, err);
+    }
   });
 }
 
@@ -240,6 +254,29 @@ function animateValue(el, start, end, duration = 1000, suffix = '') {
 }
 
 
+function showPreloaderError() {
+  const preloader = document.getElementById('preloader');
+  if (!preloader) return;
+  preloader.classList.add('preloader-error');
+  const msg = preloader.querySelector('.preloader-message');
+  if (msg) msg.textContent = "Impossibile caricare i dati dei parcheggi in questo momento.";
+  if (!preloader.querySelector('.preloader-retry')) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'preloader-retry';
+    btn.textContent = 'Riprova';
+    btn.addEventListener('click', () => {
+      preloader.classList.remove('preloader-error');
+      const m = preloader.querySelector('.preloader-message');
+      if (m) m.textContent = 'Caricamento dei dati dei parcheggi in corso…';
+      btn.remove();
+      startApp();
+    });
+    const inner = preloader.querySelector('.preloader-inner') || preloader;
+    inner.appendChild(btn);
+  }
+}
+
 async function startApp() {
   const preloader = document.getElementById('preloader');
 
@@ -247,10 +284,8 @@ async function startApp() {
     await render(); // Chiama tutto il flusso
   } catch (error) {
     console.error("Errore nel caricamento dei dati:", error);
-    if (preloader) {
-      preloader.innerText = "Errore nel caricamento dei dati.";
-      return;
-    }
+    showPreloaderError();
+    return;
   }
 
   // Una volta che tutto è pronto, rimuove il preloader
@@ -629,7 +664,10 @@ function createCard(park, index, prefix) {
   const free = park.freeslots;
   const occupied = capacity - free;
   const percentage = capacity > 0 ? Math.round((occupied / capacity) * 100) : 0;
-  const [lng, lat] = park.geom.replace('POINT(', '').replace(')', '').split(' ');
+  let lng, lat;
+  if (typeof park.geom === 'string' && park.geom.includes('POINT')) {
+    [lng, lat] = park.geom.replace('POINT(', '').replace(')', '').trim().split(/\s+/);
+  }
   const tsMs = getParkTimestampMs(park);
   const date = tsMs !== null ? new Date(tsMs) : null;
   const giorno = date ? date.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'data non disponibile';
