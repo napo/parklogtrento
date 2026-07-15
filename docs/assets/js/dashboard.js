@@ -271,8 +271,7 @@ function drawTrend(chart, series) {
   chart.setOption({
     tooltip: { trigger: 'axis' },
     legend: series.length > 1 ? { top: 0, type: 'scroll', textStyle: { fontSize: 10 } } : undefined,
-    grid: { top: series.length > 1 ? 32 : 15, bottom: 55, left: 45, right: 15 },
-    dataZoom: [{ type: 'slider', height: 16, bottom: 8 }, { type: 'inside' }],
+    grid: { top: series.length > 1 ? 32 : 15, bottom: 30, left: 45, right: 15 },
     xAxis: { type: 'time', axisLabel: { fontSize: 10 } },
     yAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
     series: series.map(s => ({ name: s.name, type: 'line', showSymbol: false, data: s.agg.trend, lineStyle: { color: s.color, width: 1.5 }, itemStyle: { color: s.color }, areaStyle: series.length === 1 ? { color: s.color, opacity: 0.1 } : undefined }))
