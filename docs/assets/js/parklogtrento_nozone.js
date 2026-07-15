@@ -27,56 +27,93 @@ const summary = {
 };
 var total_zones = 0;
 
-async function fetchParkingData(timeoutPerAttempt = 8000) {
-    const TARGET = "https://parcheggi.comune.trento.it/static/services/registry_parks.json";
+// ---------------------------------------------------------------
+//  Cache locale: i dati del Comune si aggiornano ogni ~5 minuti,
+//  quindi entro quella finestra è inutile ricontattare la rete.
+// ---------------------------------------------------------------
+const CACHE_KEY = 'parklogtrento:parks';
+const CACHE_TTL_MS = 5 * 60 * 1000;
 
-    // Lista di proxy CORS: ognuno prende l'URL di destinazione in modo diverso.
-    // Si parte da uno a caso e, se fallisce (timeout, CORS, 5xx, Cloudflare...),
-    // si passa al successivo finché uno non risponde con dati validi.
-    const buildProxyUrls = () => [
-        TARGET, // tentativo diretto: funziona se il Comune abilita CORS
+// Età del dato in ms: si basa sul timestamp del dato stesso (non su quando
+// l'abbiamo scaricato), così un dato già vecchio non viene tenuto troppo.
+// Se il timestamp non è plausibile si ripiega sull'istante di download.
+function cacheAgeMs(entry) {
+    const now = Date.now();
+    const byFetch = now - (entry.fetchedAt || 0);
+    let byData = null;
+    try {
+        const ts = entry.data.map(getParkTimestampMs).filter(t => t !== null);
+        if (ts.length) byData = now - Math.max.apply(null, ts);
+    } catch (e) { /* ignora */ }
+    const plausible = byData !== null && byData >= 0 && byData < 24 * 3600 * 1000;
+    return plausible ? byData : byFetch;
+}
+
+function readCache() {
+    try {
+        const raw = localStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const entry = JSON.parse(raw);
+        if (!entry || !Array.isArray(entry.data) || entry.data.length === 0) return null;
+        return { data: entry.data, age: cacheAgeMs(entry) };
+    } catch (e) {
+        return null; // localStorage non disponibile o dato corrotto
+    }
+}
+
+function writeCache(data) {
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ fetchedAt: Date.now(), data: data }));
+    } catch (e) { /* quota piena o storage negato: non è un problema */ }
+}
+
+// Scarica i dati contattando TUTTE le sorgenti in parallelo e tenendo la prima
+// che risponde con dati validi: il tempo d'attesa è quello del proxy più
+// veloce, non la somma di quelli lenti o morti.
+async function fetchParkingData(timeoutPerAttempt = 6000) {
+    const TARGET = "https://parcheggi.comune.trento.it/static/services/registry_parks.json";
+    const sources = [
+        TARGET, // diretto: funziona se il Comune abilita CORS
         "https://corsproxy.io/?url=" + encodeURIComponent(TARGET),
         "https://api.allorigins.win/raw?url=" + encodeURIComponent(TARGET),
         "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(TARGET),
         "https://thingproxy.freeboard.io/fetch/" + TARGET,
-        "https://proxy.cors.sh/" + TARGET,
-        "https://cors-anywhere.herokuapp.com/" + TARGET
+        "https://proxy.cors.sh/" + TARGET
     ];
 
-    // Mescola l'ordine (Fisher-Yates) così non si martella sempre lo stesso servizio
-    const shuffle = (arr) => {
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    };
-
-    const urls = shuffle(buildProxyUrls());
-
-    for (const url of urls) {
+    const controllers = [];
+    const attempts = sources.map(function (url) {
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), timeoutPerAttempt);
-        try {
-            const response = await fetch(url, { signal: controller.signal });
-            clearTimeout(timer);
-            if (!response.ok) throw new Error("HTTP " + response.status);
-            const data = await response.json();
-            if (Array.isArray(data) && data.length > 0) {
-                console.info("Dati parcheggi caricati da: " + url);
-                return data;
-            }
-            throw new Error("risposta vuota o non valida");
-        } catch (err) {
-            clearTimeout(timer);
-            console.warn("Sorgente non disponibile (" + url + "): " + (err.message || err));
-        }
-    }
+        controllers.push(controller);
+        const timer = setTimeout(function () { controller.abort(); }, timeoutPerAttempt);
+        return fetch(url, { signal: controller.signal })
+            .then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function (data) {
+                if (!Array.isArray(data) || data.length === 0) throw new Error('risposta non valida');
+                clearTimeout(timer);
+                return { url: url, data: data };
+            })
+            .catch(function (err) {
+                clearTimeout(timer);
+                throw new Error(url + ': ' + (err.message || err));
+            });
+    });
 
-    console.error("Nessun proxy disponibile: dati non caricati");
-    showErrorAndRefreshOption();
-    return null;
+    try {
+        const winner = await Promise.any(attempts);
+        controllers.forEach(function (c) { try { c.abort(); } catch (e) { } }); // chiude le richieste ancora in volo
+        console.info('Dati parcheggi caricati da: ' + winner.url);
+        writeCache(winner.data);
+        return winner.data;
+    } catch (err) {
+        console.error('Nessuna sorgente disponibile', err && err.errors ? err.errors : err);
+        return null;
+    }
 }
+
 
 function showErrorAndRefreshOption() {
     const errorBox = document.getElementById("error-box");
@@ -94,11 +131,10 @@ function retryFetch() {
 
 
 
-async function render() {
+async function render(data) {
     const structureContainer = document.getElementById('structureContainer');
     const bikeContainer = document.getElementById('bikeContainer');
 
-    const data = await fetchParkingData();
     if (!Array.isArray(data)) {
         // nessuna sorgente ha risposto: propaga l'errore a startApp che gestisce l'UI
         throw new Error('dati parcheggi non disponibili');
@@ -229,18 +265,53 @@ function showPreloaderError() {
 async function startApp() {
     const preloader = document.getElementById('preloader');
 
+    // 1) se abbiamo dati in cache li mostriamo SUBITO, senza attendere la rete
+    const cached = readCache();
+    if (cached) {
+        try {
+            await render(cached.data);
+            if (preloader) preloader.remove();
+            // dato recente (< 5 minuti, come la cadenza del Comune): non ricarichiamo
+            if (cached.age < CACHE_TTL_MS) {
+                showDataAge(cached.age);
+                return;
+            }
+            // dato vecchio: aggiorniamo in sottofondo senza bloccare la pagina
+            showDataAge(cached.age, true);
+            const fresh = await fetchParkingData();
+            if (Array.isArray(fresh)) {
+                await render(fresh);
+                showDataAge(0);
+            }
+            return;
+        } catch (e) {
+            console.warn('Cache non utilizzabile, si procede con la rete', e);
+        }
+    }
+
+    // 2) nessuna cache: attesa con preloader finché non arrivano i dati
     try {
-        await render(); // Chiama tutto il flusso
+        const data = await fetchParkingData();
+        await render(data);
     } catch (error) {
         console.error("Errore nel caricamento dei dati:", error);
         showPreloaderError();
         return;
     }
+    if (preloader) preloader.remove();
+    showDataAge(0);
+}
 
-    // Una volta che tutto è pronto, rimuove il preloader
-    if (preloader) {
-        preloader.remove();
-    }
+// Mostra da quanto sono vecchi i dati a video (e se è in corso un aggiornamento)
+function showDataAge(ageMs, updating) {
+    const el = document.getElementById('data-age');
+    if (!el) return;
+    const min = Math.floor(ageMs / 60000);
+    let txt;
+    if (updating) txt = 'dati di ' + min + ' minuti fa · aggiornamento in corso…';
+    else if (min <= 0) txt = 'dati aggiornati adesso';
+    else txt = 'dati di ' + min + (min === 1 ? ' minuto fa' : ' minuti fa');
+    el.textContent = txt;
 }
 
 // Avvia tutto quando la finestra è caricata

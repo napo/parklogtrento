@@ -95,3 +95,53 @@
     white-space: nowrap;
   }
 }
+
+/* --- ETÀ DEI DATI IN TEMPO REALE --- */
+.data-age {
+  display: inline-block;
+  margin-left: .4rem;
+  padding: .05rem .5rem;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #4a5b6d;
+  font-size: .78rem;
+  vertical-align: middle;
+}
+
+/* --- BADGE E BANNER DI CATEGORIA (condivisi fra stats, funfacts, weeklystats) --- */
+.dash-badge {
+  font-size: .68rem;
+  font-weight: 600;
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  vertical-align: middle;
+}
+.dash-badge.parcheggi { background: #185FA5; }
+.dash-badge.ciclobox { background: #0F6E56; }
+.dash-badge.stalli { background: #993C1D; }
+
+.dash-banner {
+  background: #FAECE7;
+  border: 1px solid #F0997B;
+  color: #712B13;
+  padding: .6rem .9rem;
+  border-radius: 8px;
+  font-size: .9rem;
+  margin: .5rem 0 1rem;
+}
+
+/* --- BLOCCHI DEL REPORT SETTIMANALE --- */
+.weekly-block {
+  scroll-margin-top: 90px;
+  padding-top: 1rem;
+  margin-bottom: 2rem;
+}
+.weekly-block h2 {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: .25rem;
+}

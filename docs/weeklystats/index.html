@@ -75,56 +75,7 @@
 
   <body class="index-page">
     <!-- about -->
-    <div class="modal fade" id="about" tabindex="-1" role="dialog" aria-labelledby="titoloModale" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="titoloModale">Il progetto</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi">
-            </button>
-          </div>
-          <div class="modal-body">
-            <p class="text-left">
-              Il 10 marzo 2025 il Comune di Trento ha messo online i dati sui <a
-                href="https://parcheggi.comune.trento.it">parcheggi</a> per veicoli e biciclette, permettendo finalmente
-              a tutti di sapere in tempo reale quanti posti sono disponibili.<br />
-              Parklog Trento parte da questi dati registrando la situazione la situazione ogni 5 minuti
-              creando così uno storico che racconta come cambiano i parcheggi nel tempo e aiutando a capire meglio le
-              abitudini della città.<br />
-              Tutto il <a href="https://github.com/napo/parklogtrento/tree/main/data">dataset</a> raccolto è disponibile
-              su <a href="https://github.com/napo/parklogtrento">GitHub</a>, libero da usare per chi vuole analizzare,
-              creare nuove applicazioni o semplicemente scoprire qualcosa in più sul funzionamento della mobilità
-              cittadina.<br />
-              Più dati, più conoscenza: capire come si muove la città aiuta a pianificarla meglio.<br />
-              Parklog Trento è un progetto ideato e sviluppato da <a
-                href="https://www.linkedin.com/in/napolnx/">Maurizio Napolitano</a>.<br />
-              <strong>il progetto non è collegato a fbk</strong>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Cookie Policy -->
-    <div class="modal fade" id="cookie" tabindex="-1" role="dialog" aria-labelledby="titoloModale" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="titoloModale">Cookie Policy</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi">
-            </button>
-          </div>
-          <div class="modal-body">
-            <p class="text-left">
-              Questo sito non utilizza cookie.<br />
-              Durante la navigazione su questo sito non viene installato alcun cookie sul tuo dispositivo.<br />
-              Non viene raccolto, memorizzato o tracciato alcun tipo di informazione personale tramite cookie o altre
-              tecnologie di tracciamento.<br />
-              Grazie per la tua visita!
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <header id="header" class="header d-flex align-items-center fixed-top">
       <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
@@ -136,30 +87,17 @@
         </a>
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="../#hero" class="active">Home</a></li>
-            <li class="dropdown"><a href="#"><span>Stato attuale</span> <i
-                  class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <li><a href="../">Home</a></li>
+            <li class="dropdown"><a href="#"><span>Statistiche</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="../#strutture">strutture</a></li>
-                <!--<li><a href="../#zone-blu">Stalli Blu</a></li>-->
-                <li><a href="../#ciclobox">ciclobox</a></li>
+                <li><a href="../stats/#parcheggi">parcheggi</a></li>
+                <li><a href="../stats/#ciclobox">ciclobox</a></li>
+                <li><a href="../stats/#stalli">stalli blu</a></li>
+                <li><a href="../funfacts/">curiosità</a></li>
+                <li><a href="./" class="active">report settimanale</a></li>
               </ul>
             </li>
-            <li class="dropdown"><a href="#"><span>Statistiche</span> <i
-                  class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a href="#strutture">strutture</a></li>
-                <li><a href="#ciclobox">ciclobox</a></li>
-                <!--<li><a href="../curiosity">Curiosità</a></li>-->
-              </ul>
-            </li>
-            <li class="dropdown"><a href="#"><span>Info</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a href="#" data-bs-toggle="modal" data-bs-target="#about">Cosa è?</a></li>
-                <li><a href="#" data-bs-toggle="modal" data-bs-target="#cookie">Cookie Policy</a></li>
-                <li><a href="https://github.com/napo/parklogtrento">GitHub</a></li>
-              </ul>
-            </li>
+            <li><a href="../info/">Info</a></li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -170,43 +108,50 @@
       <br /><br />
       <section id="weeklystats" class="featured-services section">
         <div class="container">
-          <h1 class="text-center mb-4">Statiche settimanali occupazione parcheggi</h1>
-          <section id="park" class="featured-services section">
-            <div id="strutture">
-              <br /><br />
-              <h2 class="mt-5">Parcheggi in struttura</h2>
-              <h6 id="range-park" class="text-muted"></h6>
-              <h4>Capienza massima: <span id="park-totali"></span></h4>
-              <div class="mb-5">
-                <div id="totale_park" style="height: 400px;" />
-              </div>
-              <br />
-              <div class="row" id="singoli_park"></div>
-            </div>
-            <!--
-            <h2 class="mt-5">Area di sosta stalli blu</h2>
+          <h1 class="text-center mb-4">Statistiche settimanali di occupazione</h1>
+          <p class="text-center text-muted mb-5">L'andamento settimanale delle tre tipologie, tenute distinte perché
+            misurano cose diverse.</p>
+
+          <!-- PARCHEGGI IN STRUTTURA -->
+          <div id="parcheggi" class="weekly-block">
+            <h2><span class="dash-badge parcheggi">auto</span> Parcheggi in struttura</h2>
             <h6 id="range-park" class="text-muted"></h6>
+            <h4>Capienza massima: <span id="park-totali"></span></h4>
+            <div class="mb-5">
+              <div id="totale_park" style="height: 400px;"></div>
+            </div>
+            <div class="row" id="singoli_park"></div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- CICLOBOX -->
+          <div id="ciclobox" class="weekly-block">
+            <h2><span class="dash-badge ciclobox">bici</span> Parcheggi ciclobox</h2>
+            <h6 id="range-bike" class="text-muted"></h6>
+            <h4>Capienza massima: <span id="bike-totali"></span></h4>
+            <div class="mb-5">
+              <div id="totale_bike" style="height: 400px;"></div>
+            </div>
+            <div class="row" id="singoli_bike"></div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- STALLI BLU (storico, non piu aggiornato) -->
+          <div id="stalli" class="weekly-block">
+            <h2><span class="dash-badge stalli">storico</span> Stalli blu</h2>
+            <p class="dash-banner">&#9888;&#65039; Dati non più aggiornati: la raccolta si è interrotta il 28 aprile 2025.
+              I valori qui sotto restano come istantanea storica e non sono confrontabili con i parcheggi e i ciclobox,
+              che sono invece aggiornati.</p>
+            <h6 id="range-zone" class="text-muted"></h6>
             <h4>Capienza massima: <span id="zone-totali"></span></h4>
             <div class="mb-5">
-              <div id="totale_zone" style="height: 400px;" />
+              <div id="totale_zone" style="height: 400px;"></div>
             </div>
-            <br />
             <div class="row" id="singoli_zone"></div>
-            
--->
-            <hr class="section-divider">
-            <div id="ciclobox">
-              <br /><br />
+          </div>
 
-              <h2 class="mt-5">Utilizzo dei ciclobox</h2>
-              <h6 id="range-bike" class="text-muted"></h6>
-              <h4>Capienza massima: <span id="bike-totali"></span></h4>
-              <div class="mb-5">
-                <div id="totale_bike" style="height: 400px;" />
-              </div>
-              <br />
-              <div class="row" id="singoli_bike"></div>
-            </div>
         </div>
       </section>
     </main>
