@@ -57,6 +57,7 @@ async function boot() {
 function parseDate(iso) { const [y, m, d] = iso.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)); }
 function hoursInBand(flt) { const out = []; for (let h = flt.hFrom; h <= flt.hTo; h++) out.push(h); return out; }
 function itLabelDate(d) { return d.getUTCDate() + ' ' + MO_FULL[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
+function itIso(iso) { const [y,m,d]=iso.split('-').map(Number); return d + ' ' + MO_FULL[m-1] + ' ' + y; }
 
 function fillSelect(sel, structures, withAll) {
   sel.innerHTML = '';
@@ -219,9 +220,11 @@ function aggregate(structs, flt) {
   const heatmap = [];
   for (let dow = 0; dow < 7; dow++) for (const h of band) { const k = dow * 24 + h; heatmap.push([h, dow, hmCnt[k] ? Math.round(hmSum[k] / hmCnt[k]) : '-']); }
   const trend = Object.keys(trendMap).sort().map(x => [x, Math.round(trendMap[x][0] / trendMap[x][1])]);
+  const giorni = Array.from(daySet).sort();
   let satH = -1, satV = -1;
   band.forEach((h, i) => { if (hourly[i] != null && hourly[i] > satV) { satV = hourly[i]; satH = h; } });
   return { nDays: daySet.size, band, hourly, heatmap, trend,
+    primoGiorno: giorni.length ? giorni[0] : null, ultimoGiorno: giorni.length ? giorni[giorni.length-1] : null,
     mean: cellCnt ? Math.round((cellSum / cellCnt) * 10) / 10 : null,
     coverage: cellTot ? Math.round((cellCnt / cellTot) * 1000) / 10 : 0, saturationHour: satH };
 }
@@ -247,11 +250,26 @@ function renderCategory(key) {
   const primaryList = isAll ? R.data.structures : [R.data.structures[Number(R.select.value)]];
   const primAgg = aggregate(primaryList, flt);
 
+  // periodo effettivamente preso in considerazione da questo blocco
+  const periodEl = R.section.querySelector('[data-role="periodo"]');
+  if (periodEl) {
+    if (primAgg.primoGiorno) {
+      const banda = (primAgg.band.length < 24)
+        ? ', solo dalle ' + primAgg.band[0] + ':00 alle ' + primAgg.band[primAgg.band.length-1] + ':59'
+        : '';
+      periodEl.textContent = 'Periodo considerato: dal ' + itIso(primAgg.primoGiorno) +
+        ' al ' + itIso(primAgg.ultimoGiorno) + ' \u00B7 ' + primAgg.nDays +
+        (primAgg.nDays === 1 ? ' giorno con dati' : ' giorni con dati') + banda;
+    } else {
+      periodEl.textContent = 'Periodo considerato: nessun giorno rientra nei filtri scelti.';
+    }
+  }
+
   const info = R.section.querySelector('[data-role="struct-info"]');
   if (info) {
     const who = isAll ? 'Tutti (media categoria)' : R.data.structures[Number(R.select.value)].name;
     if (primAgg.nDays === 0) info.innerHTML = '<span class="dash-warn">Nessun dato nel periodo selezionato.</span>';
-    else info.textContent = who + ' \u00B7 ' + primAgg.nDays + ' giorni nel filtro \u00B7 occupazione media ' +
+    else info.textContent = who + ' \u00B7 occupazione media ' +
       (primAgg.mean == null ? 'n/d' : primAgg.mean + '%') +
       (primAgg.saturationHour >= 0 ? ' \u00B7 ora di punta ~' + primAgg.saturationHour + ':00' : '') +
       ' \u00B7 copertura ' + primAgg.coverage + '%';
