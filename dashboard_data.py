@@ -37,6 +37,54 @@ MONTHS_IT = ["", "gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
              "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"]
 
 
+
+# ============================================================== #
+#  REGOLE DEI PARCHEGGI                                          #
+# ============================================================== #
+
+# L'API del Comune scrive la categoria in due modi diversi
+# ('non attestamento' e 'non-attestamento'): va normalizzata, altrimenti
+# San Lorenzo finisce in un gruppo tutto suo.
+def normalizza_categoria(v):
+    if not isinstance(v, str):
+        return ""
+    return v.strip().lower().replace("-", " ").replace("  ", " ")
+
+
+# Raggruppamento leggibile della regola di sosta (campo 'regulation')
+REGOLE = {
+    "pagamento": "a pagamento",
+    "disco orario": "disco orario",
+    "gratuito senza limitazione d'orario": "gratuito",
+}
+
+
+def gruppo_regola(v):
+    if not isinstance(v, str):
+        return ""
+    return REGOLE.get(v.strip().lower(), v.strip().lower())
+
+
+# Strutture con regole proprie, che non seguono la domanda ma un orario.
+# Fuori da queste finestre il dato non misura la disponibilita' ma un cancello
+# chiuso, quindi va escluso dalle statistiche.
+REGOLE_SPECIALI = {
+    "Parcheggio Cittadella dello studente - P6": {
+        "apertura": 8,          # dalle 8:00
+        "chiusura": 21,         # ultima ora utile: 20:59 (uscita entro le 21)
+        "giorni": [0, 1, 2, 3, 4, 5],   # lunedi-sabato, festivi esclusi
+        "nota": ("Parcheggio universitario ad accesso riservato: si entra solo con badge "
+                 "o ticket, ad abbonamento (da 80 euro al mese). Aperto dalle 8:00 alle 20:00 "
+                 "(uscita entro le 21:00), dal lunedi al sabato, festivi esclusi; sosta notturna "
+                 "vietata. Le statistiche qui sotto considerano solo le ore di apertura: "
+                 "fuori da quelle il dato non misura la disponibilita' ma un cancello chiuso. "
+                 "Durante eventi universitari o fieristici il parcheggio puo' essere riservato."),
+        "link": "https://www.unitn.it/it/sedi/contatti-e-orari/parcheggio-cittadella-dello-studente",
+        "link_testo": "regole ufficiali UniTrento",
+    },
+}
+
+
 def date_it(ts):
     return f"{ts.day} {MONTHS_IT[ts.month]} {ts.year}"
 
@@ -64,15 +112,30 @@ def occupancy_frame(df, tcol, cap_col, free_col, offline_col=None):
     return d
 
 
-def day_hour_matrix(g):
+def day_hour_matrix(g, regole=None):
     """Matrice [giorni][24] con l'occupazione media per giorno e ora.
-    I giorni vanno da first_seen all'ultimo giorno con dati (contigui),
-    con None dove non ci sono rilevazioni valide."""
+    I giorni partono dalla prima rilevazione valida della struttura (la sua
+    "nascita"), cosi' un parcheggio nuovo non risulta scoperto per il periodo
+    in cui semplicemente non esisteva.
+    Se la struttura ha regole proprie (orari di apertura), le ore di chiusura
+    vengono escluse: li' il dato non misura la disponibilita'."""
     m = g.groupby(["date", "hour"])["occ"].mean().round(0)
     piv = m.unstack("hour")
     all_dates = pd.date_range(min(piv.index), max(piv.index), freq="D").date
     piv = piv.reindex(index=all_dates, columns=range(24))
-    matrix = [[None if pd.isna(v) else int(v) for v in row] for row in piv.values]
+
+    matrix = []
+    for giorno, row in zip(all_dates, piv.values):
+        valori = [None if pd.isna(v) else int(v) for v in row]
+        if regole:
+            dow = pd.Timestamp(giorno).dayofweek
+            if dow not in regole["giorni"]:
+                valori = [None] * 24          # giorno di chiusura
+            else:
+                for h in range(24):
+                    if h < regole["apertura"] or h >= regole["chiusura"]:
+                        valori[h] = None      # fuori orario
+        matrix.append(valori)
     return str(all_dates[0]), matrix
 
 
@@ -84,7 +147,8 @@ def build_category(df, tcol, cap_col, free_col, offline_col, label, category,
         g_occ = occ[occ["name"] == name]
         if len(g_occ) == 0:
             continue
-        start, matrix = day_hour_matrix(g_occ)
+        regole = REGOLE_SPECIALI.get(name)
+        start, matrix = day_hour_matrix(g_occ, regole)
         item = {
             "name": name,
             "capacity": robust_capacity(g_all[cap_col]),
@@ -92,12 +156,37 @@ def build_category(df, tcol, cap_col, free_col, offline_col, label, category,
             "start": start,
             "matrix": matrix,
         }
+
+        # regola di sosta e categoria (normalizzata), quando l'API le espone
+        if "regulation" in g_all.columns:
+            reg = g_all["regulation"].dropna()
+            item["regulation"] = gruppo_regola(reg.iloc[-1]) if len(reg) else ""
+        if "category" in g_all.columns:
+            cat = g_all["category"].dropna()
+            item["category"] = normalizza_categoria(cat.iloc[-1]) if len(cat) else ""
+        if "operator" in g_all.columns:
+            op = g_all["operator"].dropna()
+            item["operator"] = str(op.iloc[-1]) if len(op) else ""
+        if "link" in g_all.columns:
+            lk = g_all["link"].dropna()
+            item["link"] = str(lk.iloc[-1]) if len(lk) else ""
+
+        # eventuali regole proprie (orari, accesso riservato)
+        if regole:
+            item["nota"] = regole["nota"]
+            item["nota_link"] = regole["link"]
+            item["nota_link_testo"] = regole["link_testo"]
+            item["orario"] = {"apertura": regole["apertura"],
+                              "chiusura": regole["chiusura"],
+                              "giorni": regole["giorni"]}
+
         if extra_per_struct:
             item.update(extra_per_struct(g_all))
         structures.append(item)
 
     structures.sort(key=lambda s: s["name"])
 
+    regole_presenti = sorted({s.get("regulation", "") for s in structures if s.get("regulation")})
     return {
         "meta": {
             "category": category,
@@ -107,6 +196,7 @@ def build_category(df, tcol, cap_col, free_col, offline_col, label, category,
             "period_end": period_end.strftime("%Y-%m-%d"),
             "n_structures": len(structures),
             "note": note,
+            "regolamenti": regole_presenti,
         },
         "weekdays": WEEKDAYS_IT,
         "months": MONTHS_IT[1:],

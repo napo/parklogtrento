@@ -157,3 +157,15 @@
   margin: .5rem 0 .3rem;
   display: inline-block;
 }
+
+/* --- NOTA SULLE STRUTTURE CON REGOLE PROPRIE --- */
+.nota-regole {
+  background: #eef6fb;
+  border-left: 3px solid #2b7bb9;
+  color: #234b66;
+  padding: .6rem .9rem;
+  border-radius: 4px;
+  font-size: .85rem;
+  margin: .6rem 0;
+}
+.nota-regole a { color: #185FA5; text-decoration: underline; }

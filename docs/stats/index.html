@@ -109,6 +109,7 @@
             </div>
             <div class="filter-block"><label>Giorni</label><div class="chips" data-role="flt-weekdays"></div></div>
             <div class="filter-block"><label>Mesi</label><div class="chips" data-role="flt-months"></div></div>
+            <div class="filter-block" data-role="flt-regole-wrap" style="display:none"><label>Regola di sosta</label><div class="chips" data-role="flt-regole"></div></div>
             <div class="filter-block"><label>&nbsp;</label><button class="btn-reset" data-role="flt-reset">Azzera</button></div>
           </div>
         </div>
@@ -125,6 +126,7 @@
           </div>
           <div data-role="select2-wrap" style="display:none"><label>Confronta con</label><select data-role="select2"></select></div>
         </div>
+        <p class="nota-regole" data-role="nota" style="display:none"></p>
         <p class="periodo-blocco" data-role="periodo"></p>
         <p class="struct-info" data-role="struct-info"></p>
 
@@ -133,7 +135,7 @@
           <div class="dash-card"><h3>Quando si riempie</h3><p class="hint">Heatmap: occupazione media per ora e giorno</p><div class="dash-chart tall" data-role="heatmap"></div></div>
           <div class="dash-card"><h3>Giornata tipica</h3><p class="hint">Occupazione media ora per ora</p><div class="dash-chart tall" data-role="hourly"></div></div>
           <div class="dash-card"><h3>Classifica occupazione</h3><p class="hint">Occupazione media nel periodo</p><div class="dash-chart" data-role="ranking"></div></div>
-          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Quota di rilevazioni disponibili (verde ≥95%)</p><div class="dash-chart" data-role="coverage"></div></div>
+          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Ore con almeno una rilevazione (verde ≥75%). Dipende anche dalla frequenza di campionamento</p><div class="dash-chart" data-role="coverage"></div></div>
         </div>
       </section>
       <section class="dash-section" id="ciclobox">
@@ -151,6 +153,7 @@
             </div>
             <div class="filter-block"><label>Giorni</label><div class="chips" data-role="flt-weekdays"></div></div>
             <div class="filter-block"><label>Mesi</label><div class="chips" data-role="flt-months"></div></div>
+            <div class="filter-block" data-role="flt-regole-wrap" style="display:none"><label>Regola di sosta</label><div class="chips" data-role="flt-regole"></div></div>
             <div class="filter-block"><label>&nbsp;</label><button class="btn-reset" data-role="flt-reset">Azzera</button></div>
           </div>
         </div>
@@ -167,6 +170,7 @@
           </div>
           <div data-role="select2-wrap" style="display:none"><label>Confronta con</label><select data-role="select2"></select></div>
         </div>
+        <p class="nota-regole" data-role="nota" style="display:none"></p>
         <p class="periodo-blocco" data-role="periodo"></p>
         <p class="struct-info" data-role="struct-info"></p>
 
@@ -175,7 +179,7 @@
           <div class="dash-card"><h3>Quando si riempie</h3><p class="hint">Heatmap: occupazione media per ora e giorno</p><div class="dash-chart tall" data-role="heatmap"></div></div>
           <div class="dash-card"><h3>Giornata tipica</h3><p class="hint">Occupazione media ora per ora</p><div class="dash-chart tall" data-role="hourly"></div></div>
           <div class="dash-card"><h3>Classifica occupazione</h3><p class="hint">Occupazione media nel periodo</p><div class="dash-chart" data-role="ranking"></div></div>
-          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Quota di rilevazioni disponibili (verde ≥95%)</p><div class="dash-chart" data-role="coverage"></div></div>
+          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Ore con almeno una rilevazione (verde ≥75%). Dipende anche dalla frequenza di campionamento</p><div class="dash-chart" data-role="coverage"></div></div>
         </div>
       </section>
       <section class="dash-section" id="stalli">
@@ -213,6 +217,7 @@
           </div>
           <div data-role="select2-wrap" style="display:none"><label>Confronta con</label><select data-role="select2"></select></div>
         </div>
+        <p class="nota-regole" data-role="nota" style="display:none"></p>
         <p class="periodo-blocco" data-role="periodo"></p>
         <p class="struct-info" data-role="struct-info"></p>
 
@@ -221,7 +226,7 @@
           <div class="dash-card"><h3>Quando si riempiva</h3><p class="hint">Heatmap: occupazione media per ora e giorno</p><div class="dash-chart tall" data-role="heatmap"></div></div>
           <div class="dash-card"><h3>Giornata tipica</h3><p class="hint">Occupazione media ora per ora</p><div class="dash-chart tall" data-role="hourly"></div></div>
           <div class="dash-card"><h3>Classifica occupazione</h3><p class="hint">Occupazione media nel periodo</p><div class="dash-chart" data-role="ranking"></div></div>
-          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Quota di rilevazioni disponibili (verde ≥95%)</p><div class="dash-chart" data-role="coverage"></div></div>
+          <div class="dash-card"><h3>Copertura del dato</h3><p class="hint">Ore con almeno una rilevazione (verde ≥75%). Dipende anche dalla frequenza di campionamento</p><div class="dash-chart" data-role="coverage"></div></div>
         </div>
       </section>
     </div>
