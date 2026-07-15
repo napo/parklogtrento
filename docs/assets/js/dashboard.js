@@ -319,7 +319,8 @@ function renderCategory(key) {
     const stSel = isAll ? null : R.data.structures[Number(R.select.value)];
     const regTxt = (flt.regole.size && isAll) ? ' [' + Array.from(flt.regole).join(', ') + ']' : '';
     const who = isAll
-      ? ('Totale della categoria' + regTxt + ' \u00B7 ' + primAgg.postiTotali + ' posti complessivi')
+      ? ('Totale della categoria' + regTxt + ' \u00B7 ' + primAgg.postiTotali + ' posti complessivi \u00B7 in media ' +
+         Math.round(primAgg.postiTotali * (primAgg.mean || 0) / 100) + ' occupati')
       : stSel.name + ' \u00B7 ' + primAgg.postiTotali + ' posti' + (stSel.regulation ? ' \u00B7 ' + stSel.regulation : '');
     if (primAgg.nDays === 0) info.innerHTML = '<span class="dash-warn">Nessun dato nel periodo selezionato.</span>';
     else info.textContent = who + ' \u00B7 occupazione media ' +
@@ -329,9 +330,31 @@ function renderCategory(key) {
   }
 
   const series = seriesForMode(R).map((s, i) => ({ name: s.name, agg: aggregate(s.list, flt), color: i === 0 ? color : PALETTE[(i + 1) % PALETTE.length] }));
-  drawTrend(R.charts.trend, series);
-  drawHourly(R.charts.hourly, series);
-  drawHeatmap(R.charts.heatmap, primAgg);
+
+  // Quando si guarda il solo "Totale" i grafici passano ai POSTI OCCUPATI:
+  // una percentuale, li', si confonde con quella di un singolo parcheggio e non
+  // risponde alla domanda vera, cioe' quante auto ci sono in citta'.
+  // Nei confronti si resta in percentuale: e' l'unica scala comune fra
+  // parcheggi di dimensioni diverse.
+  const assoluto = isAll && series.length === 1;
+
+  // il sottotitolo delle card deve dire cosa si sta guardando davvero
+  const hintTrend = R.section.querySelector('[data-role="hint-trend"]');
+  if (hintTrend) hintTrend.textContent = assoluto
+    ? 'Posti occupati in media, giorno per giorno, sommando tutti i parcheggi della categoria'
+    : 'Occupazione media giornaliera nel periodo e nella fascia oraria scelti';
+  const hintHourly = R.section.querySelector('[data-role="hint-hourly"]');
+  if (hintHourly) hintHourly.textContent = assoluto
+    ? 'Posti occupati in media ora per ora, sommando tutti i parcheggi'
+    : 'Occupazione media ora per ora';
+  const hintHeat = R.section.querySelector('[data-role="hint-heatmap"]');
+  if (hintHeat) hintHeat.textContent = assoluto
+    ? 'Posti occupati per ora e giorno della settimana, sommando tutti i parcheggi'
+    : 'Heatmap: occupazione media per ora e giorno';
+
+  drawTrend(R.charts.trend, series, assoluto);
+  drawHourly(R.charts.hourly, series, assoluto);
+  drawHeatmap(R.charts.heatmap, primAgg, assoluto);
 
   const inizioCategoria = R.data.meta.period_start;
   const rows = elencoFiltrato.map(st => {
@@ -349,38 +372,71 @@ function renderCategory(key) {
   drawCoverage(R.charts.coverage, rows);
 }
 
-function drawTrend(chart, series) {
+function drawTrend(chart, series, assoluto) {
+  const posti = assoluto ? series[0].agg.postiTotali : 0;
+  const dati = s => assoluto
+    ? s.agg.trend.map(p => [p[0], Math.round(p[1] * posti / 100)])
+    : s.agg.trend;
   chart.setOption({
-    tooltip: { trigger: 'axis' },
+    tooltip: {
+      trigger: 'axis',
+      formatter: assoluto ? (ps => {
+        const v = ps[0].data[1];
+        return ps[0].axisValueLabel.slice(0, 10) + '<br/><strong>' + v + ' posti occupati</strong> su ' +
+          posti + ' (' + Math.round(100 * v / posti) + '%)';
+      }) : undefined
+    },
     legend: series.length > 1 ? { top: 0, type: 'scroll', textStyle: { fontSize: 10 } } : undefined,
-    grid: { top: series.length > 1 ? 32 : 15, bottom: 30, left: 45, right: 15 },
+    grid: { top: series.length > 1 ? 32 : 15, bottom: 30, left: 55, right: 15 },
     xAxis: { type: 'time', axisLabel: { fontSize: 10 } },
-    yAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
-    series: series.map(s => ({ name: s.name, type: 'line', showSymbol: false, data: s.agg.trend, lineStyle: { color: s.color, width: 1.5 }, itemStyle: { color: s.color }, areaStyle: series.length === 1 ? { color: s.color, opacity: 0.1 } : undefined }))
+    yAxis: assoluto
+      ? { type: 'value', min: 0, max: posti, name: 'posti occupati', nameTextStyle: { fontSize: 10 }, axisLabel: { fontSize: 10 } }
+      : { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
+    series: series.map(s => ({ name: s.name, type: 'line', showSymbol: false, data: dati(s), lineStyle: { color: s.color, width: 1.5 }, itemStyle: { color: s.color }, areaStyle: series.length === 1 ? { color: s.color, opacity: 0.1 } : undefined }))
   }, true);
 }
 
-function drawHourly(chart, series) {
+function drawHourly(chart, series, assoluto) {
   const band = series[0].agg.band, hours = band.map(h => h + ':00');
+  const posti = assoluto ? series[0].agg.postiTotali : 0;
+  const dati = s => assoluto
+    ? s.agg.hourly.map(v => v == null ? null : Math.round(v * posti / 100))
+    : s.agg.hourly;
   chart.setOption({
-    tooltip: { trigger: 'axis' },
+    tooltip: {
+      trigger: 'axis',
+      formatter: assoluto ? (ps => {
+        const v = ps[0].data;
+        return ps[0].axisValue + '<br/><strong>' + (v == null ? 'n/d' : v + ' posti occupati') + '</strong>' +
+          (v == null ? '' : ' su ' + posti + ' (' + Math.round(100 * v / posti) + '%)');
+      }) : undefined
+    },
     legend: series.length > 1 ? { top: 0, type: 'scroll', textStyle: { fontSize: 10 } } : undefined,
-    grid: { top: series.length > 1 ? 32 : 20, bottom: 40, left: 45, right: 15 },
+    grid: { top: series.length > 1 ? 32 : 20, bottom: 40, left: 55, right: 15 },
     xAxis: { type: 'category', data: hours, boundaryGap: false, axisLabel: { interval: band.length > 12 ? 2 : 0, fontSize: 10 } },
-    yAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
-    series: series.map(s => ({ name: s.name, type: 'line', smooth: true, connectNulls: true, showSymbol: false, data: s.agg.hourly, lineStyle: { color: s.color, width: 2.2 }, areaStyle: series.length === 1 ? { color: s.color, opacity: 0.12 } : undefined }))
+    yAxis: assoluto
+      ? { type: 'value', min: 0, max: posti, name: 'posti occupati', nameTextStyle: { fontSize: 10 }, axisLabel: { fontSize: 10 } }
+      : { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
+    series: series.map(s => ({ name: s.name, type: 'line', smooth: true, connectNulls: true, showSymbol: false, data: dati(s), lineStyle: { color: s.color, width: 2.2 }, areaStyle: series.length === 1 ? { color: s.color, opacity: 0.12 } : undefined }))
   }, true);
 }
 
-function drawHeatmap(chart, agg) {
+function drawHeatmap(chart, agg, assoluto) {
   const hours = agg.band.map(h => h + ':00');
+  const posti = assoluto ? agg.postiTotali : 0;
+  const celle = assoluto
+    ? agg.heatmap.map(c => [c[0], c[1], c[2] === '-' ? '-' : Math.round(c[2] * posti / 100)])
+    : agg.heatmap;
   chart.setOption({
-    tooltip: { position: 'top', formatter: p => WD[p.value[1]] + ' ' + p.value[0] + ':00 \u2192 ' + (p.value[2] === '-' ? 'n/d' : p.value[2] + '% occupato') },
+    tooltip: { position: 'top', formatter: p => WD[p.value[1]] + ' ' + p.value[0] + ':00 \u2192 ' +
+      (p.value[2] === '-' ? 'n/d'
+        : (assoluto ? p.value[2] + ' posti occupati su ' + posti + ' (' + Math.round(100 * p.value[2] / posti) + '%)'
+                    : p.value[2] + '% occupato')) },
     grid: { top: 10, bottom: 60, left: 45, right: 10 },
     xAxis: { type: 'category', data: hours, splitArea: { show: true }, axisLabel: { interval: agg.band.length > 12 ? 2 : 0, fontSize: 10 } },
     yAxis: { type: 'category', data: WD, splitArea: { show: true } },
-    visualMap: { min: 0, max: 100, calculable: true, orient: 'horizontal', left: 'center', bottom: 5, inRange: { color: ['#E1F5EE', '#F9E79F', '#E24B4A'] }, text: ['pieno', 'libero'], textStyle: { fontSize: 10 } },
-    series: [{ type: 'heatmap', data: agg.heatmap, emphasis: { itemStyle: { shadowBlur: 6, shadowColor: 'rgba(0,0,0,.3)' } } }]
+    visualMap: { min: 0, max: assoluto ? posti : 100, calculable: true, orient: 'horizontal', left: 'center', bottom: 5, inRange: { color: ['#E1F5EE', '#F9E79F', '#E24B4A'] }, text: ['pieno', 'libero'], textStyle: { fontSize: 10 } },
+    series: [{ type: 'heatmap', data: celle, emphasis: { itemStyle: { shadowBlur: 6, shadowColor: 'rgba(0,0,0,.3)' } } }]
   }, true);
 }
 
