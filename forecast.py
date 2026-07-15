@@ -53,11 +53,25 @@ ORARI = {
 }
 
 
+
+def uniforma_nomi(d):
+    """Stesso id, nome cambiato nel tempo (es. 'Area ex Zuffo' -> 'Area Ex Zuffo'
+    dal 3 luglio 2025): si tiene il nome piu' recente, altrimenti la stessa
+    struttura verrebbe trattata come due."""
+    if "id" not in d.columns:
+        return d
+    ultimo = d.sort_values("ts").groupby("id")["name"].last()
+    d = d.copy()
+    d["name"] = d["id"].map(ultimo).fillna(d["name"])
+    return d
+
+
 def serie_oraria(df):
     """Serie oraria di occupazione per struttura, scartando i dati inaffidabili."""
     d = df.copy()
     d["ts"] = pd.to_datetime(d["currentTimestamp"], errors="coerce")
     d = d[d["ts"].notna()]
+    d = uniforma_nomi(d)
     d["cap"] = pd.to_numeric(d["capacity"], errors="coerce")
     d["free"] = pd.to_numeric(d["freeslots"], errors="coerce")
     ok = (d["cap"] > 0) & d["free"].notna() & (d["free"] <= d["cap"])

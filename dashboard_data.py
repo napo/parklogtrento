@@ -85,6 +85,31 @@ REGOLE_SPECIALI = {
 }
 
 
+
+def uniforma_nomi(df, tcol):
+    """Un parcheggio puo' cambiare nome nel tempo restando lo stesso id: e'
+    successo al ciclobox dell'ex Zuffo, passato da 'Area ex Zuffo' a
+    'Area Ex Zuffo' il 3 luglio 2025. Senza questa normalizzazione la stessa
+    struttura comparirebbe due volte.
+    Si tiene il nome piu' recente di ogni id.
+    """
+    if "id" not in df.columns:
+        return df
+    d = df.sort_values(tcol)
+    ultimo = d.groupby("id")["name"].last()
+    rinominati = {}
+    for idv, nome in ultimo.items():
+        precedenti = set(d[d["id"] == idv]["name"].unique()) - {nome}
+        for p in precedenti:
+            rinominati[p] = nome
+    if rinominati:
+        for vecchio, nuovo in rinominati.items():
+            print(f"  nome uniformato: {vecchio!r} -> {nuovo!r}")
+    d = d.copy()
+    d["name"] = d["id"].map(ultimo)
+    return d
+
+
 def date_it(ts):
     return f"{ts.day} {MONTHS_IT[ts.month]} {ts.year}"
 
@@ -208,6 +233,7 @@ def process_parks(parks, wanted_type, label, category):
     df = parks.copy()
     df["ts"] = pd.to_datetime(df["currentTimestamp"], errors="coerce")
     df = df[df["ts"].notna() & (df["type"] == wanted_type)]
+    df = uniforma_nomi(df, "ts")
     return build_category(
         df, "ts", "capacity", "freeslots", "offline",
         label, category, df["ts"].min(), df["ts"].max(),
@@ -219,6 +245,7 @@ def process_zones(zones):
     df = zones.copy()
     df["ts"] = pd.to_datetime(df["ts"], errors="coerce")
     df = df[df["ts"].notna()]
+    df = uniforma_nomi(df, "ts")
     ps, pe = df["ts"].min(), df["ts"].max()
     note = ("Dati storici non più aggiornati. Periodo coperto: dall'"
             + date_it(ps) + " al " + date_it(pe) + ".")
@@ -344,10 +371,14 @@ def _facts_for(d, free_col):
     return facts, n_days
 
 
-def build_curiosita_category(df, tcol, cap_col, free_col, offline_col, label, category):
+def build_curiosita_category(df, tcol, cap_col, free_col, offline_col, label, category,
+                             only_global=False):
     df = df.copy()
     df[tcol] = pd.to_datetime(df[tcol], errors="coerce")
     df = df[df[tcol].notna()]
+    # anche qui i nomi vanno uniformati, altrimenti lo stesso ciclobox comparirebbe
+    # due volte fra le curiosita' ('Area ex Zuffo' e 'Area Ex Zuffo')
+    df = uniforma_nomi(df, tcol)
     d_all = _occ_raw(df, tcol, cap_col, free_col, offline_col)
     d_all["ts"] = df.loc[d_all.index, tcol]
     d_all["date"] = d_all["ts"].dt.date
@@ -357,6 +388,13 @@ def build_curiosita_category(df, tcol, cap_col, free_col, offline_col, label, ca
     out = {"label": label, "category": category, "periods": []}
     for key in ["globale", "ieri", "settimana", "mese", "anno"]:
         start, end, plabel = periods[key]
+        # gli stalli blu sono un dato storico fermo ad aprile 2025: ha senso
+        # raccontarli solo su tutto lo storico. Mostrarli sotto "settimana
+        # scorsa" con una data del 2025, accanto a parcheggi del 2026, confonde
+        if only_global and key != "globale":
+            out["periods"].append({"key": key, "label": "", "n_days": 0,
+                                   "facts": [], "empty": True})
+            continue
         if start is None:
             sub = d_all
         else:
@@ -382,7 +420,7 @@ def build_curiosita(parks, zones):
             build_curiosita_category(parks[parks["type"] == "bike"], "cts", "capacity", "freeslots", "offline",
                                      "Parcheggi ciclobox", "ciclobox"),
             build_curiosita_category(zones, "ts", "stall_blu_capacity", "stall_blu_freeslots", None,
-                                     "Parcheggi su stalli blu", "stalli"),
+                                     "Parcheggi su stalli blu", "stalli", only_global=True),
         ],
     }
     return result

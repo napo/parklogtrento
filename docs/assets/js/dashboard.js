@@ -61,7 +61,7 @@ function itIso(iso) { const [y,m,d]=iso.split('-').map(Number); return d + ' ' +
 
 function fillSelect(sel, structures, withAll) {
   sel.innerHTML = '';
-  if (withAll) { const o = document.createElement('option'); o.value = '__all__'; o.textContent = 'Tutti'; sel.appendChild(o); }
+  if (withAll) { const o = document.createElement('option'); o.value = '__all__'; o.textContent = 'Totale'; sel.appendChild(o); }
   structures.map((s, i) => ({ i, name: s.name }))
     .sort((a, b) => a.name.localeCompare(b.name, 'it'))
     .forEach(({ i, name }) => { const o = document.createElement('option'); o.value = String(i); o.textContent = name; sel.appendChild(o); });
@@ -206,12 +206,20 @@ function selectedIndices(structure, flt) {
   return out;
 }
 
+// Aggrega una o piu' strutture.
+// Quando le strutture sono piu' di una il risultato NON e' la media delle
+// percentuali (che farebbe pesare uguale un ciclobox da 20 posti e un
+// parcheggio da 692): ogni struttura pesa per la sua capienza, cosi' il
+// totale e' davvero "posti occupati / posti disponibili".
 function aggregate(structs, flt) {
   const band = hoursInBand(flt);
   const hourSum = {}, hourCnt = {}, hmSum = {}, hmCnt = {}, trendMap = {};
-  let cellSum = 0, cellCnt = 0, cellTot = 0, daySet = new Set();
+  let occSum = 0, capSum = 0, celleConDati = 0, celleAttese = 0, daySet = new Set();
+  let postiTotali = 0;
   for (const structure of structs) {
     const orario = structure.orario || null;
+    const peso = structure.capacity > 0 ? structure.capacity : 1;   // i posti sono il peso
+    postiTotali += structure.capacity || 0;
     for (const i of selectedIndices(structure, flt)) {
       const row = structure.matrix[i], d = structure._dates[i];
       const dow = (d.getUTCDay() + 6) % 7, isoD = d.toISOString().slice(0, 10);
@@ -223,14 +231,15 @@ function aggregate(structs, flt) {
         // denominatore della copertura, altrimenti un cancello chiuso
         // sembrerebbe un sensore guasto
         if (orario && (h < orario.apertura || h >= orario.chiusura)) continue;
-        cellTot++;
+        celleAttese++;
         const v = row[h];
         if (v == null) continue;
-        hourSum[h] = (hourSum[h] || 0) + v; hourCnt[h] = (hourCnt[h] || 0) + 1;
-        const k = dow * 24 + h; hmSum[k] = (hmSum[k] || 0) + v; hmCnt[k] = (hmCnt[k] || 0) + 1;
+        celleConDati++;
+        hourSum[h] = (hourSum[h] || 0) + v * peso; hourCnt[h] = (hourCnt[h] || 0) + peso;
+        const k = dow * 24 + h; hmSum[k] = (hmSum[k] || 0) + v * peso; hmCnt[k] = (hmCnt[k] || 0) + peso;
         if (!trendMap[isoD]) trendMap[isoD] = [0, 0];
-        trendMap[isoD][0] += v; trendMap[isoD][1]++;
-        cellSum += v; cellCnt++;
+        trendMap[isoD][0] += v * peso; trendMap[isoD][1] += peso;
+        occSum += v * peso; capSum += peso;
       }
     }
   }
@@ -241,10 +250,10 @@ function aggregate(structs, flt) {
   const giorni = Array.from(daySet).sort();
   let satH = -1, satV = -1;
   band.forEach((h, i) => { if (hourly[i] != null && hourly[i] > satV) { satV = hourly[i]; satH = h; } });
-  return { nDays: daySet.size, band, hourly, heatmap, trend,
+  return { nDays: daySet.size, band, hourly, heatmap, trend, postiTotali,
     primoGiorno: giorni.length ? giorni[0] : null, ultimoGiorno: giorni.length ? giorni[giorni.length-1] : null,
-    mean: cellCnt ? Math.round((cellSum / cellCnt) * 10) / 10 : null,
-    coverage: cellTot ? Math.round((cellCnt / cellTot) * 1000) / 10 : 0, saturationHour: satH };
+    mean: capSum ? Math.round((occSum / capSum) * 10) / 10 : null,
+    coverage: celleAttese ? Math.round((celleConDati / celleAttese) * 1000) / 10 : 0, saturationHour: satH };
 }
 
 // strutture della categoria che passano il filtro per regola di sosta
@@ -259,10 +268,10 @@ function seriesForMode(R) {
   const modeVal = R.mode ? R.mode.value : 'single';
   if (val === '__all__') {
     if (modeVal === 'tutti') return structs.map(s => ({ name: s.name, list: [s] }));
-    return [{ name: 'Tutti (media categoria)', list: structs }];
+    return [{ name: 'Totale della categoria', list: structs }];
   }
   const primary = structs[Number(val)];
-  if (modeVal === 'media') return [{ name: primary.name, list: [primary] }, { name: 'Media categoria', list: structs }];
+  if (modeVal === 'media') return [{ name: primary.name, list: [primary] }, { name: 'Totale della categoria', list: structs }];
   if (modeVal === 'due') { const b = structs[Number(R.select2.value)]; return [{ name: primary.name, list: [primary] }, { name: b.name, list: [b] }]; }
   if (modeVal === 'tutti') return structs.map(s => ({ name: s.name, list: [s] }));
   return [{ name: primary.name, list: [primary] }];
@@ -309,11 +318,12 @@ function renderCategory(key) {
   if (info) {
     const stSel = isAll ? null : R.data.structures[Number(R.select.value)];
     const regTxt = (flt.regole.size && isAll) ? ' [' + Array.from(flt.regole).join(', ') + ']' : '';
-    const who = isAll ? ('Tutti (media categoria)' + regTxt)
-                      : stSel.name + (stSel.regulation ? ' \u00B7 ' + stSel.regulation : '');
+    const who = isAll
+      ? ('Totale della categoria' + regTxt + ' \u00B7 ' + primAgg.postiTotali + ' posti complessivi')
+      : stSel.name + ' \u00B7 ' + primAgg.postiTotali + ' posti' + (stSel.regulation ? ' \u00B7 ' + stSel.regulation : '');
     if (primAgg.nDays === 0) info.innerHTML = '<span class="dash-warn">Nessun dato nel periodo selezionato.</span>';
     else info.textContent = who + ' \u00B7 occupazione media ' +
-      (primAgg.mean == null ? 'n/d' : primAgg.mean + '%') +
+      (primAgg.mean == null ? 'n/d' : primAgg.mean + '%' + (isAll ? ' dei posti' : '')) +
       (primAgg.saturationHour >= 0 ? ' \u00B7 ora di punta ~' + primAgg.saturationHour + ':00' : '') +
       ' \u00B7 copertura ' + primAgg.coverage + '%';
   }
