@@ -121,7 +121,7 @@ function prepare(cfg, data, section) {
   };
   Object.values(charts).forEach(c => allCharts.push(c));
 
-  const filter = { from: null, to: null, weekdays: new Set(), months: new Set(), hFrom: 0, hTo: 23 };
+  const filter = { from: null, to: null, weekdays: new Set(), months: new Set(), hFrom: 0, hTo: 23, regole: new Set() };
   const R = { cfg, data, section, select, select2, mode, charts, filter };
   registry[cfg.key] = R;
   setupBlockFilter(R);
@@ -172,9 +172,20 @@ function setupBlockFilter(R) {
   const moBox = section.querySelector('[data-role="flt-months"]');
   if (moBox) MO.forEach((lbl, i) => moBox.appendChild(makeChip(lbl, () => { toggle(flt.months, i); rerender(); })));
 
+  // regola di sosta (solo dove l'API la espone: i ciclobox non ce l'hanno)
+  const regBox = section.querySelector('[data-role="flt-regole"]');
+  const regWrap = section.querySelector('[data-role="flt-regole-wrap"]');
+  const regole = (R.data.meta && R.data.meta.regolamenti) || [];
+  if (regBox && regole.length > 1) {
+    if (regWrap) regWrap.style.display = '';
+    regole.forEach(r => regBox.appendChild(makeChip(r, () => { toggle(flt.regole, r); rerender(); })));
+  } else if (regWrap) {
+    regWrap.style.display = 'none';
+  }
+
   const reset = section.querySelector('[data-role="flt-reset"]');
   if (reset) reset.addEventListener('click', () => {
-    flt.from = min; flt.to = max; flt.weekdays.clear(); flt.months.clear(); flt.hFrom = 0; flt.hTo = 23;
+    flt.from = min; flt.to = max; flt.weekdays.clear(); flt.months.clear(); flt.regole.clear(); flt.hFrom = 0; flt.hTo = 23;
     if (fromEl) fromEl.value = iso(min); if (toEl) toEl.value = iso(max);
     if (hFrom) hFrom.value = '0'; if (hTo) hTo.value = '23';
     section.querySelectorAll('.flt-chip.active').forEach(c => c.classList.remove('active'));
@@ -200,11 +211,18 @@ function aggregate(structs, flt) {
   const hourSum = {}, hourCnt = {}, hmSum = {}, hmCnt = {}, trendMap = {};
   let cellSum = 0, cellCnt = 0, cellTot = 0, daySet = new Set();
   for (const structure of structs) {
+    const orario = structure.orario || null;
     for (const i of selectedIndices(structure, flt)) {
       const row = structure.matrix[i], d = structure._dates[i];
       const dow = (d.getUTCDay() + 6) % 7, isoD = d.toISOString().slice(0, 10);
+      // struttura con orari propri: nei giorni di chiusura non c'e' nulla da misurare
+      if (orario && orario.giorni.indexOf(dow) === -1) continue;
       daySet.add(isoD);
       for (const h of band) {
+        // fuori orario di apertura il dato non esiste: non entra nemmeno nel
+        // denominatore della copertura, altrimenti un cancello chiuso
+        // sembrerebbe un sensore guasto
+        if (orario && (h < orario.apertura || h >= orario.chiusura)) continue;
         cellTot++;
         const v = row[h];
         if (v == null) continue;
@@ -229,8 +247,15 @@ function aggregate(structs, flt) {
     coverage: cellTot ? Math.round((cellCnt / cellTot) * 1000) / 10 : 0, saturationHour: satH };
 }
 
+// strutture della categoria che passano il filtro per regola di sosta
+function structsFiltrate(R) {
+  const flt = R.filter;
+  if (!flt.regole.size) return R.data.structures;
+  return R.data.structures.filter(s => flt.regole.has(s.regulation));
+}
+
 function seriesForMode(R) {
-  const structs = R.data.structures, val = R.select.value;
+  const structs = structsFiltrate(R), val = R.select.value;
   const modeVal = R.mode ? R.mode.value : 'single';
   if (val === '__all__') {
     if (modeVal === 'tutti') return structs.map(s => ({ name: s.name, list: [s] }));
@@ -247,7 +272,8 @@ function renderCategory(key) {
   const R = registry[key]; if (!R) return;
   const color = R.cfg.color, flt = R.filter;
   const isAll = R.select.value === '__all__';
-  const primaryList = isAll ? R.data.structures : [R.data.structures[Number(R.select.value)]];
+  const elencoFiltrato = structsFiltrate(R);
+  const primaryList = isAll ? elencoFiltrato : [R.data.structures[Number(R.select.value)]];
   const primAgg = aggregate(primaryList, flt);
 
   // periodo effettivamente preso in considerazione da questo blocco
@@ -265,9 +291,26 @@ function renderCategory(key) {
     }
   }
 
+  // nota per le strutture con regole proprie (es. parcheggio universitario)
+  const notaEl = R.section.querySelector('[data-role="nota"]');
+  if (notaEl) {
+    const st = isAll ? null : R.data.structures[Number(R.select.value)];
+    if (st && st.nota) {
+      notaEl.innerHTML = '\u2139\uFE0F ' + st.nota +
+        (st.nota_link ? ' <a href="' + st.nota_link + '" target="_blank" rel="noopener">' +
+          (st.nota_link_testo || 'regole ufficiali') + '</a>.' : '');
+      notaEl.style.display = '';
+    } else {
+      notaEl.style.display = 'none';
+    }
+  }
+
   const info = R.section.querySelector('[data-role="struct-info"]');
   if (info) {
-    const who = isAll ? 'Tutti (media categoria)' : R.data.structures[Number(R.select.value)].name;
+    const stSel = isAll ? null : R.data.structures[Number(R.select.value)];
+    const regTxt = (flt.regole.size && isAll) ? ' [' + Array.from(flt.regole).join(', ') + ']' : '';
+    const who = isAll ? ('Tutti (media categoria)' + regTxt)
+                      : stSel.name + (stSel.regulation ? ' \u00B7 ' + stSel.regulation : '');
     if (primAgg.nDays === 0) info.innerHTML = '<span class="dash-warn">Nessun dato nel periodo selezionato.</span>';
     else info.textContent = who + ' \u00B7 occupazione media ' +
       (primAgg.mean == null ? 'n/d' : primAgg.mean + '%') +
@@ -280,7 +323,18 @@ function renderCategory(key) {
   drawHourly(R.charts.hourly, series);
   drawHeatmap(R.charts.heatmap, primAgg);
 
-  const rows = R.data.structures.map(st => { const a = aggregate([st], flt); return { name: st.name, mean: a.mean, coverage: a.coverage, nDays: a.nDays }; }).filter(r => r.nDays > 0);
+  const inizioCategoria = R.data.meta.period_start;
+  const rows = elencoFiltrato.map(st => {
+    const a = aggregate([st], flt);
+    // una struttura nata dopo l'inizio della categoria non e' "scoperta":
+    // semplicemente prima non esisteva, e va detto
+    const nata = st.first_seen && st.first_seen > inizioCategoria;
+    return {
+      name: st.name,
+      etichetta: nata ? st.name + ' (dal ' + itIso(st.first_seen) + ')' : st.name,
+      mean: a.mean, coverage: a.coverage, nDays: a.nDays
+    };
+  }).filter(r => r.nDays > 0);
   drawRanking(R.charts.ranking, rows, color);
   drawCoverage(R.charts.coverage, rows);
 }
@@ -326,7 +380,7 @@ function drawRanking(chart, rows, color) {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: p => items[p[0].dataIndex].name + '<br/>occupazione media ' + p[0].data + '%' },
     grid: { top: 10, bottom: 30, left: 5, right: 40, containLabel: true },
     xAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
-    yAxis: { type: 'category', data: items.map(r => r.name), axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
+    yAxis: { type: 'category', data: items.map(r => r.etichetta || r.name), axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
     series: [{ type: 'bar', data: items.map(r => r.mean), itemStyle: { color: color, borderRadius: [0, 4, 4, 0] }, label: { show: true, position: 'right', formatter: '{c}%', fontSize: 10 } }]
   }, true);
 }
@@ -337,8 +391,8 @@ function drawCoverage(chart, rows) {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: p => items[p[0].dataIndex].name + '<br/>copertura ' + p[0].data + '%' },
     grid: { top: 10, bottom: 30, left: 5, right: 40, containLabel: true },
     xAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
-    yAxis: { type: 'category', data: items.map(r => r.name), axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
-    series: [{ type: 'bar', data: items.map(r => r.coverage), itemStyle: { borderRadius: [0, 4, 4, 0], color: p => p.value >= 95 ? '#1D9E75' : (p.value >= 80 ? '#EF9F27' : '#E24B4A') }, label: { show: true, position: 'right', formatter: '{c}%', fontSize: 10 } }]
+    yAxis: { type: 'category', data: items.map(r => r.etichetta || r.name), axisLabel: { fontSize: 10, width: 150, overflow: 'truncate' } },
+    series: [{ type: 'bar', data: items.map(r => r.coverage), itemStyle: { borderRadius: [0, 4, 4, 0], color: p => p.value >= 75 ? '#1D9E75' : (p.value >= 50 ? '#EF9F27' : '#E24B4A') }, label: { show: true, position: 'right', formatter: '{c}%', fontSize: 10 } }]
   }, true);
 }
 

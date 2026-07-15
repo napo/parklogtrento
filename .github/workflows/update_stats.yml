@@ -28,6 +28,8 @@ jobs:
         run: python data4web.py
       - name: run dashboard
         run: python dashboard_data.py
+      - name: run forecast (solo parcheggi e ciclobox, mai gli stalli)
+        run: python forecast.py
       - name: Commit and push if it changed
         run: |-
           git config user.name "napo"
