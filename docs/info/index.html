@@ -11,13 +11,12 @@
   analisi storica e di previsione.">
     <meta name="keywords"
       content="trento, parcheggi, disponibilità, auto, biciclette, ciclobox, stalli blu, parcheggi a pagamento, statistiche, analisi, previsione">
-    <meta name="author" content="maurizio napolitano">
+    <meta name="author" content="maurizio napolitano">a
     <!-- Favicons -->
-    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" href="assets/img/favicon.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+    <link rel="shortcut icon" href="assets/img/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <link rel="manifest" href="site.webmanifest" />
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -27,11 +26,11 @@
       rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-    <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css?v=a549af2a" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css?v=1d14ac40" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css?v=6bb55453" rel="stylesheet">
+    <link href="assets/vendor/glightbox/css/glightbox.min.css?v=9b438b29" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css?v=570aedd7" rel="stylesheet">
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://napo.github.io/parklogtrento" />
@@ -46,8 +45,8 @@
     <meta property="twitter:description" content="Disponibilità parcheggi comune di Trento" />
     <meta property="twitter:image" content="assets/img/preview.png" />
     <!-- Main CSS File -->
-    <link href="assets/css/main.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/main.css?v=c6e596e0" rel="stylesheet">
+    <link href="assets/css/style.css?v=8917cbb2" rel="stylesheet">
 
     <!-- =======================================================
   * Template Name: Bell
@@ -114,9 +113,12 @@
               Il 10 marzo 2025 il Comune di Trento ha messo online i dati sui <a
                 href="https://parcheggi.comune.trento.it">parcheggi</a> per veicoli e biciclette, permettendo finalmente
               a tutti di sapere in tempo reale quanti posti sono disponibili.<br />
-              Parklog Trento parte da questi dati registrando la situazione la situazione ogni 5 minuti
-              creando così uno storico che racconta come cambiano i parcheggi nel tempo e aiutando a capire meglio le
-              abitudini della città.<br />
+              Parklog Trento parte da questi dati e li registra ogni 5 minuti, creando così uno storico che racconta
+              come cambiano i parcheggi nel tempo e aiuta a capire meglio le abitudini della città.<br />
+              <small class="text-muted">Nota sulla cadenza: fino a luglio 2026 le rilevazioni erano affidate allo
+              scheduler di GitHub Actions, che è dichiaratamente "best effort": misurata sui dati raccolti, la cadenza
+              reale è stata di circa 21 minuti (mediana), con interruzioni più lunghe. Da luglio 2026 la rilevazione
+              avviene davvero ogni 5 minuti. Chi usa lo storico tenga conto di questa differenza.</small><br />
               Tutto il <a href="https://github.com/napo/parklogtrento/tree/main/data">dataset</a> raccolto è disponibile
               su <a href="https://github.com/napo/parklogtrento">GitHub</a>, libero da usare per chi vuole analizzare,
               creare nuove applicazioni o semplicemente scoprire qualcosa in più sul funzionamento della mobilità
@@ -151,11 +153,12 @@
             <li class="dropdown"><a href="stats/"><span>Statistiche</span> <i
                   class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
-                <li><a href="../stats/#parcheggi">parcheggi</a></li>
-                <li><a href="../stats/#ciclobox">ciclobox</a></li>
-                <li><a href="../stats/#stalli">stalli blu</a></li>
-                <li><a href="../funfacts/">curiosità</a></li>
-                <li><a href="../weeklystats/">report settimanale</a></li>
+                <li><a href="stats/#parcheggi">parcheggi</a></li>
+                <li><a href="stats/#ciclobox">ciclobox</a></li>
+                <li><a href="stats/#stalli">stalli blu</a></li>
+                <li><a href="funfacts/">curiosità</a></li>
+                <li><a href="forecast/">previsioni</a></li>
+                <li><a href="weeklystats/">report settimanale</a></li>
               </ul>
             </li>
 
@@ -227,7 +230,7 @@
               <h2>Parcheggi in struttura</h2>
               <p class="text-start small">La città di Trento tiene monitorata l'occupazione di <span
                   class="total_parks"></span> strutture di parcheggio</p>
-              <p class="text-start small">Situazione al giorno <span class='extractiontime'></span></p>
+              <p class="text-start small">Situazione al giorno <span class='extractiontime'></span> <span id="data-age" class="data-age"></span></p>
             </div>
           </div>
 
@@ -331,16 +334,16 @@
       </div>
 
       <!-- Vendor JS Files -->
-      <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="assets/vendor/aos/aos.js"></script>
-      <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-      <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-      <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-      <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+      <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js?v=2e477967"></script>
+      <script src="assets/vendor/aos/aos.js?v=aa20b6e0"></script>
+      <script src="assets/vendor/purecounter/purecounter_vanilla.js?v=306b61cc"></script>
+      <script src="assets/vendor/glightbox/js/glightbox.min.js?v=5ed34b33"></script>
+      <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js?v=919bcd36"></script>
+      <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js?v=2afcff64"></script>
+      <script src="assets/vendor/swiper/swiper-bundle.min.js?v=42fede71"></script>
       <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
       <!-- Main JS File -->
-      <script src="assets/js/main.js"></script>
+      <script src="assets/js/main.js?v=0015a24a"></script>
       <script>
         document.addEventListener('DOMContentLoaded', function () {
           var countdownElement = document.getElementById('countdown');
@@ -361,7 +364,8 @@
           }, 1000);
         });
       </script>
-      <script src="assets/js/parklogtrento_nozone.js"></script>
+      <script src="assets/js/parklogtrento_nozone.js?v=f1c56163"></script>
   </body>
 
 </html>
+
