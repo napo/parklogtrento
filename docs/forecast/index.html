@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Previsioni · parklogtrento</title>
+  <meta name="description" content="Previsioni sperimentali di occupazione dei parcheggi di Trento: parcheggi in struttura e ciclobox, con incertezza e valutazione dell'errore.">
+  <meta name="author" content="maurizio napolitano">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png" />
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css?v=a549af2a" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css?v=1d14ac40" rel="stylesheet">
+  <link href="../assets/css/main.css?v=c6e596e0" rel="stylesheet">
+  <link href="../assets/css/style.css?v=8917cbb2" rel="stylesheet">
+  <style>
+    .prev-main { padding-top: 90px; }
+    .prev-wrap { max-width: 1000px; margin: 0 auto; padding: 1rem 1rem 4rem; }
+    .prev-intro { max-width: 780px; margin: 0 auto 1.5rem; }
+    .prev-disclaimer { background: #fdf3e2; border: 1px solid #f0cd8f; color: #7a5312;
+      border-radius: 8px; padding: .8rem 1rem; font-size: .9rem; margin-bottom: 2.5rem; }
+    .prev-sez { margin-bottom: 3.5rem; scroll-margin-top: 90px; }
+    .prev-sez h2 { display: flex; align-items: center; gap: .5rem; font-size: 1.4rem; margin-bottom: .25rem; }
+    .prev-emessa { color: #777; font-size: .82rem; margin-bottom: .8rem; }
+    .prev-controls { display: flex; align-items: flex-end; gap: .8rem; margin: .5rem 0; flex-wrap: wrap; }
+    .prev-controls label { font-size: .72rem; color: #666; text-transform: uppercase; letter-spacing: .03em; display: block; margin-bottom: .25rem; }
+    .prev-controls select { border: 1px solid #ccc; border-radius: 6px; padding: .32rem .5rem; font-size: .88rem; max-width: 340px; }
+    .prev-info { font-size: .9rem; color: #444; background: #f7f8fa; border-radius: 8px; padding: .6rem .9rem; margin: .6rem 0; }
+    .prev-banda { color: #777; }
+    .prev-warn { color: #b02a17; font-weight: 600; }
+    .prev-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: 1.25rem; }
+    .prev-card h3 { font-size: 1rem; margin-bottom: .1rem; }
+    .prev-card .hint { color: #777; font-size: .82rem; margin-bottom: .6rem; }
+    .prev-chart { width: 100%; height: 340px; }
+    .prev-nota { font-size: .87rem; color: #555; }
+    .prev-tab { width: 100%; font-size: .85rem; border-collapse: collapse; margin-top: .5rem; }
+    .prev-tab th, .prev-tab td { padding: .35rem .5rem; border-bottom: 1px solid #eee; text-align: left; }
+    .prev-tab th { color: #666; font-weight: 600; font-size: .78rem; text-transform: uppercase; letter-spacing: .02em; }
+    .prev-tab td.ok { color: #1D9E75; font-weight: 600; }
+    .prev-tab td.ko { color: #E24B4A; font-weight: 600; }
+    .prev-status { color: #999; font-style: italic; }
+  </style>
+</head>
+
+<body class="index-page">
+  <div id="preloader" data-managed><div class="preloader-inner"><div class="preloader-spinner" role="status" aria-live="polite"></div><p class="preloader-message">Caricamento delle previsioni in corso…</p></div></div>
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+      <a href="../" class="logo d-flex align-items-center me-auto me-xl-0"><h1 class="sitename">ParkLogTrento</h1></a>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="../">Home</a></li>
+          <li class="dropdown"><a href="#"><span>Statistiche</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="../stats/#parcheggi">parcheggi</a></li>
+              <li><a href="../stats/#ciclobox">ciclobox</a></li>
+              <li><a href="../stats/#stalli">stalli blu</a></li>
+              <li><a href="../funfacts/">curiosità</a></li>
+              <li><a href="./" class="active">previsioni</a></li>
+              <li><a href="../weeklystats/">report settimanale</a></li>
+            </ul>
+          </li>
+          <li><a href="../info/">Info</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main prev-main">
+    <div class="prev-wrap">
+      <div class="prev-intro text-center">
+        <h1>Previsioni</h1>
+        <p class="text-muted">Quanto saranno occupati i parcheggi nelle prossime 48 ore, con l'incertezza della stima
+          e la misura di quanto ci si azzecca davvero.</p>
+      </div>
+
+      <p class="prev-disclaimer">⚠️ <strong>Previsione sperimentale e non ufficiale.</strong> I dati sui parcheggi
+        vengono dal Comune di Trento; la previsione no, è calcolata da questo progetto e può sbagliare. Guarda sempre
+        la fascia di incertezza e l'errore tipico del parcheggio prima di fidarti: non prendere un treno sulla base di
+        questi numeri. Gli <strong>stalli blu non vengono previsti</strong>: la raccolta di quei dati si è interrotta
+        il 28 aprile 2025 e prevederli sarebbe inventare.</p>
+
+      <!-- PARCHEGGI -->
+      <section class="prev-sez" id="parcheggi">
+        <h2><span class="dash-badge parcheggi">auto</span> <span data-role="label">Parcheggi in struttura</span></h2>
+        <p class="prev-emessa" data-role="emessa"></p>
+        <p class="prev-status" data-role="status">Caricamento…</p>
+        <div class="prev-controls">
+          <div><label>Parcheggio</label><select data-role="select"></select></div>
+        </div>
+        <p class="prev-info" data-role="info"></p>
+        <div class="prev-card">
+          <h3>Prossime 48 ore</h3>
+          <p class="hint">La linea è la stima, l'area attorno è l'incertezza (l'errore tipico del parcheggio)</p>
+          <div class="prev-chart" data-role="chart"></div>
+        </div>
+        <div class="prev-card">
+          <h3>Quanto ci azzecchiamo</h3>
+          <p class="hint">Le previsioni emesse nei giorni scorsi, confrontate con quello che è poi successo</p>
+          <div data-role="valutazione"></div>
+        </div>
+      </section>
+
+      <!-- CICLOBOX -->
+      <section class="prev-sez" id="ciclobox">
+        <h2><span class="dash-badge ciclobox">bici</span> <span data-role="label">Parcheggi ciclobox</span></h2>
+        <p class="prev-emessa" data-role="emessa"></p>
+        <p class="prev-status" data-role="status">Caricamento…</p>
+        <div class="prev-controls">
+          <div><label>Ciclobox</label><select data-role="select"></select></div>
+        </div>
+        <p class="prev-info" data-role="info"></p>
+        <div class="prev-card">
+          <h3>Prossime 48 ore</h3>
+          <p class="hint">La linea è la stima, l'area attorno è l'incertezza (l'errore tipico del ciclobox)</p>
+          <div class="prev-chart" data-role="chart"></div>
+        </div>
+        <div class="prev-card">
+          <h3>Quanto ci azzecchiamo</h3>
+          <p class="hint">Le previsioni emesse nei giorni scorsi, confrontate con quello che è poi successo</p>
+          <div data-role="valutazione"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+    <div class="container copyright text-center mt-4">
+      <p>origine dati: <a href="https://parcheggi.comune.trento.it/">https://parcheggi.comune.trento.it/</a></p>
+      <div class="credits">un progetto di @napo<br />template html <a href="https://bootstrapmade.com/">BootstrapMade</a></div>
+    </div>
+  </footer>
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js?v=2e477967"></script>
+  <script src="../assets/js/main.js?v=0015a24a"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script src="../assets/js/forecast.js?v=ec285daa"></script>
+</body>
+</html>
