@@ -1,9 +1,20 @@
 name: scrape data
 
+# Il cron di GitHub e' "best effort": misurato sui dati reali, i run schedulati
+# ogni 5 minuti venivano in realta' eseguiti ogni ~21 minuti (mediana), con
+# buchi oltre l'ora nel 9% dei casi. Per avere davvero una rilevazione ogni 5
+# minuti non ci si puo' affidare al cron: si avvia UN run all'ora e dentro al
+# run si cicla, aspettando 300 secondi fra una lettura e l'altra. Il ritmo lo
+# detta il runner, non lo scheduler di GitHub.
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "3 * * * *"   # una volta all'ora: dentro il run si fanno 12 letture
   workflow_dispatch:
+
+# Evita che due cicli si sovrappongano (il nuovo aspetta la fine del vecchio)
+concurrency:
+  group: scrape-loop
+  cancel-in-progress: false
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -11,27 +22,67 @@ env:
 jobs:
   scrape-latest:
     runs-on: ubuntu-latest
+    timeout-minutes: 75   # il ciclo dura ~60 min, il margine copre setup e push
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          lfs: true
-      - name: Pull LFS files
-        run: git lfs pull
+          fetch-depth: 1   # niente storia: il repo e' grosso, serve solo l'ultimo stato
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+          cache: 'pip'     # le dipendenze pesano ~135 MB: con la cache si scaricano una volta
+
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: run scrape 
-        run: python scrape.py
-      - name: Commit and push if it changed
-        run: |-
+
+      - name: Rileva ogni 5 minuti per un'ora
+        run: |
+          set -uo pipefail
           git config user.name "napo"
           git config user.email "napo@fbk.eu"
-          git add -A
-          timestamp=$(date -u)
-          git commit -m "Latest data: ${timestamp}" || exit 0
-          git push
+
+          LETTURE=12          # 12 letture x 5 minuti = 60 minuti
+          INTERVALLO=300      # secondi fra una lettura e l'altra
+          OGNI=6              # ogni quante letture si fa commit+push (6 = 30 min)
+
+          salva() {
+            git add -A
+            if git diff --cached --quiet; then
+              echo "  (nessuna modifica da salvare)"
+              return 0
+            fi
+            git commit -q -m "Latest data: $(date -u)"
+            for tentativo in 1 2 3; do
+              if git pull --rebase --autostash -q && git push -q; then
+                echo "  salvato e pubblicato"
+                return 0
+              fi
+              # se il rebase si impianta (il parquet e' binario) si riparte pulito:
+              # le letture perse verranno riprese al giro successivo
+              git rebase --abort 2>/dev/null || true
+              sleep 5
+            done
+            echo "  ATTENZIONE: push non riuscito, si riprova al prossimo salvataggio"
+            return 0
+          }
+
+          for i in $(seq 1 $LETTURE); do
+            inizio=$(date +%s)
+            echo "[$(date -u +%H:%M:%S)] lettura $i/$LETTURE"
+            python scrape.py || echo "  lettura $i fallita, si prosegue"
+
+            if [ $((i % OGNI)) -eq 0 ]; then salva; fi
+
+            if [ "$i" -lt "$LETTURE" ]; then
+              # attesa corretta per il tempo gia' speso: il passo resta di 5 minuti esatti
+              trascorso=$(( $(date +%s) - inizio ))
+              attesa=$(( INTERVALLO - trascorso ))
+              [ "$attesa" -gt 0 ] && sleep "$attesa"
+            fi
+          done
+
+          salva
