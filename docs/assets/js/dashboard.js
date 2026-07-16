@@ -59,12 +59,32 @@ function hoursInBand(flt) { const out = []; for (let h = flt.hFrom; h <= flt.hTo
 function itLabelDate(d) { return d.getUTCDate() + ' ' + MO_FULL[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
 function itIso(iso) { const [y,m,d]=iso.split('-').map(Number); return d + ' ' + MO_FULL[m-1] + ' ' + y; }
 
-function fillSelect(sel, structures, withAll) {
+// I valori delle opzioni sono SEMPRE gli indici della lista completa
+// (R.data.structures): sono stabili anche quando l'elenco mostrato si riduce
+// per via del filtro sulla regola di sosta.
+function fillSelect(sel, structures, withAll, ammesse) {
   sel.innerHTML = '';
   if (withAll) { const o = document.createElement('option'); o.value = '__all__'; o.textContent = 'Totale'; sel.appendChild(o); }
-  structures.map((s, i) => ({ i, name: s.name }))
+  structures.map((s, i) => ({ i, s: s, name: s.name }))
+    .filter(({ s }) => !ammesse || ammesse.indexOf(s) !== -1)
     .sort((a, b) => a.name.localeCompare(b.name, 'it'))
     .forEach(({ i, name }) => { const o = document.createElement('option'); o.value = String(i); o.textContent = name; sel.appendChild(o); });
+}
+
+// Quando cambia il filtro sulla regola, le tendine devono elencare solo i
+// parcheggi che lo rispettano. Se quello selezionato non c'e' piu', si torna
+// al Totale invece di mostrare il parcheggio sbagliato.
+function aggiornaTendine(R) {
+  const ammesse = structsFiltrate(R);
+  const prec = R.select.value;
+  fillSelect(R.select, R.data.structures, true, ammesse);
+  R.select.value = [].some.call(R.select.options, o => o.value === prec) ? prec : '__all__';
+  if (R.select2) {
+    const prec2 = R.select2.value;
+    fillSelect(R.select2, R.data.structures, false, ammesse);
+    if ([].some.call(R.select2.options, o => o.value === prec2)) R.select2.value = prec2;
+    else if (R.select2.options.length) R.select2.value = R.select2.options[0].value;
+  }
 }
 
 function prepare(cfg, data, section) {
@@ -178,7 +198,11 @@ function setupBlockFilter(R) {
   const regole = (R.data.meta && R.data.meta.regolamenti) || [];
   if (regBox && regole.length > 1) {
     if (regWrap) regWrap.style.display = '';
-    regole.forEach(r => regBox.appendChild(makeChip(r, () => { toggle(flt.regole, r); rerender(); })));
+    regole.forEach(r => regBox.appendChild(makeChip(r, () => {
+      toggle(flt.regole, r);
+      aggiornaTendine(R);   // le tendine devono seguire il filtro
+      rerender();
+    })));
   } else if (regWrap) {
     regWrap.style.display = 'none';
   }
@@ -189,6 +213,7 @@ function setupBlockFilter(R) {
     if (fromEl) fromEl.value = iso(min); if (toEl) toEl.value = iso(max);
     if (hFrom) hFrom.value = '0'; if (hTo) hTo.value = '23';
     section.querySelectorAll('.flt-chip.active').forEach(c => c.classList.remove('active'));
+    aggiornaTendine(R);
     rerender();
   });
 }
@@ -264,16 +289,22 @@ function structsFiltrate(R) {
 }
 
 function seriesForMode(R) {
-  const structs = structsFiltrate(R), val = R.select.value;
+  const ammesse = structsFiltrate(R);        // per il Totale e per "ognuno per se'"
+  const tutte = R.data.structures;           // per risolvere gli indici delle tendine
+  const val = R.select.value;
   const modeVal = R.mode ? R.mode.value : 'single';
   if (val === '__all__') {
-    if (modeVal === 'tutti') return structs.map(s => ({ name: s.name, list: [s] }));
-    return [{ name: 'Totale della categoria', list: structs }];
+    if (modeVal === 'tutti') return ammesse.map(s => ({ name: s.name, list: [s] }));
+    return [{ name: 'Totale della categoria', list: ammesse }];
   }
-  const primary = structs[Number(val)];
-  if (modeVal === 'media') return [{ name: primary.name, list: [primary] }, { name: 'Totale della categoria', list: structs }];
-  if (modeVal === 'due') { const b = structs[Number(R.select2.value)]; return [{ name: primary.name, list: [primary] }, { name: b.name, list: [b] }]; }
-  if (modeVal === 'tutti') return structs.map(s => ({ name: s.name, list: [s] }));
+  const primary = tutte[Number(val)];
+  if (!primary) return [{ name: 'Totale della categoria', list: ammesse }];
+  if (modeVal === 'media') return [{ name: primary.name, list: [primary] }, { name: 'Totale della categoria', list: ammesse }];
+  if (modeVal === 'due') {
+    const b = tutte[Number(R.select2.value)];
+    if (b) return [{ name: primary.name, list: [primary] }, { name: b.name, list: [b] }];
+  }
+  if (modeVal === 'tutti') return ammesse.map(s => ({ name: s.name, list: [s] }));
   return [{ name: primary.name, list: [primary] }];
 }
 
