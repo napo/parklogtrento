@@ -95,10 +95,14 @@ function render() {
   });
 }
 
+// Data nel formato breve italiano: "ven 17 lug 26"
 function itDate(iso) {
-  const M = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+  const WD = ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];
+  const MO = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
   const [y, m, d] = iso.split('-').map(Number);
-  return d + ' ' + M[m - 1] + ' ' + y;
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return WD[(dt.getUTCDay() + 6) % 7] + ' ' + String(d).padStart(2, '0') + ' ' +
+    MO[m - 1] + ' ' + String(y % 100).padStart(2, '0');
 }
 
 window.addEventListener('load', boot);

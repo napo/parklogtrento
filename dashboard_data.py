@@ -110,6 +110,18 @@ def uniforma_nomi(df, tcol):
     return d
 
 
+WEEKDAYS_BREVI = ["lun", "mar", "mer", "gio", "ven", "sab", "dom"]
+MONTHS_BREVI = ["", "gen", "feb", "mar", "apr", "mag", "giu",
+                "lug", "ago", "set", "ott", "nov", "dic"]
+
+
+def data_breve(ts):
+    """Data nel formato breve italiano: 'ven 17 lug 26'."""
+    ts = pd.Timestamp(ts)
+    return (f"{WEEKDAYS_BREVI[ts.dayofweek]} {ts.day:02d} "
+            f"{MONTHS_BREVI[ts.month]} {ts.year % 100:02d}")
+
+
 def date_it(ts):
     return f"{ts.day} {MONTHS_IT[ts.month]} {ts.year}"
 
@@ -247,8 +259,8 @@ def process_zones(zones):
     df = df[df["ts"].notna()]
     df = uniforma_nomi(df, "ts")
     ps, pe = df["ts"].min(), df["ts"].max()
-    note = ("Dati storici non più aggiornati. Periodo coperto: dall'"
-            + date_it(ps) + " al " + date_it(pe) + ".")
+    note = ("Dati storici non più aggiornati. Periodo coperto: da "
+            + data_breve(ps) + " a " + data_breve(pe) + ".")
 
     def extra(g_all):
         return {
@@ -298,7 +310,7 @@ def calendar_periods(ref):
     periods = {}
     periods["globale"] = (None, None, "Tutto lo storico")
     # ieri = ultimo giorno con dati
-    periods["ieri"] = (ref, ref.replace(hour=23, minute=59, second=59), date_it(ref))
+    periods["ieri"] = (ref, ref.replace(hour=23, minute=59, second=59), data_breve(ref))
     # anno scorso
     y = ref.year - 1
     periods["anno"] = (pd.Timestamp(y, 1, 1), pd.Timestamp(y, 12, 31, 23, 59, 59), str(y))
@@ -313,11 +325,7 @@ def calendar_periods(ref):
     monday_this_week = ref - pd.Timedelta(days=ref.weekday())
     prev_monday = monday_this_week - pd.Timedelta(days=7)
     prev_sunday = prev_monday + pd.Timedelta(days=6)
-    lbl = f"Settimana {prev_monday.day} {MONTHS_IT[prev_monday.month]}"
-    if prev_monday.month != prev_sunday.month:
-        lbl += f" – {prev_sunday.day} {MONTHS_IT[prev_sunday.month]} {prev_sunday.year}"
-    else:
-        lbl += f"–{prev_sunday.day} {MONTHS_IT[prev_sunday.month]} {prev_sunday.year}"
+    lbl = f"{data_breve(prev_monday)} – {data_breve(prev_sunday)}"
     periods["settimana"] = (prev_monday.normalize(),
                             prev_sunday.replace(hour=23, minute=59, second=59), lbl)
     return periods
@@ -351,7 +359,7 @@ def _facts_for(d, free_col):
     tcol = "ts"
     peak_ts = pd.to_datetime(peak[tcol])
     facts.append({"label": "Picco assoluto", "value": f"{peak['occ']:.0f}% · {peak['name']}",
-                  "detail": f"il {peak_ts.day} {MONTHS_IT[peak_ts.month]} {peak_ts.year} alle {peak_ts.hour}:{peak_ts.minute:02d}"})
+                  "detail": f"{data_breve(peak_ts)} alle {peak_ts.hour}:{peak_ts.minute:02d}"})
 
     full = d[pd.to_numeric(d[free_col], errors="coerce") == 0]
     if len(full):
