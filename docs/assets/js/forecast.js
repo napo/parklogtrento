@@ -14,8 +14,8 @@ const CATEGORIE = [
   { key: 'parcheggi', file: '../data/forecast_parcheggi.json', color: '#185FA5' },
   { key: 'ciclobox', file: '../data/forecast_ciclobox.json', color: '#0F6E56' }
 ];
-const MO_FULL = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno',
-  'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const WD_BREVI = ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];
+const MO_BREVI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
 
 const grafici = [];
 const reg = {};
@@ -49,9 +49,11 @@ async function boot() {
   }
 }
 
+// Data nel formato breve italiano: "ven 17 lug 26"
 function dataIt(iso) {
   const d = new Date(iso);
-  return d.getDate() + ' ' + MO_FULL[d.getMonth()];
+  return WD_BREVI[(d.getDay() + 6) % 7] + ' ' + String(d.getDate()).padStart(2, '0') + ' ' +
+    MO_BREVI[d.getMonth()] + ' ' + String(d.getFullYear() % 100).padStart(2, '0');
 }
 
 function prepara(cfg, dati, sez) {
@@ -60,7 +62,7 @@ function prepara(cfg, dati, sez) {
   if (st) st.style.display = 'none';
 
   sez.querySelector('[data-role="emessa"]').textContent =
-    'Ultimo dato: ' + dati.meta.ultimo_dato.replace('T', ' ore ') +
+    'Ultimo dato: ' + dataIt(dati.meta.ultimo_dato) + ' ore ' + dati.meta.ultimo_dato.slice(11, 16) +
     ' · previsione fino a ' + dati.meta.orizzonte_ore + " ore avanti · modello: " + dati.meta.modello;
 
   const sel = sez.querySelector('[data-role="select"]');
@@ -105,7 +107,7 @@ function disegna(key) {
       trigger: 'axis',
       formatter: ps => {
         const i = ps[0].dataIndex, p = s.punti[i];
-        return p.ts.replace('T', ' ore ') + '<br/><strong>' + p.occ + '%</strong> occupato' +
+        return dataIt(p.ts) + ' ore ' + p.ts.slice(11, 16) + '<br/><strong>' + p.occ + '%</strong> occupato' +
           (p.liberi !== null ? ' (~' + p.liberi + ' posti liberi)' : '') +
           '<br/>probabile fra ' + p.min + '% e ' + p.max + '%';
       }
@@ -113,7 +115,14 @@ function disegna(key) {
     grid: { top: 30, bottom: 60, left: 45, right: 15 },
     xAxis: {
       type: 'category', data: asse, boundaryGap: false,
-      axisLabel: { fontSize: 10, interval: 5, formatter: v => v.slice(5, 10) + '\n' + v.slice(11, 16) }
+      axisLabel: {
+        fontSize: 10, interval: 5,
+        formatter: v => {
+          const d = new Date(v);
+          return WD_BREVI[(d.getDay() + 6) % 7] + ' ' + String(d.getDate()).padStart(2, '0') + ' ' +
+            MO_BREVI[d.getMonth()] + '\n' + v.slice(11, 16);
+        }
+      }
     },
     yAxis: { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
     series: [

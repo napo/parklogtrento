@@ -23,7 +23,8 @@ const CATEGORIES = [
 
 const WD = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
 const MO = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
-const MO_FULL = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
+const WD_BREVI = ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'];   // 0 = lunedi
+const MO_BREVI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
 const PALETTE = ['#185FA5', '#E24B4A', '#0F6E56', '#EF9F27', '#7F77DD', '#993C1D', '#2AA9A0', '#B0568A'];
 
 const registry = {};
@@ -56,8 +57,16 @@ async function boot() {
 
 function parseDate(iso) { const [y, m, d] = iso.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)); }
 function hoursInBand(flt) { const out = []; for (let h = flt.hFrom; h <= flt.hTo; h++) out.push(h); return out; }
-function itLabelDate(d) { return d.getUTCDate() + ' ' + MO_FULL[d.getUTCMonth()] + ' ' + d.getUTCFullYear(); }
-function itIso(iso) { const [y,m,d]=iso.split('-').map(Number); return d + ' ' + MO_FULL[m-1] + ' ' + y; }
+// Data nel formato breve italiano: "ven 17 lug 26"
+function itLabelDate(d) {
+  const dow = (d.getUTCDay() + 6) % 7;
+  return WD_BREVI[dow] + ' ' + String(d.getUTCDate()).padStart(2, '0') + ' ' +
+    MO_BREVI[d.getUTCMonth()] + ' ' + String(d.getUTCFullYear() % 100).padStart(2, '0');
+}
+function itIso(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return itLabelDate(new Date(Date.UTC(y, m - 1, d)));
+}
 
 // I valori delle opzioni sono SEMPRE gli indici della lista completa
 // (R.data.structures): sono stabili anche quando l'elenco mostrato si riduce
@@ -411,15 +420,27 @@ function drawTrend(chart, series, assoluto) {
   chart.setOption({
     tooltip: {
       trigger: 'axis',
-      formatter: assoluto ? (ps => {
+      formatter: (ps => {
+        const g = itIso(String(ps[0].data[0]).slice(0, 10));
         const v = ps[0].data[1];
-        return ps[0].axisValueLabel.slice(0, 10) + '<br/><strong>' + v + ' posti occupati</strong> su ' +
-          posti + ' (' + Math.round(100 * v / posti) + '%)';
-      }) : undefined
+        return assoluto
+          ? g + '<br/><strong>' + v + ' posti occupati</strong> su ' + posti + ' (' + Math.round(100 * v / posti) + '%)'
+          : g + '<br/><strong>' + v + '%</strong> occupato';
+      })
     },
     legend: series.length > 1 ? { top: 0, type: 'scroll', textStyle: { fontSize: 10 } } : undefined,
     grid: { top: series.length > 1 ? 32 : 15, bottom: 30, left: 55, right: 15 },
-    xAxis: { type: 'time', axisLabel: { fontSize: 10 } },
+    xAxis: {
+      type: 'time',
+      axisLabel: {
+        fontSize: 10,
+        formatter: v => {
+          const d = new Date(v);
+          return String(d.getUTCDate()).padStart(2, '0') + ' ' + MO_BREVI[d.getUTCMonth()] +
+            '\n' + String(d.getUTCFullYear() % 100).padStart(2, '0');
+        }
+      }
+    },
     yAxis: assoluto
       ? { type: 'value', min: 0, max: posti, name: 'posti occupati', nameTextStyle: { fontSize: 10 }, axisLabel: { fontSize: 10 } }
       : { type: 'value', min: 0, max: 100, axisLabel: { formatter: '{value}%' } },
