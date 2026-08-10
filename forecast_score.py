@@ -22,7 +22,8 @@ import glob
 import numpy as np
 import pandas as pd
 
-PARKS_PARQUET = "data" + os.sep + "parks.geoparquet"
+import parks_history
+
 DEST = "docs" + os.sep + "data" + os.sep
 ARCHIVIO = DEST + "forecast_archive" + os.sep
 
@@ -134,7 +135,7 @@ def main():
     if not os.path.isdir(ARCHIVIO):
         print("archivio delle previsioni assente: niente da valutare")
         return
-    parks = pd.read_parquet(PARKS_PARQUET)
+    parks = parks_history.load_parks_history()
     out = {"categorie": []}
     for categoria in ["parcheggi", "ciclobox"]:   # gli stalli non si prevedono, quindi non si valutano
         r = valuta(parks, categoria)

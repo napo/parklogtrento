@@ -31,7 +31,8 @@ import json
 import numpy as np
 import pandas as pd
 
-PARKS_PARQUET = "data" + os.sep + "parks.geoparquet"
+import parks_history
+
 DEST = "docs" + os.sep + "data" + os.sep
 ARCHIVIO = DEST + "forecast_archive" + os.sep
 
@@ -165,7 +166,7 @@ def prevedi_categoria(parks, tipo, label):
 
 
 def main():
-    parks = pd.read_parquet(PARKS_PARQUET)
+    parks = parks_history.load_parks_history()
     os.makedirs(ARCHIVIO, exist_ok=True)
 
     for cfg in CATEGORIE:

@@ -6,7 +6,9 @@ import os
 import geopandas as gpd
 import requests
 import json
-PARKS_GEOPARQUET = "data" + os.sep + "parks.geoparquet"
+
+import parks_history
+
 ZONES_GEOPARQUET = "data" + os.sep + "zones.geoparquet"
 # Salvataggio dei file JSON
 DEST = "docs" + os.sep + "weeklystats" + os.sep + "data" + os.sep
@@ -15,7 +17,7 @@ if not os.path.exists(DEST):
 WEEKDAY_ORDER = ["lunedì", "martedì", "mercoledì", 
                  "giovedì", "venerdì", "sabato", 
                  "domenica"]
-parks = gpd.read_parquet(PARKS_GEOPARQUET)
+parks = parks_history.load_parks_history()
 zones = gpd.read_parquet(ZONES_GEOPARQUET)
 def fill_data(df_originale, tolleranza_minuti=5, limit_fill=1, timezone="Europe/Rome"):
     df = df_originale.copy()

@@ -27,7 +27,8 @@ import os
 import json
 import pandas as pd
 
-PARKS_PARQUET = "data" + os.sep + "parks.geoparquet"
+import parks_history
+
 ZONES_PARQUET = "data" + os.sep + "zones.geoparquet"
 DEST = "docs" + os.sep + "data" + os.sep
 
@@ -435,7 +436,7 @@ def build_curiosita(parks, zones):
 
 
 def main():
-    parks = pd.read_parquet(PARKS_PARQUET)
+    parks = parks_history.load_parks_history()
     zones = pd.read_parquet(ZONES_PARQUET)
     out = {
         "dashboard_struttura.json": process_parks(parks, "park", "Parcheggi in struttura", "struttura"),
