@@ -664,13 +664,13 @@
         "percentuale_media": 43.9
       },
       {
-        "media": 198.2,
+        "media": 199.0,
         "min": 158,
         "max": 226,
-        "percentuale_media": 44.6
+        "percentuale_media": 44.8
       },
       {
-        "media": 197.6,
+        "media": 197.7,
         "min": 162,
         "max": 226,
         "percentuale_media": 44.5
@@ -694,13 +694,13 @@
         "percentuale_media": 45.1
       },
       {
-        "media": 200.2,
+        "media": 201.3,
         "min": 168,
-        "max": 224,
-        "percentuale_media": 45.1
+        "max": 225,
+        "percentuale_media": 45.3
       },
       {
-        "media": 201.1,
+        "media": 201.3,
         "min": 169,
         "max": 226,
         "percentuale_media": 45.3
@@ -712,16 +712,16 @@
         "percentuale_media": 45.4
       },
       {
-        "media": 201.8,
+        "media": 202.4,
         "min": 170,
         "max": 227,
-        "percentuale_media": 45.4
+        "percentuale_media": 45.6
       },
       {
-        "media": 202.7,
+        "media": 203.2,
         "min": 170,
         "max": 228,
-        "percentuale_media": 45.6
+        "percentuale_media": 45.8
       },
       {
         "media": 201.2,
@@ -732,28 +732,28 @@
     ],
     "Saturday": [
       {
+        "media": 203.3,
+        "min": 170,
+        "max": 226,
+        "percentuale_media": 45.8
+      },
+      {
         "media": 202.5,
         "min": 170,
         "max": 226,
         "percentuale_media": 45.6
       },
       {
-        "media": 202.2,
-        "min": 170,
-        "max": 226,
-        "percentuale_media": 45.5
-      },
-      {
-        "media": 205.2,
+        "media": 206.1,
         "min": 188,
         "max": 225,
-        "percentuale_media": 46.2
+        "percentuale_media": 46.4
       },
       {
-        "media": 200.4,
+        "media": 203.1,
         "min": 177,
-        "max": 223,
-        "percentuale_media": 45.1
+        "max": 224,
+        "percentuale_media": 45.7
       },
       {
         "media": 204.5,
