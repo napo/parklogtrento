@@ -2,28 +2,28 @@
   "Totale ciclobox": {
     "Monday": [
       {
-        "media": 203.3,
+        "media": 203.7,
         "min": 175,
         "max": 227,
-        "percentuale_media": 45.8
+        "percentuale_media": 45.9
       },
       {
-        "media": 202.0,
+        "media": 202.3,
         "min": 175,
         "max": 226,
-        "percentuale_media": 45.5
+        "percentuale_media": 45.6
       },
       {
-        "media": 205.4,
+        "media": 205.6,
         "min": 189,
         "max": 226,
         "percentuale_media": 46.3
       },
       {
-        "media": 206.2,
+        "media": 207.6,
         "min": 188,
         "max": 226,
-        "percentuale_media": 46.4
+        "percentuale_media": 46.8
       },
       {
         "media": 202.0,
@@ -956,16 +956,16 @@
         "percentuale_media": 45.4
       },
       {
-        "media": 200.9,
+        "media": 201.3,
         "min": 174,
         "max": 227,
-        "percentuale_media": 45.2
+        "percentuale_media": 45.3
       },
       {
-        "media": 203.4,
+        "media": 204.1,
         "min": 175,
         "max": 226,
-        "percentuale_media": 45.8
+        "percentuale_media": 46.0
       },
       {
         "media": 202.9,
@@ -986,13 +986,13 @@
         "percentuale_media": 45.5
       },
       {
-        "media": 202.6,
+        "media": 203.4,
         "min": 174,
         "max": 230,
-        "percentuale_media": 45.6
+        "percentuale_media": 45.8
       },
       {
-        "media": 203.1,
+        "media": 203.2,
         "min": 174,
         "max": 230,
         "percentuale_media": 45.8
@@ -1004,16 +1004,16 @@
         "percentuale_media": 45.4
       },
       {
-        "media": 202.6,
+        "media": 203.0,
+        "min": 175,
+        "max": 226,
+        "percentuale_media": 45.7
+      },
+      {
+        "media": 202.4,
         "min": 175,
         "max": 226,
         "percentuale_media": 45.6
-      },
-      {
-        "media": 202.2,
-        "min": 175,
-        "max": 226,
-        "percentuale_media": 45.5
       },
       {
         "media": 201.8,
