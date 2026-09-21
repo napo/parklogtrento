@@ -2,28 +2,28 @@
   "Garage Autosilo Buonconsiglio - P3": {
     "Monday": [
       {
-        "media": 55.8,
+        "media": 55.3,
         "min": 14,
         "max": 128,
-        "percentuale_media": 29.7
+        "percentuale_media": 29.4
       },
       {
-        "media": 48.4,
+        "media": 48.2,
         "min": 13,
         "max": 106,
-        "percentuale_media": 25.8
+        "percentuale_media": 25.7
       },
       {
-        "media": 55.7,
+        "media": 54.9,
         "min": 12,
         "max": 122,
-        "percentuale_media": 29.6
+        "percentuale_media": 29.2
       },
       {
-        "media": 57.6,
+        "media": 54.9,
         "min": 20,
         "max": 187,
-        "percentuale_media": 30.6
+        "percentuale_media": 29.2
       },
       {
         "media": 49.8,
@@ -962,16 +962,16 @@
         "percentuale_media": 47.6
       },
       {
-        "media": 101.6,
+        "media": 99.5,
         "min": 27,
         "max": 188,
-        "percentuale_media": 54.1
+        "percentuale_media": 52.9
       },
       {
-        "media": 95.1,
+        "media": 95.0,
         "min": 20,
         "max": 188,
-        "percentuale_media": 50.6
+        "percentuale_media": 50.5
       },
       {
         "media": 104.3,
@@ -986,16 +986,16 @@
         "percentuale_media": 49.8
       },
       {
-        "media": 95.3,
+        "media": 94.6,
         "min": 27,
         "max": 188,
-        "percentuale_media": 50.7
+        "percentuale_media": 50.3
       },
       {
-        "media": 88.9,
+        "media": 87.8,
         "min": 27,
         "max": 188,
-        "percentuale_media": 47.3
+        "percentuale_media": 46.7
       },
       {
         "media": 89.4,
@@ -1004,16 +1004,16 @@
         "percentuale_media": 47.6
       },
       {
-        "media": 76.0,
+        "media": 75.2,
         "min": 26,
         "max": 174,
-        "percentuale_media": 40.4
+        "percentuale_media": 40.0
       },
       {
-        "media": 68.1,
+        "media": 67.7,
         "min": 24,
         "max": 160,
-        "percentuale_media": 36.2
+        "percentuale_media": 36.0
       },
       {
         "media": 58.2,
@@ -1026,28 +1026,28 @@
   "Garage Centro Europa - P2": {
     "Monday": [
       {
-        "media": 119.6,
+        "media": 117.3,
         "min": 0,
         "max": 234,
-        "percentuale_media": 41.1
+        "percentuale_media": 40.7
       },
       {
-        "media": 155.9,
+        "media": 153.6,
         "min": 0,
         "max": 234,
-        "percentuale_media": 49.0
+        "percentuale_media": 48.6
       },
       {
-        "media": 96.7,
+        "media": 94.3,
         "min": 0,
         "max": 226,
-        "percentuale_media": 37.5
+        "percentuale_media": 37.1
       },
       {
-        "media": 82.0,
+        "media": 78.2,
         "min": 0,
         "max": 226,
-        "percentuale_media": 32.5
+        "percentuale_media": 32.3
       },
       {
         "media": 135.2,
@@ -1986,16 +1986,16 @@
         "percentuale_media": 47.9
       },
       {
-        "media": 110.6,
+        "media": 105.8,
         "min": 0,
         "max": 233,
-        "percentuale_media": 41.1
+        "percentuale_media": 40.2
       },
       {
-        "media": 129.8,
+        "media": 129.1,
         "min": 0,
         "max": 247,
-        "percentuale_media": 45.4
+        "percentuale_media": 45.2
       },
       {
         "media": 130.0,
@@ -2010,16 +2010,16 @@
         "percentuale_media": 44.8
       },
       {
-        "media": 107.8,
+        "media": 106.7,
         "min": 0,
         "max": 234,
-        "percentuale_media": 37.3
+        "percentuale_media": 37.2
       },
       {
-        "media": 134.1,
+        "media": 130.7,
         "min": 0,
         "max": 234,
-        "percentuale_media": 45.2
+        "percentuale_media": 44.6
       },
       {
         "media": 114.8,
@@ -2028,16 +2028,16 @@
         "percentuale_media": 40.4
       },
       {
-        "media": 121.9,
+        "media": 119.4,
         "min": 0,
         "max": 234,
-        "percentuale_media": 41.6
+        "percentuale_media": 41.2
       },
       {
-        "media": 120.7,
+        "media": 119.6,
         "min": 0,
         "max": 234,
-        "percentuale_media": 40.6
+        "percentuale_media": 40.5
       },
       {
         "media": 129.2,
@@ -2050,28 +2050,28 @@
   "Garage Parcheggio Duomo - P5": {
     "Monday": [
       {
-        "media": 34.6,
+        "media": 34.0,
         "min": 0,
         "max": 119,
-        "percentuale_media": 29.1
-      },
-      {
-        "media": 38.5,
-        "min": 2,
-        "max": 119,
-        "percentuale_media": 32.4
-      },
-      {
-        "media": 38.6,
-        "min": 0,
-        "max": 119,
-        "percentuale_media": 32.4
+        "percentuale_media": 28.6
       },
       {
         "media": 38.2,
-        "min": 0,
+        "min": 2,
         "max": 119,
         "percentuale_media": 32.1
+      },
+      {
+        "media": 38.0,
+        "min": 0,
+        "max": 119,
+        "percentuale_media": 32.0
+      },
+      {
+        "media": 35.2,
+        "min": 0,
+        "max": 119,
+        "percentuale_media": 29.6
       },
       {
         "media": 38.9,
@@ -3010,16 +3010,16 @@
         "percentuale_media": 41.5
       },
       {
-        "media": 57.1,
+        "media": 55.1,
         "min": 5,
         "max": 119,
-        "percentuale_media": 48.0
+        "percentuale_media": 46.3
       },
       {
-        "media": 49.9,
+        "media": 49.7,
         "min": 4,
         "max": 119,
-        "percentuale_media": 41.9
+        "percentuale_media": 41.8
       },
       {
         "media": 51.6,
@@ -3034,16 +3034,16 @@
         "percentuale_media": 39.2
       },
       {
-        "media": 45.3,
+        "media": 44.8,
         "min": 0,
         "max": 119,
-        "percentuale_media": 38.1
+        "percentuale_media": 37.7
       },
       {
-        "media": 41.1,
+        "media": 40.4,
         "min": 0,
         "max": 119,
-        "percentuale_media": 34.5
+        "percentuale_media": 33.9
       },
       {
         "media": 38.7,
@@ -3052,16 +3052,16 @@
         "percentuale_media": 32.5
       },
       {
-        "media": 39.7,
+        "media": 39.0,
         "min": 0,
         "max": 119,
-        "percentuale_media": 33.4
+        "percentuale_media": 32.8
       },
       {
-        "media": 36.6,
+        "media": 36.3,
         "min": 0,
         "max": 119,
-        "percentuale_media": 30.8
+        "percentuale_media": 30.5
       },
       {
         "media": 35.6,
@@ -3074,28 +3074,28 @@
   "Garage piazza Fiera - P4": {
     "Monday": [
       {
-        "media": 115.0,
+        "media": 114.3,
         "min": 0,
         "max": 208,
-        "percentuale_media": 25.7
+        "percentuale_media": 25.5
       },
       {
-        "media": 116.4,
+        "media": 116.0,
         "min": 81,
         "max": 207,
-        "percentuale_media": 26.0
+        "percentuale_media": 25.9
       },
       {
-        "media": 114.0,
+        "media": 113.4,
         "min": 0,
         "max": 207,
-        "percentuale_media": 25.4
+        "percentuale_media": 25.3
       },
       {
-        "media": 111.3,
+        "media": 108.5,
         "min": 81,
         "max": 163,
-        "percentuale_media": 24.9
+        "percentuale_media": 24.2
       },
       {
         "media": 109.0,
@@ -4034,28 +4034,16 @@
         "percentuale_media": 45.8
       },
       {
-        "media": 216.0,
+        "media": 210.7,
         "min": 0,
         "max": 448,
-        "percentuale_media": 48.2
+        "percentuale_media": 47.0
       },
       {
-        "media": 203.1,
+        "media": 202.7,
         "min": 0,
         "max": 448,
-        "percentuale_media": 45.3
-      },
-      {
-        "media": 224.2,
-        "min": 0,
-        "max": 448,
-        "percentuale_media": 50.0
-      },
-      {
-        "media": 216.0,
-        "min": 0,
-        "max": 448,
-        "percentuale_media": 48.2
+        "percentuale_media": 45.2
       },
       {
         "media": 224.2,
@@ -4064,10 +4052,22 @@
         "percentuale_media": 50.0
       },
       {
-        "media": 201.2,
+        "media": 216.0,
         "min": 0,
         "max": 448,
-        "percentuale_media": 44.9
+        "percentuale_media": 48.2
+      },
+      {
+        "media": 222.9,
+        "min": 0,
+        "max": 448,
+        "percentuale_media": 49.8
+      },
+      {
+        "media": 199.2,
+        "min": 0,
+        "max": 448,
+        "percentuale_media": 44.5
       },
       {
         "media": 206.5,
@@ -4076,16 +4076,16 @@
         "percentuale_media": 46.1
       },
       {
-        "media": 184.9,
+        "media": 182.8,
         "min": 0,
         "max": 339,
-        "percentuale_media": 41.3
+        "percentuale_media": 40.8
       },
       {
-        "media": 158.2,
+        "media": 157.5,
         "min": 0,
         "max": 309,
-        "percentuale_media": 35.3
+        "percentuale_media": 35.2
       },
       {
         "media": 127.5,
@@ -4098,28 +4098,28 @@
   "Parcheggio Area ex Zuffo - P9": {
     "Monday": [
       {
-        "media": 501.8,
+        "media": 507.5,
         "min": 199,
         "max": 693,
-        "percentuale_media": 73.7
+        "percentuale_media": 74.5
       },
       {
-        "media": 524.5,
+        "media": 527.6,
         "min": 0,
         "max": 693,
-        "percentuale_media": 76.0
+        "percentuale_media": 76.4
       },
       {
-        "media": 620.4,
+        "media": 622.2,
         "min": 201,
         "max": 693,
-        "percentuale_media": 90.1
+        "percentuale_media": 90.3
       },
       {
-        "media": 584.4,
+        "media": 602.2,
         "min": 0,
         "max": 693,
-        "percentuale_media": 85.1
+        "percentuale_media": 87.5
       },
       {
         "media": 565.5,
@@ -5058,13 +5058,13 @@
         "percentuale_media": 91.8
       },
       {
-        "media": 640.2,
+        "media": 643.6,
         "min": 0,
         "max": 693,
-        "percentuale_media": 94.7
+        "percentuale_media": 95.1
       },
       {
-        "media": 631.5,
+        "media": 631.9,
         "min": 323,
         "max": 693,
         "percentuale_media": 93.7
@@ -5082,16 +5082,16 @@
         "percentuale_media": 89.9
       },
       {
-        "media": 592.1,
+        "media": 593.9,
         "min": 0,
         "max": 693,
-        "percentuale_media": 88.3
+        "percentuale_media": 88.5
       },
       {
-        "media": 566.0,
+        "media": 570.2,
         "min": 0,
         "max": 693,
-        "percentuale_media": 83.5
+        "percentuale_media": 84.1
       },
       {
         "media": 537.2,
@@ -5100,16 +5100,16 @@
         "percentuale_media": 80.5
       },
       {
-        "media": 536.7,
+        "media": 541.4,
         "min": 0,
         "max": 693,
-        "percentuale_media": 79.4
+        "percentuale_media": 80.0
       },
       {
-        "media": 506.1,
+        "media": 508.9,
         "min": 0,
         "max": 693,
-        "percentuale_media": 75.5
+        "percentuale_media": 75.9
       },
       {
         "media": 486.3,
@@ -5131,10 +5131,10 @@
         "media": 1.2,
         "min": 0,
         "max": 6,
-        "percentuale_media": 0.9
+        "percentuale_media": 0.8
       },
       {
-        "media": 0.3,
+        "media": 0.2,
         "min": 0,
         "max": 6,
         "percentuale_media": 0.2
@@ -6082,10 +6082,10 @@
         "percentuale_media": 6.5
       },
       {
-        "media": 17.0,
+        "media": 16.4,
         "min": 0,
         "max": 145,
-        "percentuale_media": 11.8
+        "percentuale_media": 11.4
       },
       {
         "media": 13.2,
@@ -6106,16 +6106,16 @@
         "percentuale_media": 7.7
       },
       {
-        "media": 11.0,
+        "media": 11.1,
         "min": 0,
         "max": 145,
         "percentuale_media": 7.7
       },
       {
-        "media": 9.1,
+        "media": 9.2,
         "min": 0,
         "max": 145,
-        "percentuale_media": 6.3
+        "percentuale_media": 6.4
       },
       {
         "media": 8.9,
@@ -6124,16 +6124,16 @@
         "percentuale_media": 6.2
       },
       {
-        "media": 6.3,
+        "media": 6.5,
+        "min": 0,
+        "max": 145,
+        "percentuale_media": 4.5
+      },
+      {
+        "media": 6.4,
         "min": 0,
         "max": 145,
         "percentuale_media": 4.4
-      },
-      {
-        "media": 6.3,
-        "min": 0,
-        "max": 145,
-        "percentuale_media": 4.3
       },
       {
         "media": 5.8,
@@ -6146,28 +6146,28 @@
   "Parcheggio S. Lorenzo - P1": {
     "Monday": [
       {
-        "media": 16.5,
+        "media": 16.1,
         "min": 6,
         "max": 33,
-        "percentuale_media": 11.9
+        "percentuale_media": 11.6
       },
       {
-        "media": 13.6,
+        "media": 13.5,
         "min": 6,
         "max": 20,
-        "percentuale_media": 9.8
+        "percentuale_media": 9.7
       },
       {
-        "media": 13.9,
+        "media": 13.8,
         "min": 9,
         "max": 18,
-        "percentuale_media": 10.0
+        "percentuale_media": 9.9
       },
       {
-        "media": 16.4,
+        "media": 15.6,
         "min": 6,
         "max": 55,
-        "percentuale_media": 11.8
+        "percentuale_media": 11.2
       },
       {
         "media": 14.4,
@@ -7040,9 +7040,9 @@
         "percentuale_media": 11.4
       },
       {
-        "media": 17.9,
+        "media": 18.0,
         "min": 8,
-        "max": 22,
+        "max": 27,
         "percentuale_media": 12.9
       },
       {
@@ -7106,16 +7106,16 @@
         "percentuale_media": 24.2
       },
       {
-        "media": 30.4,
+        "media": 30.1,
         "min": 9,
         "max": 55,
-        "percentuale_media": 21.9
+        "percentuale_media": 21.7
       },
       {
-        "media": 24.2,
+        "media": 24.4,
         "min": 16,
         "max": 50,
-        "percentuale_media": 17.4
+        "percentuale_media": 17.5
       },
       {
         "media": 19.4,
@@ -7130,16 +7130,16 @@
         "percentuale_media": 13.9
       },
       {
-        "media": 22.6,
+        "media": 22.7,
         "min": 11,
         "max": 39,
         "percentuale_media": 16.3
       },
       {
-        "media": 19.5,
+        "media": 20.2,
         "min": 7,
         "max": 36,
-        "percentuale_media": 14.1
+        "percentuale_media": 14.5
       },
       {
         "media": 22.4,
@@ -7148,16 +7148,16 @@
         "percentuale_media": 16.1
       },
       {
-        "media": 35.3,
+        "media": 33.4,
         "min": 7,
         "max": 108,
-        "percentuale_media": 25.4
+        "percentuale_media": 24.0
       },
       {
-        "media": 32.3,
+        "media": 30.2,
         "min": 7,
         "max": 105,
-        "percentuale_media": 23.2
+        "percentuale_media": 21.7
       },
       {
         "media": 17.5,
@@ -7170,28 +7170,28 @@
   "Parcheggio Santa Chiara - P24": {
     "Monday": [
       {
-        "media": 25.9,
+        "media": 25.2,
         "min": 0,
         "max": 183,
-        "percentuale_media": 13.6
+        "percentuale_media": 13.2
       },
       {
-        "media": 24.9,
+        "media": 24.5,
         "min": 0,
         "max": 183,
-        "percentuale_media": 12.9
+        "percentuale_media": 12.7
       },
       {
-        "media": 24.2,
+        "media": 23.7,
         "min": 0,
         "max": 183,
-        "percentuale_media": 13.1
+        "percentuale_media": 12.8
       },
       {
-        "media": 43.9,
+        "media": 38.2,
         "min": 0,
         "max": 183,
-        "percentuale_media": 23.6
+        "percentuale_media": 20.5
       },
       {
         "media": 27.7,
@@ -8130,13 +8130,13 @@
         "percentuale_media": 14.2
       },
       {
-        "media": 39.1,
+        "media": 38.7,
         "min": 0,
         "max": 183,
-        "percentuale_media": 20.7
+        "percentuale_media": 20.5
       },
       {
-        "media": 56.6,
+        "media": 56.5,
         "min": 0,
         "max": 164,
         "percentuale_media": 29.5
@@ -8154,16 +8154,16 @@
         "percentuale_media": 29.8
       },
       {
-        "media": 52.0,
+        "media": 51.7,
         "min": 0,
         "max": 183,
-        "percentuale_media": 27.3
+        "percentuale_media": 27.1
       },
       {
-        "media": 30.7,
+        "media": 30.4,
         "min": 0,
         "max": 183,
-        "percentuale_media": 15.8
+        "percentuale_media": 15.7
       },
       {
         "media": 23.6,
@@ -8172,16 +8172,16 @@
         "percentuale_media": 12.3
       },
       {
-        "media": 27.6,
+        "media": 26.8,
         "min": 0,
         "max": 183,
-        "percentuale_media": 14.5
+        "percentuale_media": 14.0
       },
       {
-        "media": 21.8,
+        "media": 21.5,
         "min": 0,
         "max": 183,
-        "percentuale_media": 11.3
+        "percentuale_media": 11.2
       },
       {
         "media": 23.3,
@@ -8194,28 +8194,28 @@
   "Parcheggio piazzale Sanseverino - P7": {
     "Monday": [
       {
-        "media": 68.1,
+        "media": 67.5,
         "min": -7,
         "max": 308,
-        "percentuale_media": 21.1
+        "percentuale_media": 20.9
       },
       {
-        "media": 55.6,
+        "media": 55.4,
         "min": -7,
         "max": 308,
         "percentuale_media": 17.2
       },
       {
-        "media": 66.7,
+        "media": 66.2,
         "min": 0,
         "max": 308,
-        "percentuale_media": 20.7
+        "percentuale_media": 20.5
       },
       {
-        "media": 56.2,
+        "media": 54.2,
         "min": -9,
         "max": 323,
-        "percentuale_media": 17.4
+        "percentuale_media": 16.8
       },
       {
         "media": 88.5,
@@ -9154,16 +9154,16 @@
         "percentuale_media": 63.8
       },
       {
-        "media": 229.3,
+        "media": 228.8,
         "min": 0,
         "max": 323,
-        "percentuale_media": 71.0
+        "percentuale_media": 70.8
       },
       {
-        "media": 219.1,
+        "media": 219.3,
         "min": 0,
         "max": 323,
-        "percentuale_media": 67.8
+        "percentuale_media": 67.9
       },
       {
         "media": 229.6,
@@ -9178,16 +9178,16 @@
         "percentuale_media": 64.9
       },
       {
-        "media": 216.0,
+        "media": 215.6,
         "min": 0,
         "max": 323,
-        "percentuale_media": 66.9
+        "percentuale_media": 66.7
       },
       {
-        "media": 191.3,
+        "media": 190.8,
         "min": 0,
         "max": 323,
-        "percentuale_media": 59.2
+        "percentuale_media": 59.1
       },
       {
         "media": 177.1,
@@ -9196,10 +9196,10 @@
         "percentuale_media": 54.8
       },
       {
-        "media": 163.1,
+        "media": 162.6,
         "min": 0,
         "max": 323,
-        "percentuale_media": 50.5
+        "percentuale_media": 50.4
       },
       {
         "media": 129.9,
@@ -9218,13 +9218,13 @@
   "Parcheggio via Monte Baldo - P8": {
     "Monday": [
       {
-        "media": 27.6,
+        "media": 27.8,
         "min": 0,
         "max": 165,
         "percentuale_media": 13.8
       },
       {
-        "media": 28.5,
+        "media": 28.6,
         "min": 0,
         "max": 165,
         "percentuale_media": 14.3
@@ -9236,10 +9236,10 @@
         "percentuale_media": 15.8
       },
       {
-        "media": 29.9,
+        "media": 30.1,
         "min": 0,
         "max": 146,
-        "percentuale_media": 14.8
+        "percentuale_media": 14.9
       },
       {
         "media": 25.6,
@@ -10178,13 +10178,13 @@
         "percentuale_media": 21.7
       },
       {
-        "media": 60.6,
+        "media": 59.4,
         "min": 4,
         "max": 202,
-        "percentuale_media": 30.1
+        "percentuale_media": 29.5
       },
       {
-        "media": 56.4,
+        "media": 56.3,
         "min": 5,
         "max": 202,
         "percentuale_media": 28.0
@@ -10202,16 +10202,16 @@
         "percentuale_media": 23.0
       },
       {
-        "media": 42.5,
+        "media": 42.4,
         "min": 2,
         "max": 163,
-        "percentuale_media": 21.1
+        "percentuale_media": 21.0
       },
       {
-        "media": 36.5,
+        "media": 36.4,
         "min": 0,
         "max": 164,
-        "percentuale_media": 18.2
+        "percentuale_media": 18.1
       },
       {
         "media": 35.8,
@@ -10220,16 +10220,16 @@
         "percentuale_media": 17.8
       },
       {
-        "media": 29.9,
+        "media": 30.2,
         "min": 0,
         "max": 165,
-        "percentuale_media": 14.9
+        "percentuale_media": 15.0
       },
       {
-        "media": 28.8,
+        "media": 28.9,
         "min": 0,
         "max": 165,
-        "percentuale_media": 14.3
+        "percentuale_media": 14.4
       },
       {
         "media": 29.8,
