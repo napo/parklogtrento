@@ -610,9 +610,9 @@
         "percentuale_media": 34.2
       },
       {
-        "media": 770.2,
+        "media": 771.2,
         "min": 134,
-        "max": 1232,
+        "max": 1688,
         "percentuale_media": 35.1
       },
       {
@@ -646,16 +646,16 @@
         "percentuale_media": 62.8
       },
       {
-        "media": 1796.2,
+        "media": 1817.6,
         "min": 256,
         "max": 2475,
-        "percentuale_media": 71.7
+        "percentuale_media": 72.5
       },
       {
-        "media": 1825.8,
+        "media": 1835.8,
         "min": 858,
         "max": 2423,
-        "percentuale_media": 73.1
+        "percentuale_media": 73.5
       },
       {
         "media": 1757.1,
@@ -688,16 +688,16 @@
         "percentuale_media": 66.8
       },
       {
-        "media": 1611.9,
+        "media": 1622.0,
         "min": 521,
         "max": 2193,
-        "percentuale_media": 65.1
+        "percentuale_media": 65.4
       },
       {
-        "media": 1516.5,
+        "media": 1537.4,
         "min": 492,
         "max": 2118,
-        "percentuale_media": 61.7
+        "percentuale_media": 62.4
       },
       {
         "media": 1497.3,
@@ -718,16 +718,16 @@
         "percentuale_media": 59.4
       },
       {
-        "media": 1384.5,
+        "media": 1393.0,
         "min": 550,
         "max": 1849,
-        "percentuale_media": 56.1
+        "percentuale_media": 56.4
       },
       {
-        "media": 1213.0,
+        "media": 1227.8,
         "min": 464,
         "max": 1740,
-        "percentuale_media": 49.0
+        "percentuale_media": 49.6
       }
     ],
     "Saturday": [
@@ -744,16 +744,16 @@
         "percentuale_media": 40.0
       },
       {
-        "media": 923.7,
+        "media": 955.0,
         "min": 253,
-        "max": 1284,
-        "percentuale_media": 40.9
+        "max": 1619,
+        "percentuale_media": 41.7
       },
       {
-        "media": 848.2,
+        "media": 862.7,
         "min": 220,
         "max": 1410,
-        "percentuale_media": 37.3
+        "percentuale_media": 37.7
       },
       {
         "media": 871.3,
