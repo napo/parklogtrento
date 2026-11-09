@@ -2,16 +2,16 @@
   "Totale parcheggi in struttura": {
     "Monday": [
       {
-        "media": 894.1,
+        "media": 896.7,
         "min": 194,
         "max": 1445,
-        "percentuale_media": 37.0
+        "percentuale_media": 37.2
       },
       {
-        "media": 860.6,
+        "media": 863.5,
         "min": 176,
         "max": 1329,
-        "percentuale_media": 36.1
+        "percentuale_media": 36.4
       },
       {
         "media": 893.7,
@@ -38,16 +38,16 @@
         "percentuale_media": 35.5
       },
       {
-        "media": 798.9,
+        "media": 799.0,
         "min": 230,
         "max": 1451,
-        "percentuale_media": 32.8
+        "percentuale_media": 32.9
       },
       {
-        "media": 927.9,
+        "media": 933.1,
         "min": 247,
         "max": 1410,
-        "percentuale_media": 37.6
+        "percentuale_media": 38.2
       },
       {
         "media": 1283.1,
@@ -968,16 +968,16 @@
         "percentuale_media": 57.5
       },
       {
-        "media": 1432.5,
+        "media": 1432.6,
         "min": 538,
         "max": 2197,
-        "percentuale_media": 57.9
+        "percentuale_media": 58.0
       },
       {
-        "media": 1440.7,
+        "media": 1444.7,
         "min": 405,
         "max": 2191,
-        "percentuale_media": 58.0
+        "percentuale_media": 58.6
       },
       {
         "media": 1377.9,
@@ -998,16 +998,16 @@
         "percentuale_media": 49.7
       },
       {
-        "media": 1216.6,
+        "media": 1221.0,
         "min": 534,
         "max": 1740,
-        "percentuale_media": 49.7
+        "percentuale_media": 50.1
       },
       {
-        "media": 1132.9,
+        "media": 1137.5,
         "min": 467,
         "max": 1789,
-        "percentuale_media": 45.8
+        "percentuale_media": 46.1
       },
       {
         "media": 1016.8,
