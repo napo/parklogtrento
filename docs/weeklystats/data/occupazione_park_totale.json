@@ -2,10 +2,10 @@
   "Totale parcheggi in struttura": {
     "Monday": [
       {
-        "media": 896.7,
+        "media": 898.6,
         "min": 194,
         "max": 1445,
-        "percentuale_media": 37.2
+        "percentuale_media": 37.3
       },
       {
         "media": 863.5,
@@ -14,22 +14,22 @@
         "percentuale_media": 36.4
       },
       {
-        "media": 893.7,
+        "media": 894.3,
         "min": 162,
         "max": 1243,
-        "percentuale_media": 40.3
+        "percentuale_media": 40.4
       },
       {
-        "media": 880.0,
+        "media": 857.2,
         "min": 144,
         "max": 1437,
-        "percentuale_media": 37.3
+        "percentuale_media": 36.5
       },
       {
-        "media": 880.8,
+        "media": 848.6,
         "min": 210,
         "max": 1819,
-        "percentuale_media": 38.9
+        "percentuale_media": 37.7
       },
       {
         "media": 826.5,
@@ -944,16 +944,16 @@
         "percentuale_media": 49.5
       },
       {
-        "media": 1334.1,
+        "media": 1337.8,
         "min": 406,
         "max": 1995,
-        "percentuale_media": 53.3
+        "percentuale_media": 53.5
       },
       {
-        "media": 1385.5,
+        "media": 1389.4,
         "min": 436,
         "max": 2058,
-        "percentuale_media": 56.1
+        "percentuale_media": 56.2
       },
       {
         "media": 1353.9,
@@ -986,16 +986,16 @@
         "percentuale_media": 55.2
       },
       {
-        "media": 1334.9,
+        "media": 1338.1,
         "min": 490,
         "max": 1961,
-        "percentuale_media": 53.8
+        "percentuale_media": 53.9
       },
       {
-        "media": 1230.0,
+        "media": 1235.4,
         "min": 482,
         "max": 1797,
-        "percentuale_media": 49.7
+        "percentuale_media": 49.8
       },
       {
         "media": 1221.0,
@@ -1016,10 +1016,10 @@
         "percentuale_media": 41.7
       },
       {
-        "media": 924.7,
+        "media": 928.0,
         "min": 242,
         "max": 1506,
-        "percentuale_media": 37.9
+        "percentuale_media": 38.0
       }
     ]
   }
